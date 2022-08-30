@@ -124,9 +124,7 @@ class Shopware_Controllers_Backend_SwagImportExportImport extends \Shopware_Cont
 
         $importRequest = new ImportRequest();
         $importRequest->setData([
-            'sessionId' => $request->get('sessionId') ? (int) $request->get('sessionId') : null,
             'profileEntity' => $profile,
-            'type' => 'import',
             'inputFile' => $inputFile,
             'format' => $this->uploadPathProvider->getFileExtension($inputFile),
             'username' => $this->auth->getIdentity()->name ?: 'Cli',

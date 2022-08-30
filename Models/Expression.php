@@ -34,22 +34,22 @@ class Expression extends ModelEntity
      * @ORM\ManyToOne(targetEntity="SwagImportExport\Models\Profile", cascade={"persist", "refresh"})
      * @ORM\JoinColumn(onDelete="CASCADE")
      */
-    protected ?Profile $profile;
+    private ?Profile $profile;
 
     /**
      * @ORM\Column(name="variable", type="string", length=200)
      */
-    protected string $variable;
+    private string $variable;
 
     /**
      * @ORM\Column(name="export_conversion", type="text")
      */
-    protected string $exportConversion;
+    private string $exportConversion;
 
     /**
      * @ORM\Column(name="import_conversion", type="text")
      */
-    protected string $importConversion;
+    private string $importConversion;
 
     public function getId(): int
     {

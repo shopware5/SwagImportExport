@@ -18,22 +18,22 @@ use SwagImportExport\Components\Validators\CategoryTranslationValidator;
 
 class CategoryTranslationDbAdapter implements DataDbAdapter, \Enlight_Hook
 {
-    protected ModelManager $manager;
+    private ModelManager $manager;
 
-    protected \Shopware_Components_Translation $translationComponent;
+    private \Shopware_Components_Translation $translationComponent;
 
-    protected bool $importExportErrorMode;
+    private bool $importExportErrorMode;
 
     /**
      * @var array<string>
      */
-    protected array $logMessages = [];
+    private array $logMessages = [];
 
-    protected ?string $logState = null;
+    private ?string $logState = null;
 
-    protected CategoryTranslationValidator $validator;
+    private CategoryTranslationValidator $validator;
 
-    protected \Enlight_Event_EventManager $eventManager;
+    private \Enlight_Event_EventManager $eventManager;
 
     private Connection $connection;
 

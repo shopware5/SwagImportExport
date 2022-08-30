@@ -16,9 +16,9 @@ class CsvFileWriter implements FileWriter
 {
     private const FORMAT = 'csv';
 
-    protected bool $treeStructure = false;
+    private bool $treeStructure = false;
 
-    protected FileHelper $fileHelper;
+    private FileHelper $fileHelper;
 
     public function __construct(FileHelper $fileHelper)
     {

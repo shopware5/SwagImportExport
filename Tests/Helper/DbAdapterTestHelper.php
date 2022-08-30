@@ -22,14 +22,14 @@ class DbAdapterTestHelper extends TestCase
 
     protected string $dbTable;
 
-    protected ?Parser $parser = null;
-
     protected string $yamlFile;
+
+    private ?Parser $parser = null;
 
     /**
      * @var array<string, array<string, mixed>>|null
      */
-    protected ?array $dataProvider = null;
+    private ?array $dataProvider = null;
 
     public function getDataProvider(string $testCase): array
     {

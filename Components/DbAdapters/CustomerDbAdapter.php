@@ -32,29 +32,29 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
 {
     protected ModelManager $manager;
 
-    protected ?array $customerMap = null;
+    private ?array $customerMap = null;
 
-    protected ?array $billingMap = null;
+    private ?array $billingMap = null;
 
-    protected ?array $shippingMap = null;
+    private ?array $shippingMap = null;
 
-    protected array $logMessages = [];
+    private array $logMessages = [];
 
-    protected ?string $logState = null;
+    private ?string $logState = null;
 
-    protected \Enlight_Components_Db_Adapter_Pdo_Mysql $db;
+    private \Enlight_Components_Db_Adapter_Pdo_Mysql $db;
 
-    protected CustomerValidator $validator;
+    private CustomerValidator $validator;
 
-    protected CustomerDataManager $dataManager;
+    private CustomerDataManager $dataManager;
 
-    protected Manager $passwordManager;
+    private Manager $passwordManager;
 
-    protected \Shopware_Components_Config $config;
+    private \Shopware_Components_Config $config;
 
-    protected \Enlight_Event_EventManager $eventManager;
+    private \Enlight_Event_EventManager $eventManager;
 
-    protected array $defaultValues = [];
+    private array $defaultValues = [];
 
     private UnderscoreToCamelCaseServiceInterface $underscoreToCamelCaseService;
 

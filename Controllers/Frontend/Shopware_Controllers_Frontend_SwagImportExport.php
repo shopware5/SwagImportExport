@@ -9,15 +9,11 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Controllers\Frontend;
 
-use Shopware\Components\Model\ModelManager;
-
 /**
  * Shopware ImportExport Plugin
  */
 class Shopware_Controllers_Frontend_SwagImportExport extends \Enlight_Controller_Action
 {
-    protected ModelManager $manager;
-
     private \Enlight_Plugin_PluginManager $pluginManager;
 
     public function __construct(\Enlight_Plugin_PluginManager $pluginManager)

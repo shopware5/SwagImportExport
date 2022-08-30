@@ -24,41 +24,41 @@ use SwagImportExport\Components\Validators\TranslationValidator;
 
 class TranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
 {
-    protected ModelManager $manager;
+    private ModelManager $manager;
 
     /**
      * @var ModelRepository<ConfiguratorGroup>
      */
-    protected ModelRepository $configuratorGroupRepo;
+    private ModelRepository $configuratorGroupRepo;
 
     /**
      * @var ModelRepository<ConfiguratorOption>
      */
-    protected ModelRepository $configuratorOptionRepo;
+    private ModelRepository $configuratorOptionRepo;
 
     /**
      * @var ModelRepository<PropertyGroup>
      */
-    protected ModelRepository $propertyGroupRepo;
+    private ModelRepository $propertyGroupRepo;
 
     /**
      * @var ModelRepository<PropertyOption>
      */
-    protected ModelRepository $propertyOptionRepo;
+    private ModelRepository $propertyOptionRepo;
 
     /**
      * @var ModelRepository<PropertyValue>
      */
-    protected ModelRepository $propertyValueRepo;
+    private ModelRepository $propertyValueRepo;
 
     /**
      * @var array<string>
      */
-    protected array $logMessages = [];
+    private array $logMessages = [];
 
-    protected ?string $logState = null;
+    private ?string $logState = null;
 
-    protected TranslationValidator $validator;
+    private TranslationValidator $validator;
 
     private \Enlight_Event_EventManager $eventManager;
 

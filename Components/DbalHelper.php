@@ -17,7 +17,7 @@ use Shopware\Components\Model\ModelManager;
 
 class DbalHelper
 {
-    protected Connection $connection;
+    private Connection $connection;
 
     private ModelManager $modelManager;
 

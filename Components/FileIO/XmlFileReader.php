@@ -16,14 +16,14 @@ class XmlFileReader implements FileReader
     /**
      * @var array<mixed>
      */
-    protected array $iterationPath = [];
+    private array $iterationPath = [];
 
     /**
      * @var array<mixed>
      */
-    protected array $iterationTag = [];
+    private array $iterationTag = [];
 
-    protected bool $treeStructure = true;
+    private bool $treeStructure = true;
 
     public function supports(string $format): bool
     {

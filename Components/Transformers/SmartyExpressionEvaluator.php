@@ -11,7 +11,7 @@ namespace SwagImportExport\Components\Transformers;
 
 class SmartyExpressionEvaluator implements ExpressionEvaluator
 {
-    protected \Shopware_Components_StringCompiler $compiler;
+    private \Shopware_Components_StringCompiler $compiler;
 
     public function __construct(
         \Enlight_Template_Manager $templateManager

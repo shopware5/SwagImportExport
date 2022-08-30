@@ -32,66 +32,66 @@ class Session extends ModelEntity
      * @ORM\ManyToOne(targetEntity="SwagImportExport\Models\Profile", inversedBy="sessions", cascade={"persist", "refresh"})
      * @ORM\JoinColumn(name="profile_id", onDelete="CASCADE")
      */
-    protected ?Profile $profile;
+    private ?Profile $profile;
 
     /**
      * @ORM\Column(name="type", type="string", length=200)
      */
-    protected string $type;
+    private string $type;
 
     /**
      * @ORM\Column(name="ids", type="text", nullable=false)
      */
-    protected string $ids = '';
+    private string $ids = '';
 
     /**
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
-    protected int $position = 0;
+    private int $position = 0;
 
     /**
      * @ORM\Column(name="total_count", type="integer", nullable=false)
      */
-    protected int $totalCount = 0;
+    private int $totalCount = 0;
 
     /**
      * @ORM\Column(name="username", type="string", length=200, nullable=true)
      */
-    protected ?string $userName;
+    private ?string $userName;
 
     /**
      * @ORM\Column(name="file_name", type="string", length=200)
      */
-    protected string $fileName;
+    private string $fileName;
 
     /**
      * @ORM\Column(name="format", type="string", length=100)
      */
-    protected string $format;
+    private string $format;
 
     /**
      * Filesize of the file in bytes
      *
      * @ORM\Column(name="file_size", type="integer", nullable=true)
      */
-    protected ?int $fileSize;
+    private ?int $fileSize;
 
     /**
      * @ORM\Column(name="state", type="string", length=100)
      */
-    protected string $state = 'new';
+    private string $state = 'new';
 
     /**
      * @ORM\Column(name="created_at", type="datetime")
      */
-    protected \DateTime $createdAt;
+    private \DateTime $createdAt;
 
     /**
      * @var Collection<int, Logger>
      *
      * @ORM\OneToMany(targetEntity="SwagImportExport\Models\Logger", mappedBy="session")
      */
-    protected Collection $logs;
+    private Collection $logs;
 
     public function __construct()
     {
@@ -241,5 +241,21 @@ class Session extends ModelEntity
         $this->createdAt = $createdAt;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, Logger>
+     */
+    public function getLogs(): Collection
+    {
+        return $this->logs;
+    }
+
+    /**
+     * @param Collection<int, Logger> $logs
+     */
+    public function setLogs(Collection $logs): void
+    {
+        $this->logs = $logs;
     }
 }

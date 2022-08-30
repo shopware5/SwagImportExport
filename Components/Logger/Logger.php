@@ -13,24 +13,20 @@ use Shopware\Components\Model\ModelManager;
 use SwagImportExport\Components\FileIO\FileWriter;
 use SwagImportExport\Components\Session\Session;
 use SwagImportExport\Models\Logger as LoggerEntity;
-use SwagImportExport\Models\LoggerRepository;
 
 class Logger implements LoggerInterface
 {
-    protected ModelManager $modelManager;
+    private ModelManager $modelManager;
 
-    protected LoggerRepository $loggerRepository;
+    private FileWriter $fileWriter;
 
-    protected FileWriter $fileWriter;
-
-    protected string $logDirectory;
+    private string $logDirectory;
 
     public function __construct(FileWriter $fileWriter, ModelManager $modelManager, string $logDirectory)
     {
         $this->fileWriter = $fileWriter;
         $this->modelManager = $modelManager;
         $this->logDirectory = $logDirectory;
-        $this->loggerRepository = $this->modelManager->getRepository(LoggerEntity::class);
     }
 
     /**

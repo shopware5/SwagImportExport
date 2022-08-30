@@ -14,7 +14,6 @@
         </service>
 
         <service id="SwagImportExport\Components\DbAdapters\ProductsDbAdapter">
-            <argument type="service" id="service_container"/>
             <argument type="service" id="db"/>
             <argument type="service" id="models"/>
             <argument type="service" id="shopware_media.media_service"/>

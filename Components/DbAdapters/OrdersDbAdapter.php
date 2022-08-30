@@ -27,16 +27,16 @@ class OrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
     private const ORDERS_DB_ADAPTER_GET_QUERY = 'OrdersDbAdapter::getQuery';
     private const ORDERS_DB_ADAPTER_ADJUST_COLUMNS = 'OrdersDbAdapter::adjustColumns';
 
-    protected ModelManager $modelManager;
+    private ModelManager $modelManager;
 
     /**
      * @var array<string>
      */
-    protected array $logMessages = [];
+    private array $logMessages = [];
 
-    protected ?string $logState = null;
+    private ?string $logState = null;
 
-    protected OrderValidator $validator;
+    private OrderValidator $validator;
 
     private UnderscoreToCamelCaseServiceInterface $underscoreToCamelCaseService;
 

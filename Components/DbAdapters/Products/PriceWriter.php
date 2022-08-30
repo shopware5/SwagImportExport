@@ -20,13 +20,13 @@ use SwagImportExport\Components\Validators\Products\PriceValidator;
 
 class PriceWriter
 {
-    protected PDOConnection $db;
+    private PDOConnection $db;
 
-    protected array $customerGroups;
+    private array $customerGroups;
 
-    protected PriceValidator $validator;
+    private PriceValidator $validator;
 
-    protected PriceDataManager $dataManager;
+    private PriceDataManager $dataManager;
 
     private DbalHelper $dbalHelper;
 
@@ -114,7 +114,7 @@ class PriceWriter
             }
 
             if ($taxInput) {
-                $price['pseudoPrice'] = \round($price['pseudoPrice'] * (100 + $tax) / 100, 2);
+                $price['pseudoPrice'] = \round(($price['pseudoPrice'] ?? 0) * (100 + $tax) / 100, 2);
             }
         }
 

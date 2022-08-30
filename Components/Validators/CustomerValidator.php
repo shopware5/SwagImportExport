@@ -17,30 +17,14 @@ class CustomerValidator extends Validator
     /**
      * @var array<string>
      */
-    private array $requiredFields = [
+    protected array $requiredFields = [
         'email',
-    ];
-
-    /**
-     * @var array<string>
-     */
-    private array $requiredFieldsForCreate = [
-        'unhashedPassword',
-        'encoder',
-        'customergroup',
-        'billingSalutation',
-        'billingFirstname',
-        'billingLastname',
-        'billingStreet',
-        'billingZipcode',
-        'billingCity',
-        'billingCountryID',
     ];
 
     /**
      * @var array<string, array<string>>
      */
-    private array $snippetData = [
+    protected array $snippetData = [
         'email' => [
             'adapters/customer/email_required',
             'User email is required field.',
@@ -85,6 +69,22 @@ class CustomerValidator extends Validator
             'adapters/customer/billingCountryID_required',
             'Billing countryId must be provided for user with email: %s.',
         ],
+    ];
+
+    /**
+     * @var array<string>
+     */
+    private array $requiredFieldsForCreate = [
+        'unhashedPassword',
+        'encoder',
+        'customergroup',
+        'billingSalutation',
+        'billingFirstname',
+        'billingLastname',
+        'billingStreet',
+        'billingZipcode',
+        'billingCity',
+        'billingCountryID',
     ];
 
     /**

@@ -126,7 +126,6 @@ class Shopware_Controllers_Backend_SwagImportExportExport extends \Shopware_Cont
         $exportRequest->setData([
             'sessionId' => $this->Request()->getParam('sessionId') ? (int) $this->Request()->getParam('sessionId') : null,
             'profileEntity' => $profile,
-            'type' => 'export',
             'format' => $format,
             'filter' => [],
             'limit' => $this->Request()->getParam('limit') ? (int) $this->Request()->getParam('limit') : null,

@@ -20,24 +20,24 @@ use SwagImportExport\Components\Validators\ProductTranslationValidator;
 
 class ProductsTranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
 {
-    protected ModelManager $manager;
+    private ModelManager $manager;
 
-    protected \Shopware_Components_Translation $translationComponent;
+    private \Shopware_Components_Translation $translationComponent;
 
-    protected bool $importExportErrorMode;
+    private bool $importExportErrorMode;
 
     /**
      * @var array<string>
      */
-    protected array $logMessages = [];
+    private array $logMessages = [];
 
-    protected ?string $logState = null;
+    private ?string $logState = null;
 
-    protected ProductTranslationValidator $validator;
+    private ProductTranslationValidator $validator;
 
-    protected \Enlight_Components_Db_Adapter_Pdo_Mysql $db;
+    private \Enlight_Components_Db_Adapter_Pdo_Mysql $db;
 
-    protected \Enlight_Event_EventManager $eventManager;
+    private \Enlight_Event_EventManager $eventManager;
 
     public function __construct(
         ModelManager $manager,

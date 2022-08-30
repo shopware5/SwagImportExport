@@ -20,11 +20,9 @@ class Session
     public const SESSION_ACTIVE = 'active';
     public const SESSION_FINISHED = 'finished';
 
-    protected SessionEntity $sessionEntity;
+    private SessionEntity $sessionEntity;
 
-    protected int $sessionId;
-
-    protected ModelManager $manager;
+    private ModelManager $manager;
 
     public function __construct(
         SessionEntity $session,

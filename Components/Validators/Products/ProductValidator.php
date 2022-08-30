@@ -24,16 +24,6 @@ class ProductValidator extends Validator
     ];
 
     /**
-     * @var array<string|array<string>>
-     */
-    protected array $requiredFieldsForCreate = [
-        'name',
-        'mainNumber',
-        ['supplierName', 'supplierId'],
-        'taxId',
-    ];
-
-    /**
      * @var array<string, array<string>>
      */
     protected array $snippetData = [
@@ -57,6 +47,16 @@ class ProductValidator extends Validator
             'adapters/articles/no_tax_provided',
             'Tax not provided for article %s.',
         ],
+    ];
+
+    /**
+     * @var array<string|array<string>>
+     */
+    private array $requiredFieldsForCreate = [
+        'name',
+        'mainNumber',
+        ['supplierName', 'supplierId'],
+        'taxId',
     ];
 
     /**

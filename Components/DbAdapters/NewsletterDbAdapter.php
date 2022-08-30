@@ -24,24 +24,24 @@ use SwagImportExport\Components\Validators\NewsletterValidator;
 
 class NewsletterDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleable
 {
-    protected \Enlight_Components_Db_Adapter_Pdo_Mysql $db;
+    private \Enlight_Components_Db_Adapter_Pdo_Mysql $db;
 
-    protected bool $errorMode;
+    private bool $errorMode;
 
-    protected ModelManager $manager;
+    private ModelManager $manager;
 
     /**
      * @var array<string>
      */
-    protected array $logMessages = [];
+    private array $logMessages = [];
 
-    protected ?string $logState = null;
+    private ?string $logState = null;
 
-    protected NewsletterValidator $validator;
+    private NewsletterValidator $validator;
 
-    protected NewsletterDataManager $dataManager;
+    private NewsletterDataManager $dataManager;
 
-    protected array $defaultValues = [];
+    private array $defaultValues = [];
 
     private \Enlight_Event_EventManager $eventManager;
 

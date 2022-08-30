@@ -32,23 +32,23 @@ use SwagImportExport\Components\Validators\ProductPriceValidator;
 
 class ProductsPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
 {
-    protected ModelManager $manager;
+    private ModelManager $manager;
 
     /**
      * @return array<array<int>>
      */
-    protected array $categoryIdCollection;
+    private array $categoryIdCollection;
 
     /**
      * @var array<string>
      */
-    protected array $logMessages = [];
+    private array $logMessages = [];
 
-    protected ?string $logState = null;
+    private ?string $logState = null;
 
-    protected ProductPriceValidator $validator;
+    private ProductPriceValidator $validator;
 
-    protected ProductPriceDataManager $dataManager;
+    private ProductPriceDataManager $dataManager;
 
     private ContextServiceInterface $contextService;
 
@@ -349,9 +349,9 @@ class ProductsPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
                     $tax = $productVariant->getArticle()->getTax();
                     if ($tax instanceof Tax) {
                         $record['price'] = $record['price'] / (100 + (float) $tax->getTax()) * 100;
-                        $record['pseudoPrice'] = $record['pseudoPrice'] / (100 + (float) $tax->getTax()) * 100;
+                        $record['pseudoPrice'] = ($record['pseudoPrice'] ?? 0) / (100 + (float) $tax->getTax()) * 100;
                         if (SwagVersionHelper::isShopware578()) {
-                            $record['regulationPrice'] = $record['regulationPrice'] / (100 + (float) $tax->getTax()) * 100;
+                            $record['regulationPrice'] = ($record['regulationPrice'] ?? 0) / (100 + (float) $tax->getTax()) * 100;
                         }
                     }
                 }

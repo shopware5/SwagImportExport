@@ -36,51 +36,51 @@ class Profile extends ModelEntity
      * @ORM\OneToMany(targetEntity="SwagImportExport\Models\Expression", mappedBy="profile")
      * @ORM\JoinColumn(nullable=true)
      */
-    protected Collection $expressions;
+    private Collection $expressions;
 
     /**
      * @var Collection<int, Session>
      *
      * @ORM\OneToMany(targetEntity="SwagImportExport\Models\Session", mappedBy="profile")
      */
-    protected Collection $sessions;
+    private Collection $sessions;
 
     /**
      * @ORM\Column(name="type", type="string", length=200)
      */
-    protected string $type;
+    private string $type;
 
     /**
      * @ORM\Column(name="base_profile", type="integer", nullable=true)
      */
-    protected ?int $baseProfile;
+    private ?int $baseProfile;
 
     /**
      * @ORM\Column(name="name", type="string", length=200, unique=true)
      */
-    protected string $name;
+    private string $name;
 
     /**
      * @ORM\Column(name="description", type="text", nullable=true)
      */
-    protected ?string $description;
+    private ?string $description;
 
     /**
      * @ORM\Column(name="tree", type="text")
      */
-    protected string $tree;
+    private string $tree;
 
     /**
      * @var bool hidden
      *
      * @ORM\Column(name="hidden", type="boolean")
      */
-    protected bool $hidden = false;
+    private bool $hidden = false;
 
     /**
      * @ORM\Column(name="is_default", type="boolean")
      */
-    protected bool $default = false;
+    private bool $default = false;
 
     public function __construct()
     {

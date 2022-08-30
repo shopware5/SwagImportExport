@@ -42,7 +42,6 @@ use SwagImportExport\Components\Service\UnderscoreToCamelCaseServiceInterface;
 use SwagImportExport\Components\Utils\DbAdapterHelper;
 use SwagImportExport\Components\Utils\SnippetsHelper;
 use SwagImportExport\Components\Utils\SwagVersionHelper;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleable, UnprocessedDataDbAdapter
 {
@@ -51,24 +50,22 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
     public const PRODUCT_STREAM_ID_FILTER_KEY = 'productStreamId';
     private const MAIN_KIND = 1;
 
-    protected ModelManager $modelManager;
+    private ModelManager $modelManager;
 
-    protected Enlight_Components_Db_Adapter_Pdo_Mysql $db;
+    private Enlight_Components_Db_Adapter_Pdo_Mysql $db;
 
-    protected array $unprocessedData;
+    private array $unprocessedData;
 
-    protected array $logMessages = [];
+    private array $logMessages = [];
 
-    protected ?string $logState = null;
+    private ?string $logState = null;
 
     /**
      * @var array<string, string>
      */
-    protected ?array $tempData = null;
+    private ?array $tempData = null;
 
-    protected array $defaultValues = [];
-
-    protected ContainerInterface $container;
+    private array $defaultValues = [];
 
     private MediaServiceInterface $mediaService;
 
@@ -103,7 +100,6 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
     private ImageWriter $imageWriter;
 
     public function __construct(
-        ContainerInterface $container,
         Enlight_Components_Db_Adapter_Pdo_Mysql $db,
         ModelManager $modelManager,
         MediaServiceInterface $mediaService,
@@ -122,7 +118,6 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
         RelationWriter $relationWriter,
         ImageWriter $imageWriter
     ) {
-        $this->container = $container;
         $this->db = $db;
         $this->modelManager = $modelManager;
         $this->mediaService = $mediaService;

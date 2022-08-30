@@ -50,33 +50,33 @@ class ProductsImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
         self::PROTOCOL_FILE,
     ];
 
-    protected ModelManager $manager;
+    private ModelManager $manager;
 
-    protected MediaServiceInterface $mediaService;
+    private MediaServiceInterface $mediaService;
 
-    protected ?\Enlight_Controller_Request_Request $request;
+    private ?\Enlight_Controller_Request_Request $request;
 
-    protected \Enlight_Event_EventManager $eventManager;
+    private \Enlight_Event_EventManager $eventManager;
 
-    protected ProductImageValidator $validator;
+    private ProductImageValidator $validator;
 
-    protected ProductImageDataManager $dataManager;
+    private ProductImageDataManager $dataManager;
 
-    protected int $imageImportMode;
+    private int $imageImportMode;
 
-    protected bool $importExportErrorMode;
+    private bool $importExportErrorMode;
 
-    protected \Enlight_Components_Db_Adapter_Pdo_Mysql $db;
+    private \Enlight_Components_Db_Adapter_Pdo_Mysql $db;
 
-    protected array $logMessages = [];
+    private array $logMessages = [];
 
-    protected ?string $logState = null;
+    private ?string $logState = null;
 
-    protected Manager $thumbnailManager;
+    private Manager $thumbnailManager;
 
-    protected string $docPath;
+    private string $docPath;
 
-    protected UnderscoreToCamelCaseServiceInterface $underscoreToCamelCaseService;
+    private UnderscoreToCamelCaseServiceInterface $underscoreToCamelCaseService;
 
     private DbalHelper $dbalHelper;
 

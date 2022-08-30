@@ -15,7 +15,7 @@ class CsvFileReader implements FileReader
 {
     private const FORMAT = 'csv';
 
-    protected bool $treeStructure = false;
+    private bool $treeStructure = false;
 
     private UploadPathProvider $uploadPathProvider;
 

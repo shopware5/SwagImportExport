@@ -26,24 +26,24 @@ use SwagImportExport\Components\Validators\CategoryValidator;
 
 class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleable
 {
-    protected ModelManager $modelManager;
+    private ModelManager $modelManager;
 
-    protected \Enlight_Components_Db_Adapter_Pdo_Mysql $db;
+    private \Enlight_Components_Db_Adapter_Pdo_Mysql $db;
 
-    protected Repository $repository;
+    private Repository $repository;
 
     /**
      * @var array<string>
      */
-    protected array $logMessages = [];
+    private array $logMessages = [];
 
-    protected ?string $logState = null;
+    private ?string $logState = null;
 
-    protected CategoryValidator $validator;
+    private CategoryValidator $validator;
 
-    protected CategoriesDataManager $dataManager;
+    private CategoriesDataManager $dataManager;
 
-    protected array $defaultValues = [];
+    private array $defaultValues = [];
 
     /**
      * @var array<array<string,mixed>>

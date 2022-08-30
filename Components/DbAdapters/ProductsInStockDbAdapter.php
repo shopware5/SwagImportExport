@@ -20,15 +20,15 @@ use SwagImportExport\Components\Validators\ProductInStockValidator;
 
 class ProductsInStockDbAdapter implements DataDbAdapter, \Enlight_Hook
 {
-    protected ModelManager $modelManager;
+    private ModelManager $modelManager;
 
-    protected array $logMessages = [];
+    private array $logMessages = [];
 
-    protected ?string $logState = null;
+    private ?string $logState = null;
 
-    protected Repository $repository;
+    private Repository $repository;
 
-    protected ProductInStockValidator $validator;
+    private ProductInStockValidator $validator;
 
     private \Enlight_Event_EventManager $eventManager;
 

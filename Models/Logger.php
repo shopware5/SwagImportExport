@@ -32,24 +32,24 @@ class Logger extends ModelEntity
      * @ORM\ManyToOne(targetEntity="SwagImportExport\Models\Session", inversedBy="logs")
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", onDelete="SET NULL")
      */
-    protected ?Session $session;
+    private ?Session $session;
 
     /**
      * @ORM\Column(name="message", type="text", nullable=true)
      */
-    protected ?string $message;
+    private ?string $message;
 
     /**
      * Confusing naming here - indicates error state: false = no errors
      *
      * @ORM\Column(name="state", type="string", length=100, nullable=true)
      */
-    protected ?string $state;
+    private ?string $state;
 
     /**
      * @ORM\Column(name="created_at", type="datetime")
      */
-    protected \DateTime $createdAt;
+    private \DateTime $createdAt;
 
     public function getId(): int
     {

@@ -23,9 +23,9 @@ use SwagImportExport\Components\Utils\SnippetsHelper;
 
 class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
 {
-    protected array $logMessages = [];
+    private array $logMessages = [];
 
-    protected ?string $logState = null;
+    private ?string $logState = null;
 
     private ModelManager $modelManager;
 

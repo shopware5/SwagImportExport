@@ -21,7 +21,7 @@ use SwagImportExport\Components\Validators\Products\ConfiguratorValidator;
 
 class ConfiguratorWriter
 {
-    protected ConfiguratorValidator $configuratorValidator;
+    private ConfiguratorValidator $configuratorValidator;
 
     private DbalHelper $dbalHelper;
 

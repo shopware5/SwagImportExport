@@ -22,13 +22,7 @@ class ImportRequest
 
     public string $username = 'Cli';
 
-    public ?int $sessionId = null;
-
     public int $batchSize = 50;
-
-    public string $filePath;
-
-    public bool $exportVariants = false;
 
     /**
      * @param array<string, mixed> $data

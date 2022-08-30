@@ -15,9 +15,7 @@ class FrontendTestViewMock extends \Enlight_View_Default
     /**
      * @var array<string, mixed>
      */
-    public array $viewAssign = [];
-
-    public string $templateDir;
+    private array $viewAssign = [];
 
     public function __construct()
     {
@@ -55,8 +53,6 @@ class FrontendTestViewMock extends \Enlight_View_Default
      */
     public function addTemplateDir($templateDir, $key = null)
     {
-        $this->templateDir = $templateDir;
-
         return $this;
     }
 }

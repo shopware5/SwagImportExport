@@ -18,11 +18,11 @@ use SwagImportExport\Components\Utils\SnippetsHelper;
 
 class ImageWriter
 {
-    protected ProductsDbAdapter $productsDbAdapter;
+    private ProductsDbAdapter $productsDbAdapter;
 
-    protected PDOConnection $db;
+    private PDOConnection $db;
 
-    protected Connection $connection;
+    private Connection $connection;
 
     public function __construct(
         PDOConnection $db,

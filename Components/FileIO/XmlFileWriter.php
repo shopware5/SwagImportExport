@@ -20,11 +20,11 @@ class XmlFileWriter implements FileWriter
 {
     private const FORMAT = 'xml';
 
-    protected bool $treeStructure = true;
+    private bool $treeStructure = true;
 
-    protected XmlConverter $xmlConvertor;
+    private XmlConverter $xmlConvertor;
 
-    protected FileHelper $fileHelper;
+    private FileHelper $fileHelper;
 
     public function __construct(FileHelper $fileHelper)
     {

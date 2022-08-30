@@ -26,13 +26,13 @@ class ProductWriter
     private const MAIN_KIND = 1;
     private const VARIANT_KIND = 2;
 
-    protected \Enlight_Components_Db_Adapter_Pdo_Mysql $db;
+    private \Enlight_Components_Db_Adapter_Pdo_Mysql $db;
 
-    protected Connection $connection;
+    private Connection $connection;
 
-    protected ProductValidator $validator;
+    private ProductValidator $validator;
 
-    protected ProductDataManager $dataManager;
+    private ProductDataManager $dataManager;
 
     private DbalHelper $dbalHelper;
 
