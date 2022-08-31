@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -6,11 +7,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Shopware\Components\Converter;
+namespace SwagImportExport\Components\Converter;
 
-class XmlConverter
+class XmlConverter implements ConverterInterface
 {
-    public $sSettings = [
+    /**
+     * @var array<string, mixed>
+     */
+    private array $settings = [
         'encoding' => 'UTF-8',
         'standalone' => true,
         'attributes' => true,
@@ -19,30 +23,32 @@ class XmlConverter
         'newline' => "\r\n",
     ];
 
-    /**
-     * @return string
-     */
-    public function encode($array)
+    public function getNewline(): string
     {
-        $standalone = $this->sSettings['standalone'] ? 'yes' : 'no';
+        return "\r\n";
+    }
+
+    /**
+     * @param array<string, mixed> $array
+     */
+    public function encode(array $array): string
+    {
+        $standalone = $this->settings['standalone'] ? 'yes' : 'no';
         $ret =
-            "<?xml version=\"1.0\" encoding=\"{$this->sSettings['encoding']}\" standalone=\"$standalone\"?>{$this->sSettings['newline']}";
+            "<?xml version=\"1.0\" encoding=\"{$this->settings['encoding']}\" standalone=\"$standalone\"?>{$this->settings['newline']}";
         $ret .= $this->_encode($array);
 
         return $ret;
     }
 
     /**
-     * @param int    $pos
-     * @param string $ekey
-     *
-     * @return string
+     * @param array<string, mixed> $array
      */
-    public function _encode($array, $pos = 0, $ekey = '')
+    public function _encode(array $array, int $pos = 0, string $ekey = ''): string
     {
         $ret = '';
-        if ($this->sSettings['padding'] !== false) {
-            $pad = \str_repeat($this->sSettings['padding'], $pos);
+        if ($this->settings['padding'] !== false) {
+            $pad = \str_repeat($this->settings['padding'], $pos);
         } else {
             $pad = '';
         }
@@ -53,7 +59,7 @@ class XmlConverter
             $attributes = '';
             if (\is_array($item) && isset($item['_attributes'])) {
                 foreach ($item['_attributes'] as $k => $v) {
-                    $attributes .= " $k=\"" . \htmlspecialchars($v) . '"';
+                    $attributes .= " $k=\"" . \htmlspecialchars($v, \ENT_COMPAT) . '"';
                 }
                 if (isset($item['_value'])) {
                     $item = $item['_value'];
@@ -61,24 +67,26 @@ class XmlConverter
                     unset($item['_attributes'], $item['_value']);
                 }
             }
-            if (empty($item)) {
-                $ret .= "$pad<$key$attributes></$key>{$this->sSettings['newline']}";
+            if ($this->isEmpty($item)) {
+                $ret .= "$pad<$key$attributes></$key>{$this->settings['newline']}";
             } elseif (\is_array($item)) {
                 if (\is_numeric(\key($item))) {
                     $ret .= $this->_encode($item, $pos, $key);
                 } else {
-                    $ret .= "$pad<$key$attributes>{$this->sSettings['newline']}" . $this->_encode(
-                        $item,
-                        $pos + 1
-                    ) . "$pad</$key>{$this->sSettings['newline']}";
+                    $ret .= "$pad<$key$attributes>{$this->settings['newline']}"
+                        . $this->_encode($item, $pos + 1)
+                        . "$pad</$key>{$this->settings['newline']}";
                 }
             } else {
-                if (\preg_match('#<|>|&(?<!amp;)#', $item)) {
-                    //$item = str_replace("<![CDATA[", "&lt;![CDATA[", $item);
+                if ($this->hasSpecialCharacters((string) $item)) {
                     $item = \str_replace(']]>', ']]]]><![CDATA[>', $item);
-                    $ret .= "$pad<$key$attributes><![CDATA[" . $item . "]]></$key>{$this->sSettings['newline']}";
+                    $ret .= "$pad<$key$attributes><![CDATA[" . $item . "]]></$key>{$this->settings['newline']}";
                 } else {
-                    $ret .= "$pad<$key$attributes>" . $item . "</$key>{$this->sSettings['newline']}";
+                    if ($item === false) {
+                        $item = 0;
+                    }
+
+                    $ret .= "$pad<$key$attributes>" . $item . "</$key>{$this->settings['newline']}";
                 }
             }
         }
@@ -87,219 +95,18 @@ class XmlConverter
     }
 
     /**
-     * @return array
+     * @param string|int|bool $item
      */
-    public function decode($contents)
+    private function isEmpty($item): bool
     {
-        if (!$contents) {
-            return [];
-        }
-        if (!\function_exists('xml_parser_create')) {
-            return [];
-        }
-        $parser = \xml_parser_create();
-        \xml_parser_set_option($parser, \XML_OPTION_CASE_FOLDING, 0);
-        \xml_parser_set_option($parser, \XML_OPTION_SKIP_WHITE, 1);
-        \xml_parser_set_option($parser, \XML_OPTION_TARGET_ENCODING, $this->sSettings['encoding']);
-        \xml_parse_into_struct($parser, \file_get_contents($contents), $xml_values);
-        \xml_parser_free($parser);
-
-        if (!$xml_values) {
-            return [];
-        }
-
-        $xml_array = [];
-        $current = &$xml_array;
-
-        foreach ($xml_values as $data) {
-            unset($attributes, $value); //Remove existing values, or there will be trouble
-            \extract($data); //We could use the array by itself, but this cooler.
-            $result = '';
-            if (!empty($attributes)) { //The second argument of the function decides this.
-                $result = [];
-                if (isset($value)) {
-                    $result['_value'] = $value;
-                }
-
-                //Set the attributes too.
-                if (isset($attributes)) {
-                    foreach ($attributes as $attr => $val) {
-                        if ($this->sSettings['attributes']) {
-                            $result['_attributes'][$attr] = $val;
-                        } //Set all the attributes in a array called 'attr'
-                        /*  TO DO should we change the key name to '_attr'? Someone may use the tagname 'attr'. Same goes for 'value' too */
-                    }
-                }
-            } elseif (isset($value)) {
-                $result = $value;
-            }
-
-            //See tag status and do the needed.
-            if ($type === 'open') { //The starting of the tag '<tag>'
-                $parent[$level - 1] = &$current;
-
-                if (!\is_array($current) || (!\in_array($tag, \array_keys($current)))) { //Insert New tag
-                    $current[$tag] = $result;
-                    $current = &$current[$tag];
-                } else { //There was another element with the same tag name
-                    if (isset($current[$tag][0])) {
-                        $current[$tag][] = $result;
-                    } else {
-                        $current[$tag] = [$current[$tag], $result];
-                    }
-                    $last = \count($current[$tag]) - 1;
-                    $current = &$current[$tag][$last];
-                }
-            } elseif ($type === 'complete') { //Tags that ends in 1 line '<tag />'
-                //See if the key is already taken.
-                if (!isset($current[$tag])) { //New Key
-                    $current[$tag] = $result;
-                } else { //If taken, put all things inside a list(array)
-                    if ((\is_array(
-                        $current[$tag]
-                    ) && $this->sSettings['attributes'] == 0) //If it is already an array...
-                        || (isset($current[$tag][0]) && \is_array(
-                            $current[$tag]
-                        ) && $this->sSettings['attributes'] == 1)
-                    ) {
-                        //array_push($current[$tag],$result); // ...push the new element into that array.
-                        $current[$tag][] = $result;
-                    } else { //If it is not an array...
-                        $current[$tag] = [
-                            $current[$tag], $result,
-                        ]; //...Make it an array using the existing value and the new value
-                    }
-                }
-            } elseif ($type === 'close') { //End of tag '</tag>'
-                $current = &$parent[$level - 1];
-            }
-        }
-
-        return $xml_array;
+        return empty($item) && $item !== '0' && $item !== false && $item !== 0;
     }
 
     /**
-     * @param string $name
-     *
-     * @return bool
+     * Checks if special xml characters were used.
      */
-    public function fix_array(&$array, $name = '')
+    private function hasSpecialCharacters(string $item): bool
     {
-        if (!empty($name) && (empty($array[$name]) || !\is_array($array[$name]))) {
-            return false;
-        }
-        if (!empty($name)) {
-            $array = $array[$name];
-        }
-        if (empty($array) || !\is_array($array)) {
-            return false;
-        }
-        if (\key($array) !== 0) {
-            $array = [0 => $array];
-        }
-
-        return true;
-    }
-
-    /**
-     * @return bool
-     */
-    public function fix_string(&$string)
-    {
-        if (empty($string)) {
-            return false;
-        }
-        if (!\is_array($string)) {
-            $string = ['_value' => $string];
-        }
-        if (empty($string['_value'])) {
-            $string['_value'] = '';
-        }
-
-        return true;
-    }
-
-    /**
-     * @param string $valuename
-     */
-    public function attr_as_key(&$array, $atr, $valuename = '')
-    {
-        $data = [];
-        if (!empty($array) && \is_array($array)) {
-            foreach ($array as $value) {
-                if (!isset($value['_attributes'][$atr])) {
-                } elseif (isset($value['_value'])) {
-                    $data[$value['_attributes'][$atr]] = $value['_value'];
-                } elseif (!empty($valuename)) {
-                    if (isset($value[$valuename])) {
-                        $data[$value['_attributes'][$atr]] = $value[$valuename];
-                    } else {
-                        $data[$value['_attributes'][$atr]] = null;
-                    }
-                } else {
-                    $data[$value['_attributes'][$atr]] = $value;
-                    unset($data[$value['_attributes'][$atr]]['_attributes'][$atr]);
-                    if (empty($data[$value['_attributes'][$atr]]['_attributes'])) {
-                        unset($data[$value['_attributes'][$atr]]['_attributes']);
-                    }
-                    if (empty($data[$value['_attributes'][$atr]])) {
-                        $data[$value['_attributes'][$atr]] = null;
-                    }
-                }
-            }
-        }
-        $array = $data;
-    }
-
-    /**
-     * @param string $valuename
-     */
-    public function value_as_key(&$array, $name, $valuename = '')
-    {
-        $data = [];
-        if (!empty($array) && \is_array($array)) {
-            foreach ($array as $value) {
-                if (!isset($value[$name])) {
-                    $data[$value[$name]] = null;
-                } elseif (!empty($valuename)) {
-                    if (isset($value[$valuename])) {
-                        $data[$value[$name]] = $value[$valuename];
-                    } else {
-                        $data[$value[$name]] = null;
-                    }
-                } else {
-                    $data[$value[$name]] = $value;
-                }
-            }
-        }
-        $array = $data;
-    }
-
-    /**
-     * @param string $valuename
-     *
-     * @return bool
-     */
-    public function atr_as_values(&$array, $valuename = '')
-    {
-        if (!empty($valuename) && \is_string($array)) {
-            $array[$valuename] = $array;
-        }
-        if (empty($array) || !\is_array($array)) {
-            return false;
-        }
-        if (!empty($array['_attributes']) && \is_array(
-            $array['_attributes']
-        )
-        ) {
-            foreach ($array['_attributes'] as $key => $value) {
-                $array[$key] = $value;
-            }
-        }
-        unset($array['_attributes']);
-        if (!empty($valuename) && isset($array['_value'])) {
-            $array[$valuename] = $array['_value'];
-            unset($array['_value']);
-        }
+        return (bool) \preg_match('#<|>|&(?<!amp;)#', $item);
     }
 }

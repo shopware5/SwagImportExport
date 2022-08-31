@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services https://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <defaults public="true"/>
+
+        <service id="SwagImportExport\Components\FileIO\XmlFileReader">
+            <tag name="import_export.file_reader"/>
+        </service>
+
+        <service id="SwagImportExport\Components\FileIO\CsvFileReader">
+            <argument type="service" id="SwagImportExport\Components\UploadPathProvider"/>
+            <tag name="import_export.file_reader"/>
+        </service>
+    </services>
+</container>

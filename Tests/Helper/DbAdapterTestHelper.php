@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -8,54 +9,38 @@
 
 namespace SwagImportExport\Tests\Helper;
 
-use Shopware\Components\SwagImportExport\Factories\DataFactory;
+use PHPUnit\Framework\TestCase;
+use SwagImportExport\Components\Providers\DataProvider;
 use Symfony\Component\Yaml\Parser;
 
-class DbAdapterTestHelper extends ImportExportTestHelper
+class DbAdapterTestHelper extends TestCase
 {
-    /**
-     * @var string
-     */
-    protected $dbAdapter;
+    use DatabaseTestCaseTrait;
+    use ContainerTrait;
+
+    protected string $dbAdapter;
+
+    protected string $dbTable;
+
+    protected string $yamlFile;
+
+    private ?Parser $parser = null;
 
     /**
-     * @var string
+     * @var array<string, array<string, mixed>>|null
      */
-    protected $dbTable;
+    private ?array $dataProvider = null;
 
-    /**
-     * @var Parser
-     */
-    protected $parser;
-
-    protected $yamlFile;
-
-    protected $dataProvider;
-
-    /**
-     * @param string $testCase
-     *
-     * @return array
-     */
-    public function getDataProvider($testCase)
+    public function getDataProvider(string $testCase): array
     {
         if ($this->dataProvider === null) {
-            $this->dataProvider = $this->parseYaml(
-                \file_get_contents(
-                    $this->getYamlFile($this->yamlFile)
-                )
-            );
+            $this->dataProvider = $this->parseYaml((string) \file_get_contents($this->getYamlFile($this->yamlFile)));
         }
 
         return $this->dataProvider[$testCase];
     }
 
-    /**
-     * @param string $yamlFile
-     *
-     * @return array
-     */
-    public function parseYaml($yamlFile)
+    public function parseYaml(string $yamlFile): array
     {
         if ($this->parser === null) {
             $this->parser = new Parser();
@@ -65,90 +50,61 @@ class DbAdapterTestHelper extends ImportExportTestHelper
     }
 
     /**
-     * @param array  $columns
-     * @param int[]  $ids
-     * @param array  $expectedResults
-     * @param int    $expectedCount
-     * @param string $section
+     * @param array<string> $columns
+     * @param array<int>    $ids
      */
-    public function read($columns, $ids, $expectedResults, $expectedCount, $section = 'default')
+    public function read(array $columns, array $ids, array $expectedResults, int $expectedCount, string $section = 'default'): void
     {
-        /* @var DataFactory $dataFactory */
-        $dataFactory = $this->Plugin()->getDataFactory();
-        $dbAdapter = $dataFactory->createDbAdapter($this->dbAdapter);
-
-        $rawData = $dbAdapter->read($ids, $columns);
+        $rawData = $this->getContainer()->get(DataProvider::class)->createDbAdapter($this->dbAdapter)->read($ids, $columns);
         foreach ($expectedResults as $index => $expectedResult) {
             foreach ($expectedResult as $column => $value) {
-                $this->assertEquals($value, $rawData[$section][$index][$column], "The value of `$column` field does not match!");
+                static::assertEquals($value, $rawData[$section][$index][$column], "The value of `$column` field does not match!");
             }
         }
 
-        $this->assertCount($expectedCount, $rawData[$section]);
+        static::assertCount($expectedCount, $rawData[$section]);
     }
 
-    /**
-     * @param int   $start
-     * @param int   $limit
-     * @param array $filter
-     * @param array $expectedIds
-     * @param int   $expectedCount
-     */
-    public function readRecordIds($start, $limit, $filter, $expectedIds, $expectedCount)
+    public function readRecordIds(int $start, int $limit, array $filter, array $expectedIds, int $expectedCount): void
     {
-        /* @var DataFactory $dataFactory */
-        $dataFactory = $this->Plugin()->getDataFactory();
-        $dbAdapter = $dataFactory->createDbAdapter($this->dbAdapter);
-
-        $ids = $dbAdapter->readRecordIds($start, $limit, $filter);
+        $ids = $this->getContainer()->get(DataProvider::class)->createDbAdapter($this->dbAdapter)->readRecordIds($start, $limit, $filter);
 
         foreach ($ids as $index => $id) {
-            $this->assertSame($expectedIds[$index], $id, 'Expected id = ' . $expectedIds[$index] . ' does not match with actual id = ' . $id);
+            static::assertSame($expectedIds[$index], $id, 'Expected id = ' . $expectedIds[$index] . ' does not match with actual id = ' . $id);
         }
 
         // no records found check
         if ($ids === []) {
-            $this->assertEmpty($ids);
-            $this->assertEmpty($expectedIds, 'There are no actual ids, but we received expected ids.');
+            static::assertEmpty($ids);
+            static::assertEmpty($expectedIds, 'There are no actual ids, but we received expected ids.');
         }
 
-        $this->assertCount($expectedCount, $ids);
+        static::assertCount($expectedCount, $ids);
     }
 
-    /**
-     * @param array $records
-     * @param int   $expectedInsertedRows
-     */
-    public function write($records, $expectedInsertedRows)
+    public function write(array $records, int $expectedInsertedRows): void
     {
         $recordsCountBeforeImport = $this->getTableCount($this->dbTable);
 
-        $dataFactory = $this->Plugin()->getDataFactory();
-
-        $dbAdapter = $dataFactory->createDbAdapter($this->dbAdapter);
+        $dbAdapter = $this->getContainer()->get(DataProvider::class)->createDbAdapter($this->dbAdapter);
         $dbAdapter->write($records);
 
         $recordsCountAfterImport = $this->getTableCount($this->dbTable);
 
-        $this->assertEquals($expectedInsertedRows, $recordsCountAfterImport - $recordsCountBeforeImport);
+        static::assertEquals($expectedInsertedRows, $recordsCountAfterImport - $recordsCountBeforeImport);
     }
 
-    /**
-     * @param string $fileName
-     *
-     * @return string
-     */
-    protected function getYamlFile($fileName)
+    protected function getYamlFile(string $fileName): string
     {
-        return __DIR__ . '/../Shopware/ImportExport/' . $fileName;
+        return __DIR__ . '/../Integration/Components/' . $fileName;
     }
 
     private function getTableCount(string $tableName): int
     {
-        return (int) Shopware()->Container()->get('dbal_connection')->createQueryBuilder()
+        return (int) $this->getContainer()->get('dbal_connection')->createQueryBuilder()
             ->select('COUNT(id)')
             ->from($tableName)
             ->execute()
-            ->fetch(\PDO::FETCH_COLUMN);
+            ->fetchOne();
     }
 }

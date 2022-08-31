@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -10,6 +11,7 @@ namespace SwagImportExport\Tests\Integration\DefaultProfiles\Import;
 
 use PHPUnit\Framework\TestCase;
 use SwagImportExport\Tests\Helper\CommandTestCaseTrait;
+use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Integration\DefaultProfiles\DefaultProfileImportTestCaseTrait;
 
@@ -18,8 +20,9 @@ class NewsletterDefaultProfileTest extends TestCase
     use CommandTestCaseTrait;
     use DefaultProfileImportTestCaseTrait;
     use DatabaseTestCaseTrait;
+    use ContainerTrait;
 
-    public function testNewsletterRecipientShouldBeImported()
+    public function testNewsletterRecipientShouldBeImported(): void
     {
         $filePath = __DIR__ . '/_fixtures/newsletter_profile.csv';
         $expectedRecipientEmail = 'email_should_be_created@example.org';
@@ -33,7 +36,7 @@ class NewsletterDefaultProfileTest extends TestCase
         static::assertEquals('Newsletter-Empfänger', $assignedGroup[0]['name']);
     }
 
-    public function testCustomNewsletterGroupImportAndAssignedRecipient()
+    public function testCustomNewsletterGroupImportAndAssignedRecipient(): void
     {
         $filePath = __DIR__ . '/_fixtures/newsletter_profile.csv';
         $expectedAssignedRecipientEmail = 'custom_group_should_be_created@example.org';
@@ -48,7 +51,7 @@ class NewsletterDefaultProfileTest extends TestCase
         static::assertEquals($expectedAssignedRecipientEmail, $assignedRecipient[0]['email']);
     }
 
-    public function testImportedRecipientAssignedToExistingShopCustomer()
+    public function testImportedRecipientAssignedToExistingShopCustomer(): void
     {
         $filePath = __DIR__ . '/_fixtures/newsletter_profile.csv';
         $exceptedRecipientCustomerEmail = 'mustermann@b2b.de';

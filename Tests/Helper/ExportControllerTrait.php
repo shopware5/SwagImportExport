@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -8,60 +9,68 @@
 
 namespace SwagImportExport\Tests\Helper;
 
-use Shopware\Components\SwagImportExport\UploadPathProvider;
+use Shopware\Components\DependencyInjection\Container;
+use SwagImportExport\Components\UploadPathProvider;
 
 trait ExportControllerTrait
 {
-    /**
-     * @var BackendControllerTestHelper
-     */
-    private $backendControllerTestHelper;
+    private BackendControllerTestHelper $backendControllerTestHelper;
 
-    /**
-     * @var UploadPathProvider
-     */
-    private $uploadPathProvider;
+    private UploadPathProvider $uploadPathProvider;
+
+    abstract public function getContainer(): Container;
 
     /**
      * @before
      */
-    protected function loadDependenciesBefore()
+    protected function loadDependenciesBefore(): void
     {
         $this->backendControllerTestHelper = new BackendControllerTestHelper();
 
-        $this->uploadPathProvider = Shopware()->Container()->get('swag_import_export.upload_path_provider');
+        $this->uploadPathProvider = $this->getContainer()->get(UploadPathProvider::class);
     }
 
     /**
-     * @param string $filePath
-     * @param string $xpath
-     *
-     * @return \DOMNodeList
+     * @after
      */
-    private function queryXpath($filePath, $xpath)
+    protected function unlinkFiles(): void
+    {
+        $this->backendControllerTestHelper->tearDown();
+    }
+
+    /**
+     * @return \DOMNodeList<\DOMNode>
+     */
+    private function queryXpath(string $filePath, string $xpath): \DOMNodeList
     {
         $domDocument = new \DOMDocument();
-        $domDocument->loadXML(\file_get_contents($filePath));
+        $xml = \file_get_contents($filePath);
+        static::assertIsString($xml);
+        $domDocument->loadXML($xml);
 
-        $domXpath = new \DOMXPath($domDocument);
+        $path = (new \DOMXPath($domDocument))->query($xpath);
 
-        return $domXpath->query($xpath);
+        self::assertInstanceOf(\DOMNodeList::class, $path);
+
+        return $path;
     }
 
     /**
-     * @param string $filePath
-     * @param string $indexField
-     *
-     * @return array
+     * @return array<array<string, mixed>>
      */
-    private function csvToArrayIndexedByFieldValue($filePath, $indexField)
+    private function csvToArrayIndexedByFieldValue(string $filePath, string $indexField): array
     {
         $csv = \fopen($filePath, 'rb');
+        static::assertIsResource($csv);
         $mappedCsv = [];
 
         $header = \fgetcsv($csv, 0, ';');
+        static::assertIsArray($header);
         while (($row = \fgetcsv($csv, 0, ';')) !== false) {
+            static::assertIsArray($row);
+            static::assertCount(\count($header), $row);
             $tmpRow = \array_combine($header, $row);
+            static::assertIsArray($tmpRow);
             $mappedCsv[$tmpRow[$indexField]] = $tmpRow;
         }
 
@@ -69,9 +78,9 @@ trait ExportControllerTrait
     }
 
     /**
-     * @return array
+     * @return array<string, string>
      */
-    private function getExportRequestParams()
+    private function getExportRequestParams(): array
     {
         return [
             'profileId' => '',

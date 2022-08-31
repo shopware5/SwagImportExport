@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -9,30 +10,20 @@
 namespace SwagImportExport\Tests\Unit\Setup\DefaultProfiles;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Setup\SwagImportExport\DefaultProfiles\ProfileMetaData;
-use Shopware\Setup\SwagImportExport\DefaultProfiles\TranslationProfile;
+use SwagImportExport\Setup\DefaultProfiles\TranslationProfile;
 
 class TranslationProfileTest extends TestCase
 {
     use DefaultProfileTestCaseTrait;
 
-    public function testItCanBeCreated()
+    public function testItShouldReturnValidProfile(): void
     {
         $translationProfile = new TranslationProfile();
 
-        static::assertInstanceOf(TranslationProfile::class, $translationProfile);
-        static::assertInstanceOf(\JsonSerializable::class, $translationProfile);
-        static::assertInstanceOf(ProfileMetaData::class, $translationProfile);
-    }
-
-    public function testItShouldReturnValidProfile()
-    {
-        $translationProfile = new TranslationProfile();
-
-        $this->walkRecursive($translationProfile->jsonSerialize(), function ($node) {
-            $this->assertArrayHasKey('id', $node, 'Current array: ' . \print_r($node, true));
-            $this->assertArrayHasKey('type', $node, 'Current array: ' . \print_r($node, true));
-            $this->assertArrayHasKey('name', $node, 'Current array: ' . \print_r($node, true));
+        $this->walkRecursive($translationProfile->jsonSerialize(), function ($node): void {
+            static::assertArrayHasKey('id', $node, 'Current array: ' . \print_r($node, true));
+            static::assertArrayHasKey('type', $node, 'Current array: ' . \print_r($node, true));
+            static::assertArrayHasKey('name', $node, 'Current array: ' . \print_r($node, true));
         });
     }
 }

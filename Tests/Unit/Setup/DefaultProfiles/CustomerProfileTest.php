@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -9,41 +10,28 @@
 namespace SwagImportExport\Tests\Unit\Setup\DefaultProfiles;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Setup\SwagImportExport\DefaultProfiles\CustomerProfile;
-use Shopware\Setup\SwagImportExport\DefaultProfiles\ProfileMetaData;
+use SwagImportExport\Setup\DefaultProfiles\CustomerProfile;
 
 class CustomerProfileTest extends TestCase
 {
     use DefaultProfileTestCaseTrait;
 
-    public function testItCanBeCreated()
-    {
-        $categoryProfile = $this->createCustomerProfile();
-
-        static::assertInstanceOf(CustomerProfile::class, $categoryProfile);
-        static::assertInstanceOf(\JsonSerializable::class, $categoryProfile);
-        static::assertInstanceOf(ProfileMetaData::class, $categoryProfile);
-    }
-
-    public function testItShouldReturnValidProfileTree()
+    public function testItShouldReturnValidProfileTree(): void
     {
         $categoryProfile = $this->createCustomerProfile();
 
         $profileTree = $categoryProfile->jsonSerialize();
-        $this->walkRecursive($profileTree, function ($node) {
-            $this->assertArrayHasKey('id', $node, 'Current array: ' . \print_r($node, true));
-            $this->assertArrayHasKey('name', $node, 'Current array: ' . \print_r($node, true));
-            $this->assertArrayHasKey('type', $node, 'Current array: ' . \print_r($node, true));
+        $this->walkRecursive($profileTree, function ($node): void {
+            static::assertArrayHasKey('id', $node, 'Current array: ' . \print_r($node, true));
+            static::assertArrayHasKey('name', $node, 'Current array: ' . \print_r($node, true));
+            static::assertArrayHasKey('type', $node, 'Current array: ' . \print_r($node, true));
         });
 
-        $profileJson = \json_encode($categoryProfile);
+        $profileJson = \json_encode($categoryProfile, \JSON_THROW_ON_ERROR);
         static::assertJson($profileJson);
     }
 
-    /**
-     * @return CustomerProfile
-     */
-    private function createCustomerProfile()
+    private function createCustomerProfile(): CustomerProfile
     {
         return new CustomerProfile();
     }

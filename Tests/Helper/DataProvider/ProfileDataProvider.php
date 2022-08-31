@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -9,13 +10,13 @@
 namespace SwagImportExport\Tests\Helper\DataProvider;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Components\SwagImportExport\Utils\TreeHelper;
+use SwagImportExport\Components\Utils\TreeHelper;
 
 class ProfileDataProvider
 {
-    public const ARTICLE_PROFILE_TYPE = 'articles';
-    public const ARTICLE_PROFILE_NAME = 'article_profile';
-    public const ARTICLE_TABLE = 's_articles';
+    public const PRODUCT_PROFILE_TYPE = 'articles';
+    public const PRODUCT_PROFILE_NAME = 'article_profile';
+    public const PRODUCT_TABLE = 's_articles';
 
     public const VARIANT_PROFILE_TYPE = 'articles';
     public const VARIANT_PROFILE_NAME = 'variant_profile';
@@ -29,17 +30,17 @@ class ProfileDataProvider
     public const CATEGORY_PROFILE_NAME = 'category_profile';
     public const CATEGORY_TABLE = 's_categories';
 
-    public const ARTICLES_INSTOCK_PROFILE_TYPE = 'articlesInStock';
-    public const ARTICLES_INSTOCK_PROFILE_NAME = 'article_instock_profile';
+    public const PRODUCTS_INSTOCK_PROFILE_TYPE = 'articlesInStock';
+    public const PRODUCTS_INSTOCK_PROFILE_NAME = 'article_instock_profile';
 
-    public const ARTICLES_PRICES_PROFILE_TYPE = 'articlesPrices';
-    public const ARTICLES_PRICES_PROFILE_NAME = 'articles_price_profile';
+    public const PRODUCTS_PRICES_PROFILE_TYPE = 'articlesPrices';
+    public const PRODUCTS_PRICES_PROFILE_NAME = 'articles_price_profile';
 
-    public const ARTICLES_IMAGES_PROFILE_TYPE = 'articlesImages';
-    public const ARTICLES_IMAGE_PROFILE_NAME = 'articles_image_profile';
+    public const PRODUCTS_IMAGES_PROFILE_TYPE = 'articlesImages';
+    public const PRODUCTS_IMAGE_PROFILE_NAME = 'articles_image_profile';
 
-    public const ARTICLES_TRANSLATIONS_PROFILE_TYPE = 'articlesTranslations';
-    public const ARTICLES_TRANSLATIONS_PROFILE_NAME = 'articles_translations_profile';
+    public const PRODUCTS_TRANSLATIONS_PROFILE_TYPE = 'articlesTranslations';
+    public const PRODUCTS_TRANSLATIONS_PROFILE_NAME = 'articles_translations_profile';
 
     public const ORDERS_PROFILE_TYPE = 'orders';
     public const ORDERS_PROFILE_NAME = 'order_profile';
@@ -56,49 +57,27 @@ class ProfileDataProvider
     public const NEWSLETTER_PROFILE_NAME = 'newsletter_profile';
     public const NEWSLETTER_TABLE = 's_campaigns_mailaddresses';
 
-    /**
-     * @var array - Indexed by profile type
-     */
-    private $profileIds = [];
-
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
     }
 
-    public function createProfiles()
+    public function createProfiles(): void
     {
-        $this->createProfile(self::ARTICLE_PROFILE_TYPE, self::ARTICLE_PROFILE_NAME);
+        $this->createProfile(self::PRODUCT_PROFILE_TYPE, self::PRODUCT_PROFILE_NAME);
         $this->createProfile(self::VARIANT_PROFILE_TYPE, self::VARIANT_PROFILE_NAME);
         $this->createProfile(self::CUSTOMER_PROFILE_TYPE, self::CUSTOMER_PROFILE_NAME);
         $this->createProfile(self::CATEGORY_PROFILE_TYPE, self::CATEGORY_PROFILE_NAME);
-        $this->createProfile(self::ARTICLES_INSTOCK_PROFILE_TYPE, self::ARTICLES_INSTOCK_PROFILE_NAME);
-        $this->createProfile(self::ARTICLES_PRICES_PROFILE_TYPE, self::ARTICLES_PRICES_PROFILE_NAME);
-        $this->createProfile(self::ARTICLES_IMAGES_PROFILE_TYPE, self::ARTICLES_IMAGE_PROFILE_NAME);
-        $this->createProfile(self::ARTICLES_TRANSLATIONS_PROFILE_TYPE, self::ARTICLES_TRANSLATIONS_PROFILE_NAME);
+        $this->createProfile(self::PRODUCTS_INSTOCK_PROFILE_TYPE, self::PRODUCTS_INSTOCK_PROFILE_NAME);
+        $this->createProfile(self::PRODUCTS_PRICES_PROFILE_TYPE, self::PRODUCTS_PRICES_PROFILE_NAME);
+        $this->createProfile(self::PRODUCTS_IMAGES_PROFILE_TYPE, self::PRODUCTS_IMAGE_PROFILE_NAME);
+        $this->createProfile(self::PRODUCTS_TRANSLATIONS_PROFILE_TYPE, self::PRODUCTS_TRANSLATIONS_PROFILE_NAME);
         $this->createProfile(self::ORDERS_PROFILE_TYPE, self::ORDERS_PROFILE_NAME);
         $this->createProfile(self::MAIN_ORDERS_PROFILE_TYPE, self::MAIN_ORDERS_PROFILE_NAME);
         $this->createProfile(self::TRANSLATIONS_PROFILE_TYPE, self::TRANSLATIONS_PROFILE_NAME);
         $this->createProfile(self::NEWSLETTER_PROFILE_TYPE, self::NEWSLETTER_PROFILE_NAME);
-    }
-
-    /**
-     * @param string $type
-     *
-     * @return int
-     */
-    public function getIdByProfileType($type)
-    {
-        if (!\array_key_exists($type, $this->profileIds)) {
-            throw new \RuntimeException("Profile type {$type} not found.");
-        }
-
-        return $this->profileIds[$type];
     }
 
     public function getProfileId(string $profile): int
@@ -112,7 +91,7 @@ class ProfileDataProvider
             ->setParameter('profileType', $profile)
             ->setParameter('profileName', $profile)
             ->execute()
-            ->fetch(\PDO::FETCH_COLUMN);
+            ->fetchOne();
     }
 
     private function createProfile(string $profileType, string $profileName): void
@@ -130,16 +109,14 @@ class ProfileDataProvider
             ->setValue('name', ':name')
             ->setValue('description', ':description')
             ->setValue('tree', ':tree')
-            ->setValue('hidden', 0)
-            ->setValue('is_default', 1)
+            ->setValue('hidden', '0')
+            ->setValue('is_default', '1')
             ->setParameter('type', $profileType)
             ->setParameter('name', $profileName)
             ->setParameter('description', $profileName . '_description_unit_test')
             ->setParameter('tree', $defaultTree);
 
         $queryBuilder->execute();
-
-        $this->profileIds[$profileType] = $queryBuilder->getConnection()->lastInsertId();
     }
 
     private function isProfileInstalled(string $profileType): bool

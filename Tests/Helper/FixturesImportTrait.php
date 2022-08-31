@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -8,17 +9,14 @@
 
 namespace SwagImportExport\Tests\Helper;
 
-use Shopware\Components\Model\ModelManager;
+use Shopware\Components\DependencyInjection\Container;
 use Shopware\Models\Newsletter\Address;
 use Shopware\Models\Newsletter\Group;
 use SwagImportExport\Tests\Helper\DataProvider\ProfileDataProvider;
 
 trait FixturesImportTrait
 {
-    /**
-     * @var ModelManager
-     */
-    private $modelManager;
+    abstract public function getContainer(): Container;
 
     /**
      * @before
@@ -26,7 +24,7 @@ trait FixturesImportTrait
     protected function importFixtures(): void
     {
         $profileDataProvider = new ProfileDataProvider(
-            Shopware()->Container()->get('dbal_connection')
+            $this->getContainer()->get('dbal_connection')
         );
 
         $profileDataProvider->createProfiles();
@@ -34,8 +32,8 @@ trait FixturesImportTrait
 
     private function importNewsletterDemoData(): void
     {
-        $this->modelManager = Shopware()->Container()->get('models');
-        $newsletterGroup = $this->modelManager->find(Group::class, 1);
+        $modelManager = $this->getContainer()->get('models');
+        $newsletterGroup = $modelManager->find(Group::class, 1);
 
         self::assertInstanceOf(Group::class, $newsletterGroup);
 
@@ -46,8 +44,8 @@ trait FixturesImportTrait
             $address->setNewsletterGroup($newsletterGroup);
             $address->setIsCustomer(false);
 
-            $this->modelManager->persist($address);
-            $this->modelManager->flush();
+            $modelManager->persist($address);
+            $modelManager->flush();
         }
     }
 
@@ -57,7 +55,7 @@ trait FixturesImportTrait
             return;
         }
 
-        $connection = Shopware()->Container()->get('dbal_connection');
+        $connection = $this->getContainer()->get('dbal_connection');
 
         $sql = <<<SQL
 INSERT INTO `s_product_streams` (`id`, `name`, `conditions`, `type`) VALUES
@@ -69,12 +67,12 @@ SQL;
 
     private function isStreamInstalled(): bool
     {
-        return (bool) Shopware()->Container()->get('dbal_connection')
+        return (bool) $this->getContainer()->get('dbal_connection')
             ->createQueryBuilder()
             ->select('id')
             ->from('s_product_streams')
             ->where('id = 999999')
             ->execute()
-            ->fetch(\PDO::FETCH_COLUMN);
+            ->fetchOne();
     }
 }

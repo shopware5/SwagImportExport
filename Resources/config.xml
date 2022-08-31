@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/shopware/5.7/engine/Shopware/Components/Plugin/schema/config.xsd">
+    <elements>
+        <element required="false" type="boolean" scope="locale">
+            <name>SwagImportExportErrorMode</name>
+            <label lang="de">Mit Import/Export fortfahren, wenn ein Fehler auftritt</label>
+            <label lang="en">Continue import/export if an error occurs during the process</label>
+            <value>false</value>
+        </element>
+
+        <element required="false" type="number" scope="locale">
+            <name>batch-size-export</name>
+            <label lang="de">Batch-Size Export</label>
+            <label lang="en">Batch-Size Export</label>
+            <value>1000</value>
+        </element>
+
+        <element required="false" type="number" scope="locale">
+            <name>batch-size-import</name>
+            <label lang="de">Batch-Size Import</label>
+            <label lang="en">Batch-Size Import</label>
+            <value>50</value>
+        </element>
+
+        <element required="false" type="boolean" scope="locale">
+            <name>SwagImportExportImageMode</name>
+            <label lang="de">Bestehende Produktbilder erneut verwenden</label>
+            <label lang="en">Re-use same product images</label>
+            <value>true</value>
+        </element>
+
+        <element type="boolean">
+            <name>useCommaDecimal</name>
+            <label lang="de">Komma als Dezimal-Trennzeichen nutzen</label>
+            <label lang="en">Use comma as decimal separator</label>
+            <value>true</value>
+        </element>
+    </elements>
+</config>

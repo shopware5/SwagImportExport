@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -9,30 +10,20 @@
 namespace SwagImportExport\Tests\Unit\Setup\DefaultProfiles;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Setup\SwagImportExport\DefaultProfiles\OrderMainDataProfile;
-use Shopware\Setup\SwagImportExport\DefaultProfiles\ProfileMetaData;
+use SwagImportExport\Setup\DefaultProfiles\OrderMainDataProfile;
 
 class OrderMainDataProfileTest extends TestCase
 {
     use DefaultProfileTestCaseTrait;
 
-    public function testItCanBeCreated()
+    public function testItShouldReturnValidProfile(): void
     {
         $orderMainDataProfile = new OrderMainDataProfile();
 
-        static::assertInstanceOf(OrderMainDataProfile::class, $orderMainDataProfile);
-        static::assertInstanceOf(ProfileMetaData::class, $orderMainDataProfile);
-        static::assertInstanceOf(\JsonSerializable::class, $orderMainDataProfile);
-    }
-
-    public function testItShouldReturnValidProfile()
-    {
-        $orderMainDataProfile = new OrderMainDataProfile();
-
-        $this->walkRecursive($orderMainDataProfile->jsonSerialize(), function ($node) {
-            $this->assertArrayHasKey('id', $node, 'Current array: ' . \print_r($node, true));
-            $this->assertArrayHasKey('type', $node, 'Current array: ' . \print_r($node, true));
-            $this->assertArrayHasKey('name', $node, 'Current array: ' . \print_r($node, true));
+        $this->walkRecursive($orderMainDataProfile->jsonSerialize(), function ($node): void {
+            static::assertArrayHasKey('id', $node, 'Current array: ' . \print_r($node, true));
+            static::assertArrayHasKey('type', $node, 'Current array: ' . \print_r($node, true));
+            static::assertArrayHasKey('name', $node, 'Current array: ' . \print_r($node, true));
         });
     }
 }

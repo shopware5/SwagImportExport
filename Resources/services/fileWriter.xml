@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services https://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <defaults public="true"/>
+
+        <service
+            id="SwagImportExport\Components\FileIO\CsvFileWriter">
+            <argument type="service" id="SwagImportExport\Components\Utils\FileHelper"/>
+
+            <tag name="import_export.file_writer"/>
+        </service>
+
+        <service
+            id="SwagImportExport\Components\FileIO\XmlFileWriter">
+            <argument type="service" id="SwagImportExport\Components\Utils\FileHelper"/>
+
+            <tag name="import_export.file_writer"/>
+        </service>
+    </services>
+</container>

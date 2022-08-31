@@ -4,3 +4,4 @@
 .build/
 .idea
 vendor
+.php-cs-fixer.cache

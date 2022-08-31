@@ -1,8 +1,10 @@
 # SwagImportExport
 ## Description
-Importing and exporting product and customer data, categories as well as product images is a standard task of any shop owner. Keeping that in mind, Shopware wants to make it as easy as possible for you to quickly edit inventory, prices or even perform a customized import. 
+Importing and exporting product and customer data, categories as well as product images is a standard task of any shop owner.
+Keeping that in mind, Shopware wants to make it as easy as possible for you to quickly edit inventory, prices or even perform a customized import. 
  
-Shopware’s advanced feature "Import/Export" is a valuable extension to the default Import/Export module: it allows you to define CSV and XML formats and export your data as such. Furthermore you can import existing formats (i.e. from your manufacturer) following a one-time configuration.
+Shopware’s advanced feature "Import/Export" is a valuable extension to the default Import/Export module: it allows you to define CSV and XML formats and export your data as such.
+Furthermore, you can import existing formats (i.e. from your manufacturer) following a one-time configuration.
  
 This advanced feature also comes with a massive performance boost in comparison to the default module and supports large amounts of data.
  
@@ -45,4 +47,5 @@ Example execution:
 Further all tests which are executed with the `phpunit` cli command will be executed in the environment you configured.
 
 ## sw-zip-blacklist
-Exclude files and/or directories in `.sw-zip-blacklist`, which should not be in the release package of the plugin. List them separated by a new line
+Exclude files and/or directories in `.sw-zip-blacklist`, which should not be in the release package of the plugin.
+List them separated by a new line.

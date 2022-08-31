@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -10,6 +11,7 @@ namespace SwagImportExport\Tests\Integration\DefaultProfiles\Import;
 
 use PHPUnit\Framework\TestCase;
 use SwagImportExport\Tests\Helper\CommandTestCaseTrait;
+use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Integration\DefaultProfiles\DefaultProfileImportTestCaseTrait;
 
@@ -18,8 +20,9 @@ class AddressProfileTest extends TestCase
     use CommandTestCaseTrait;
     use DefaultProfileImportTestCaseTrait;
     use DatabaseTestCaseTrait;
+    use ContainerTrait;
 
-    public function testShouldImportNewAddresses()
+    public function testShouldImportNewAddresses(): void
     {
         $file = __DIR__ . '/_fixtures/addresses_profile_create.csv';
         $this->runCommand("sw:importexport:import -p default_addresses {$file}");
@@ -36,7 +39,7 @@ class AddressProfileTest extends TestCase
         static::assertEquals('My additional address', $createdAddress[0]['additional_address_line1']);
     }
 
-    public function testShouldUpdateExistingAddressesById()
+    public function testShouldUpdateExistingAddressesById(): void
     {
         $file = __DIR__ . '/_fixtures/addresses_profile_update.csv';
         $this->runCommand("sw:importexport:import -p default_addresses {$file}");

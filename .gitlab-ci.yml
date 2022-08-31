@@ -23,14 +23,16 @@ default:
     services:
         -   name: mysql:5.7
             alias: mysql
+    interruptible: true
     before_script:
         - zip -rq plugin.zip .
         - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.shopware.com/shopware/5/product/shopware.git shopware --depth=1 -b ${CHECKOUT_SHOPWARE_BRANCH}
-        - unzip -q plugin.zip -d shopware/engine/Shopware/Plugins/Local/Backend/${PLUGIN_NAME}
+        - unzip -q plugin.zip -d shopware/custom/plugins/${PLUGIN_NAME}
+        - (cd shopware/custom/plugins/${PLUGIN_NAME} && composer install)
         - cd shopware
         - cp .env.dist .env
         - make init
-        - cp -r engine/Shopware/Plugins/Local/Backend/${PLUGIN_NAME}/Tests/config_gitlab.php config.php
+        - cp -r custom/plugins/${PLUGIN_NAME}/Tests/config_gitlab.php config.php
         - php bin/console sw:plugin:refresh
         - php bin/console sw:plugin:list
         - php bin/console sw:plugin:install --activate ${PLUGIN_NAME}
@@ -38,8 +40,6 @@ default:
         - /entrypoint supervisord &>/dev/null &
 
 JavaScript analyze:
-    tags:
-        - t3.nano
     stage: Code Analysis
     image: node:alpine
     services: []
@@ -47,18 +47,18 @@ JavaScript analyze:
         - apk add --no-cache make bash zip unzip git
         - zip -rq plugin.zip .
         - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.shopware.com/shopware/5/product/shopware.git shopware --depth=1 -b ${CHECKOUT_SHOPWARE_BRANCH}
-        - unzip -q plugin.zip -d shopware/engine/Shopware/Plugins/Local/Backend/${PLUGIN_NAME}
+        - unzip -q plugin.zip -d shopware/custom/plugins/${PLUGIN_NAME}
     script:
         - cd shopware
-        - make install-theme-depencencies
-        - cd engine/Shopware/Plugins/Local/Backend/${PLUGIN_NAME}
+        - make .make.install.npm-dependencies
+        - cd custom/plugins/${PLUGIN_NAME}
         - make check-eslint-backend
 
 PHP analyze:
     stage: Code Analysis
     script:
         - php bin/console -e production
-        - cd engine/Shopware/Plugins/Local/Backend/${PLUGIN_NAME}
+        - cd custom/plugins/${PLUGIN_NAME}
         - >
             if [ $CI_PIPELINE_SOURCE == "schedule" ]; then
                 sed -i "s|reportUnmatchedIgnoredErrors: true|reportUnmatchedIgnoredErrors: false|g" phpstan.neon
@@ -70,9 +70,9 @@ Code Coverage:
     stage: PHPUnit
     needs: [ PHP analyze ]
     script:
-        - cd engine/Shopware/Plugins/Local/Backend/${PLUGIN_NAME}
+        - cd custom/plugins/${PLUGIN_NAME}
         - php -d pcov.enabled=1 -d pcov.directory=$CI_PROJECT_DIR
-            ../../../../../../vendor/bin/phpunit
+            ./../../../vendor/bin/phpunit
             --configuration phpunit.xml.dist
             --log-junit build/artifacts/phpunit.junit.xml
             --colors=never
@@ -81,43 +81,16 @@ Code Coverage:
     coverage: '/^\s*Lines:\s*(\d+(?:\.\d+)?%)/'
     artifacts:
         paths:
-            - shopware/engine/Shopware/Plugins/Local/Backend/${PLUGIN_NAME}/build/artifacts/*
+            - shopware/custom/plugins/${PLUGIN_NAME}/build/artifacts/*
         reports:
-            junit: shopware/engine/Shopware/Plugins/Local/Backend/${PLUGIN_NAME}/build/artifacts/phpunit.junit.xml
-
-SW 5.6:
-    stage: PHPUnit
-    needs: [ PHP analyze ]
-    image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:7.2
-    variables:
-        CHECKOUT_SHOPWARE_BRANCH: "5.6"
-    before_script: [ ]
-    script:
-        - zip -rq plugin.zip .
-        - git clone https://gitlab-ci-token:${CI_JOB_TOKEN}@gitlab.shopware.com/shopware/5/product/shopware.git shopware --depth=1 -b ${CHECKOUT_SHOPWARE_BRANCH}
-        - unzip -q plugin.zip -d shopware/engine/Shopware/Plugins/Local/Backend/${PLUGIN_NAME}
-        - cd shopware
-        - ./psh.phar init --SW_HOST="localhost"
-        - cp -r engine/Shopware/Plugins/Local/Backend/${PLUGIN_NAME}/Tests/config_gitlab_56.php config.php
-        - php bin/console sw:plugin:refresh
-        - php bin/console sw:plugin:list
-        - php bin/console sw:plugin:install --activate ${PLUGIN_NAME}
-        - php bin/console sw:cache:clear
-        - /entrypoint supervisord &>/dev/null &
-        - cd engine/Shopware/Plugins/Local/Backend/${PLUGIN_NAME}
-        - php ../../../../../../vendor/bin/phpunit
-            --configuration phpunit.xml.dist
-            --colors=never
-    services:
-        -   name: mysql:5.7
-            alias: mysql
+            junit: shopware/custom/plugins/${PLUGIN_NAME}/build/artifacts/phpunit.junit.xml
 
 .SW 5.7 default:
     stage: PHPUnit
     needs: [PHP analyze]
     script:
-        - cd engine/Shopware/Plugins/Local/Backend/${PLUGIN_NAME}
-        - php ../../../../../../vendor/bin/phpunit
+        - cd custom/plugins/${PLUGIN_NAME}
+        - php ./../../../vendor/bin/phpunit
             --configuration phpunit.xml.dist
             --colors=never
 

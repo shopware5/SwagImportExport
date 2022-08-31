@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -9,38 +10,23 @@
 namespace SwagImportExport\Tests\Unit\Setup\DefaultProfiles;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Setup\SwagImportExport\DefaultProfiles\MinimalOrdersProfile;
-use Shopware\Setup\SwagImportExport\DefaultProfiles\ProfileMetaData;
+use SwagImportExport\Setup\DefaultProfiles\MinimalOrdersProfile;
 
 class MinimalOrdersProfileTest extends TestCase
 {
     use DefaultProfileTestCaseTrait;
 
-    public function testItCanBeCreated()
+    public function testItShouldReturnValidProfileTree(): void
     {
-        $minimalOrdersProfile = $this->createMinimalOrdersProfile();
-
-        static::assertInstanceOf(MinimalOrdersProfile::class, $minimalOrdersProfile);
-        static::assertInstanceOf(\JsonSerializable::class, $minimalOrdersProfile);
-        static::assertInstanceOf(ProfileMetaData::class, $minimalOrdersProfile);
-    }
-
-    public function testItShouldReturnValidProfileTree()
-    {
-        $minimalOrdersProfile = $this->createMinimalOrdersProfile();
-
-        $profileTree = $minimalOrdersProfile->jsonSerialize();
-        $this->walkRecursive($profileTree, function ($node) {
-            $this->assertArrayHasKey('id', $node, 'Current array: ' . \print_r($node, true));
-            $this->assertArrayHasKey('type', $node, 'Current array: ' . \print_r($node, true));
-            $this->assertArrayHasKey('name', $node, 'Current array: ' . \print_r($node, true));
+        $profileTree = $this->createMinimalOrdersProfile()->jsonSerialize();
+        $this->walkRecursive($profileTree, function ($node): void {
+            static::assertArrayHasKey('id', $node, 'Current array: ' . \print_r($node, true));
+            static::assertArrayHasKey('type', $node, 'Current array: ' . \print_r($node, true));
+            static::assertArrayHasKey('name', $node, 'Current array: ' . \print_r($node, true));
         });
     }
 
-    /**
-     * @return MinimalOrdersProfile
-     */
-    private function createMinimalOrdersProfile()
+    private function createMinimalOrdersProfile(): MinimalOrdersProfile
     {
         return new MinimalOrdersProfile();
     }

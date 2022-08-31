@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -6,37 +7,27 @@
  * file that was distributed with this source code.
  */
 
-namespace SwagImportExport\Unit\Setup\DefaultProfiles;
+namespace SwagImportExport\Tests\Unit\Setup\DefaultProfiles;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Setup\SwagImportExport\DefaultProfiles\AddressProfile;
-use Shopware\Setup\SwagImportExport\DefaultProfiles\ProfileMetaData;
-use SwagImportExport\Tests\Unit\Setup\DefaultProfiles\DefaultProfileTestCaseTrait;
+use SwagImportExport\Setup\DefaultProfiles\AddressProfile;
 
 class AddressProfileTest extends TestCase
 {
     use DefaultProfileTestCaseTrait;
 
-    public function testItCanBeCreated()
-    {
-        $addressProfile = new AddressProfile();
-        static::assertInstanceOf(AddressProfile::class, $addressProfile);
-        static::assertInstanceOf(ProfileMetaData::class, $addressProfile);
-        static::assertInstanceOf(\JsonSerializable::class, $addressProfile);
-    }
-
-    public function testItShouldReturnValidProfileTree()
+    public function testItShouldReturnValidProfileTree(): void
     {
         $addressProfile = new AddressProfile();
 
         $profileTree = $addressProfile->jsonSerialize();
-        $this->walkRecursive($profileTree, function ($node) {
-            $this->assertArrayHasKey('id', $node, 'Current array: ' . \print_r($node, true));
-            $this->assertArrayHasKey('type', $node, 'Current array: ' . \print_r($node, true));
-            $this->assertArrayHasKey('name', $node, 'Current array: ' . \print_r($node, true));
+        $this->walkRecursive($profileTree, function ($node): void {
+            static::assertArrayHasKey('id', $node, 'Current array: ' . \print_r($node, true));
+            static::assertArrayHasKey('type', $node, 'Current array: ' . \print_r($node, true));
+            static::assertArrayHasKey('name', $node, 'Current array: ' . \print_r($node, true));
         });
 
-        $profileJson = \json_encode($addressProfile);
+        $profileJson = \json_encode($addressProfile, \JSON_THROW_ON_ERROR);
         static::assertJson($profileJson);
     }
 }

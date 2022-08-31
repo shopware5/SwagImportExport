@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -8,14 +9,18 @@
 
 namespace SwagImportExport\Tests\Helper;
 
+use Shopware\Components\DependencyInjection\Container;
+
 trait DatabaseTestCaseTrait
 {
+    abstract public function getContainer(): Container;
+
     /**
      * @before
      */
     protected function startTransactionBefore(): void
     {
-        $modelManager = Shopware()->Container()->get('models');
+        $modelManager = $this->getContainer()->get('models');
         $modelManager->beginTransaction();
     }
 
@@ -24,7 +29,7 @@ trait DatabaseTestCaseTrait
      */
     protected function rollbackTransactionAfter(): void
     {
-        $modelManager = Shopware()->Container()->get('models');
+        $modelManager = $this->getContainer()->get('models');
         $modelManager->rollback();
     }
 }

@@ -10,8 +10,9 @@ declare(strict_types=1);
 namespace SwagImportExport\Tests\Functional\Commands;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Components\SwagImportExport\Utils\SwagVersionHelper;
+use SwagImportExport\Components\Utils\SwagVersionHelper;
 use SwagImportExport\Tests\Helper\CommandTestCaseTrait;
+use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Helper\FixturesImportTrait;
 
@@ -20,8 +21,9 @@ class ExportCommandTest extends TestCase
     use FixturesImportTrait;
     use CommandTestCaseTrait;
     use DatabaseTestCaseTrait;
+    use ContainerTrait;
 
-    public function testArticlesCsvExportCommand(): void
+    public function testProductsCsvExportCommand(): void
     {
         $expectedLineAmount = 290;
         $profileName = 'default_articles';
@@ -31,8 +33,7 @@ class ExportCommandTest extends TestCase
 
         $consoleOutput = $this->runCommand(sprintf('sw:importexport:export -p %s %s', $profileName, $fileName));
 
-        $fp = \file($this->getFilePath($fileName));
-        $lineAmount = \count($fp);
+        $lineAmount = $this->getLineAmount($fileName);
 
         static::assertSame('Using format: csv.', $consoleOutput[1]);
         static::assertSame('Total count: 225.', $consoleOutput[3]);
@@ -49,8 +50,7 @@ class ExportCommandTest extends TestCase
 
         $consoleOutput = $this->runCommand(sprintf('sw:importexport:export -p %s -x %s', $profileName, $fileName));
 
-        $fp = \file($this->getFilePath($fileName));
-        $lineAmount = \count($fp);
+        $lineAmount = $this->getLineAmount($fileName);
 
         static::assertSame('Using format: csv.', $consoleOutput[1]);
         static::assertSame('Total count: 400.', $consoleOutput[3]);
@@ -67,8 +67,7 @@ class ExportCommandTest extends TestCase
 
         $consoleOutput = $this->runCommand(sprintf('sw:importexport:export -p %s %s', $profileName, $fileName));
 
-        $fp = \file($this->getFilePath($fileName));
-        $lineAmount = \count($fp);
+        $lineAmount = $this->getLineAmount($fileName);
 
         static::assertSame('Using format: csv.', $consoleOutput[1]);
         static::assertSame('Total count: 2.', $consoleOutput[3]);
@@ -85,8 +84,7 @@ class ExportCommandTest extends TestCase
 
         $consoleOutput = $this->runCommand(sprintf('sw:importexport:export -p %s %s', $profileName, $fileName));
 
-        $fp = \file($this->getFilePath($fileName));
-        $lineAmount = \count($fp);
+        $lineAmount = $this->getLineAmount($fileName);
 
         static::assertSame('Using format: csv.', $consoleOutput[1]);
         static::assertSame('Total count: 62.', $consoleOutput[3]);
@@ -97,7 +95,7 @@ class ExportCommandTest extends TestCase
         );
     }
 
-    public function testArticlesInStockCsvExportCommand(): void
+    public function testProductsInStockCsvExportCommand(): void
     {
         $expectedLineAmount = 405;
         $profileName = 'default_article_in_stock';
@@ -107,8 +105,7 @@ class ExportCommandTest extends TestCase
 
         $consoleOutput = $this->runCommand(sprintf('sw:importexport:export -p %s %s', $profileName, $fileName));
 
-        $fp = \file($this->getFilePath($fileName));
-        $lineAmount = \count($fp);
+        $lineAmount = $this->getLineAmount($fileName);
 
         static::assertSame('Using format: csv.', $consoleOutput[1]);
         static::assertSame('Total count: 400.', $consoleOutput[3]);
@@ -119,7 +116,7 @@ class ExportCommandTest extends TestCase
         );
     }
 
-    public function testArticlesPricesCsvExportCommand(): void
+    public function testProductsPricesCsvExportCommand(): void
     {
         $expectedLineAmount = 406;
         $profileName = 'default_article_prices';
@@ -129,8 +126,7 @@ class ExportCommandTest extends TestCase
 
         $consoleOutput = $this->runCommand(sprintf('sw:importexport:export -p %s %s', $profileName, $fileName));
 
-        $fp = \file($this->getFilePath($fileName));
-        $lineAmount = \count($fp);
+        $lineAmount = $this->getLineAmount($fileName);
 
         static::assertSame('Using format: csv.', $consoleOutput[1]);
         static::assertSame('Total count: 405.', $consoleOutput[3]);
@@ -141,7 +137,7 @@ class ExportCommandTest extends TestCase
         );
     }
 
-    public function testArticlesImagesCsvExportCommand(): void
+    public function testProductsImagesCsvExportCommand(): void
     {
         $profileName = 'default_article_images';
 
@@ -151,7 +147,7 @@ class ExportCommandTest extends TestCase
         $this->runCommand(sprintf('sw:importexport:export -p %s %s', $profileName, $fileName));
     }
 
-    public function testArticlesTranslationsCsvExportCommand(): void
+    public function testProductsTranslationsCsvExportCommand(): void
     {
         $profileName = 'default_article_translations_update';
 
@@ -174,8 +170,7 @@ class ExportCommandTest extends TestCase
 
         $consoleOutput = $this->runCommand(sprintf('sw:importexport:export -p %s %s', $profileName, $fileName));
 
-        $fp = \file($this->getFilePath($fileName));
-        $lineAmount = \count($fp);
+        $lineAmount = $this->getLineAmount($fileName);
 
         static::assertSame('Using format: csv.', $consoleOutput[1]);
         static::assertSame('Total count: 17.', $consoleOutput[3]);
@@ -196,8 +191,7 @@ class ExportCommandTest extends TestCase
 
         $consoleOutput = $this->runCommand(sprintf('sw:importexport:export -p %s %s', $profileName, $fileName));
 
-        $fp = \file($this->getFilePath($fileName));
-        $lineAmount = \count($fp);
+        $lineAmount = $this->getLineAmount($fileName);
 
         static::assertSame('Using format: csv.', $consoleOutput[1]);
         static::assertSame('Total count: 4.', $consoleOutput[3]);
@@ -218,8 +212,7 @@ class ExportCommandTest extends TestCase
 
         $consoleOutput = $this->runCommand(sprintf('sw:importexport:export -p %s %s', $profileName, $fileName));
 
-        $fp = \file($this->getFilePath($fileName));
-        $lineAmount = \count($fp);
+        $lineAmount = $this->getLineAmount($fileName);
 
         static::assertSame('Using format: csv.', $consoleOutput[1]);
         static::assertSame('Total count: 15.', $consoleOutput[3]);
@@ -242,8 +235,7 @@ class ExportCommandTest extends TestCase
 
         $consoleOutput = $this->runCommand(sprintf('sw:importexport:export -p %s %s', $profileName, $fileName));
 
-        $fp = \file($this->getFilePath($fileName));
-        $lineAmount = \count($fp);
+        $lineAmount = $this->getLineAmount($fileName);
 
         static::assertSame('Using format: csv.', $consoleOutput[1]);
         static::assertSame('Total count: 25.', $consoleOutput[3]);
@@ -254,7 +246,7 @@ class ExportCommandTest extends TestCase
         );
     }
 
-    public function testArticlesXmlExportCommandWithLimit(): void
+    public function testProductsXmlExportCommandWithLimit(): void
     {
         $expectedLineAmount = 6462;
         $profileName = 'default_articles';
@@ -264,8 +256,7 @@ class ExportCommandTest extends TestCase
 
         $consoleOutput = $this->runCommand(sprintf('sw:importexport:export -p %s -l 100 %s', $profileName, $fileName));
 
-        $fp = \file($this->getFilePath($fileName));
-        $lineAmount = \count($fp);
+        $lineAmount = $this->getLineAmount($fileName);
 
         static::assertSame('Using format: xml.', $consoleOutput[1]);
         static::assertSame('Total count: 100.', $consoleOutput[3]);
@@ -290,8 +281,7 @@ class ExportCommandTest extends TestCase
             $fileName
         ));
 
-        $fp = \file($this->getFilePath($fileName));
-        $lineAmount = \count($fp);
+        $lineAmount = $this->getLineAmount($fileName);
 
         static::assertSame('Using format: xml.', $consoleOutput[1]);
         static::assertSame('Total count: 100.', $consoleOutput[3]);
@@ -312,8 +302,7 @@ class ExportCommandTest extends TestCase
 
         $consoleOutput = $this->runCommand(sprintf('sw:importexport:export -p %s -l 1 %s', $profileName, $fileName));
 
-        $fp = \file($this->getFilePath($fileName));
-        $lineAmount = \count($fp);
+        $lineAmount = $this->getLineAmount($fileName);
 
         static::assertSame('Using format: xml.', $consoleOutput[1]);
         static::assertSame('Total count: 1.', $consoleOutput[3]);
@@ -334,8 +323,7 @@ class ExportCommandTest extends TestCase
 
         $consoleOutput = $this->runCommand(sprintf('sw:importexport:export -p %s -l 40 %s', $profileName, $fileName));
 
-        $fp = \file($this->getFilePath($fileName));
-        $lineAmount = \count($fp);
+        $lineAmount = $this->getLineAmount($fileName);
 
         static::assertSame('Using format: xml.', $consoleOutput[1]);
         static::assertSame('Total count: 40.', $consoleOutput[3]);
@@ -346,7 +334,7 @@ class ExportCommandTest extends TestCase
         );
     }
 
-    public function testArticlesInStockXmlExportCommandWithLimit(): void
+    public function testProductsInStockXmlExportCommandWithLimit(): void
     {
         $expectedLineAmount = 1408;
         $profileName = 'default_article_in_stock';
@@ -356,8 +344,7 @@ class ExportCommandTest extends TestCase
 
         $consoleOutput = $this->runCommand(sprintf('sw:importexport:export -p %s -l 200 %s', $profileName, $fileName));
 
-        $fp = \file($this->getFilePath($fileName));
-        $lineAmount = \count($fp);
+        $lineAmount = $this->getLineAmount($fileName);
 
         static::assertSame('Using format: xml.', $consoleOutput[1]);
         static::assertSame('Total count: 200.', $consoleOutput[3]);
@@ -368,7 +355,7 @@ class ExportCommandTest extends TestCase
         );
     }
 
-    public function testArticlesPricesXmlExportCommandWithLimit(): void
+    public function testProductsPricesXmlExportCommandWithLimit(): void
     {
         if (SwagVersionHelper::isShopware578()) {
             $expectedLineAmount = 1308;
@@ -382,8 +369,7 @@ class ExportCommandTest extends TestCase
 
         $consoleOutput = $this->runCommand(sprintf('sw:importexport:export -p %s -l 100 %s', $profileName, $fileName));
 
-        $fp = \file($this->getFilePath($fileName));
-        $lineAmount = \count($fp);
+        $lineAmount = $this->getLineAmount($fileName);
 
         static::assertSame('Using format: xml.', $consoleOutput[1]);
         static::assertSame('Total count: 100.', $consoleOutput[3]);
@@ -394,7 +380,7 @@ class ExportCommandTest extends TestCase
         );
     }
 
-    public function testArticlesImagesXmlExportCommandWithLimit(): void
+    public function testProductsImagesXmlExportCommandWithLimit(): void
     {
         $profileName = 'default_article_images';
 
@@ -404,7 +390,7 @@ class ExportCommandTest extends TestCase
         $this->runCommand(sprintf('sw:importexport:export -p %s -l 50 %s', $profileName, $fileName));
     }
 
-    public function testArticlesTranslationsXmlExportCommandWithLimit(): void
+    public function testProductsTranslationsXmlExportCommandWithLimit(): void
     {
         $profileName = 'default_article_translations_update';
 
@@ -427,8 +413,7 @@ class ExportCommandTest extends TestCase
 
         $consoleOutput = $this->runCommand(sprintf('sw:importexport:export -p %s -l 2 %s', $profileName, $fileName));
 
-        $fp = \file($this->getFilePath($fileName));
-        $lineAmount = \count($fp);
+        $lineAmount = $this->getLineAmount($fileName);
 
         static::assertSame('Using format: xml.', $consoleOutput[1]);
         static::assertSame('Total count: 2.', $consoleOutput[3]);
@@ -449,8 +434,7 @@ class ExportCommandTest extends TestCase
 
         $consoleOutput = $this->runCommand(sprintf('sw:importexport:export -p %s -l 10 %s', $profileName, $fileName));
 
-        $fp = \file($this->getFilePath($fileName));
-        $lineAmount = \count($fp);
+        $lineAmount = $this->getLineAmount($fileName);
 
         static::assertSame('Using format: xml.', $consoleOutput[1]);
         static::assertSame('Total count: 10.', $consoleOutput[3]);
@@ -473,8 +457,7 @@ class ExportCommandTest extends TestCase
 
         $consoleOutput = $this->runCommand(sprintf('sw:importexport:export -p %s -l 15 %s', $profileName, $fileName));
 
-        $fp = \file($this->getFilePath($fileName));
-        $lineAmount = \count($fp);
+        $lineAmount = $this->getLineAmount($fileName);
 
         static::assertSame('Using format: xml.', $consoleOutput[1]);
         static::assertSame('Total count: 15.', $consoleOutput[3]);
@@ -483,5 +466,13 @@ class ExportCommandTest extends TestCase
             $lineAmount,
             sprintf('Expected %s lines, found %s', $expectedLineAmount, $lineAmount)
         );
+    }
+
+    private function getLineAmount(string $fileName): int
+    {
+        $fp = \file($this->getFilePath($fileName));
+        static::assertIsArray($fp);
+
+        return \count($fp);
     }
 }

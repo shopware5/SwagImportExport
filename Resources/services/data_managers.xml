@@ -1,0 +1,54 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services https://symfony.com/schema/dic/services/services-1.0.xsd">
+    <services>
+        <defaults public="true"/>
+
+        <service id="SwagImportExport\Components\DataManagers\Products\ProductDataManager">
+            <argument type="service" id="db"/>
+            <argument type="service" id="SwagImportExport\Components\DbalHelper"/>
+
+            <tag name="import_export.data_manager"/>
+            <tag name="import_export.proxyable"/>
+        </service>
+
+        <service id="SwagImportExport\Components\DataManagers\Products\PriceDataManager">
+            <tag name="import_export.proxyable"/>
+        </service>
+
+        <service id="SwagImportExport\Components\DataManagers\ProductImageDataManager">
+            <argument type="service" id="db"/>
+
+            <tag name="import_export.proxyable"/>
+        </service>
+
+        <service id="SwagImportExport\Components\DataManagers\ProductPriceDataManager">
+            <tag name="import_export.proxyable"/>
+        </service>
+
+        <service id="SwagImportExport\Components\DataManagers\CategoriesDataManager">
+
+            <tag name="import_export.data_manager"/>
+            <tag name="import_export.proxyable"/>
+        </service>
+
+        <service id="SwagImportExport\Components\DataManagers\CustomerDataManager">
+            <argument type="service" id="db"/>
+            <argument type="service" id="config"/>
+            <argument type="service" id="passwordencoder"/>
+            <argument type="service" id="shopware.number_range_incrementer"/>
+
+            <tag name="import_export.data_manager"/>
+            <tag name="import_export.proxyable"/>
+        </service>
+
+        <service id="SwagImportExport\Components\DataManagers\NewsletterDataManager">
+            <argument type="service" id="config"/>
+            <argument type="service" id="models"/>
+
+            <tag name="import_export.data_manager"/>
+            <tag name="import_export.proxyable"/>
+        </service>
+    </services>
+</container>

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -12,9 +13,10 @@ use SwagImportExport\Tests\Helper\DataProvider\ProfileDataProvider;
 
 class BackendControllerTestHelper
 {
-    public const EXPECTED_EXPORT_FILES_DIR = __DIR__ . '/ExportFiles';
-
-    private $files = [];
+    /**
+     * @var array<string>
+     */
+    private array $files = [];
 
     public function tearDown(): void
     {
@@ -23,12 +25,7 @@ class BackendControllerTestHelper
         }
     }
 
-    /**
-     * @param string $type
-     *
-     * @return int
-     */
-    public function getProfileIdByType($type)
+    public function getProfileIdByType(string $type): int
     {
         $profileDataProvider = new ProfileDataProvider(
             Shopware()->Container()->get('dbal_connection')
@@ -37,10 +34,7 @@ class BackendControllerTestHelper
         return $profileDataProvider->getProfileId($type);
     }
 
-    /**
-     * @param string $file
-     */
-    public function addFile($file)
+    public function addFile(string $file): void
     {
         $this->files[] = $file;
     }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -10,6 +11,7 @@ namespace SwagImportExport\Tests\Integration\DefaultProfiles\Import;
 
 use PHPUnit\Framework\TestCase;
 use SwagImportExport\Tests\Helper\CommandTestCaseTrait;
+use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Integration\DefaultProfiles\DefaultProfileImportTestCaseTrait;
 
@@ -18,8 +20,9 @@ class MinimalCategoriesProfileTest extends TestCase
     use CommandTestCaseTrait;
     use DefaultProfileImportTestCaseTrait;
     use DatabaseTestCaseTrait;
+    use ContainerTrait;
 
-    public function testImportShouldImportCategories()
+    public function testImportShouldImportCategories(): void
     {
         $filePath = $this->getImportFile('categories_profile_test.csv');
         $this->runCommand("sw:import:import -p default_categories {$filePath}");
@@ -27,11 +30,11 @@ class MinimalCategoriesProfileTest extends TestCase
         $createdCategory = $this->executeQuery("SELECT * FROM s_categories WHERE description='NewCategoryWithId'");
         $createdChildCategory = $this->executeQuery("SELECT * FROM s_categories WHERE description='NewChildCategoryWithId'");
 
-        //Parent category assertion
+        // Parent category assertion
         static::assertEquals('NewCategoryWithId', $createdCategory[0]['description']);
         static::assertEquals('9999', $createdCategory[0]['id']);
 
-        //Child category assertion
+        // Child category assertion
         static::assertEquals('NewChildCategoryWithId', $createdChildCategory[0]['description']);
         static::assertEquals('10000', $createdChildCategory[0]['id']);
         static::assertEquals('9999', $createdChildCategory[0]['parent']);

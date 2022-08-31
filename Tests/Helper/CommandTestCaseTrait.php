@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
  *
@@ -9,6 +10,7 @@
 namespace SwagImportExport\Tests\Helper;
 
 use Shopware\Components\Console\Application;
+use Shopware\Components\DependencyInjection\Container;
 use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\StreamOutput;
 
@@ -17,7 +19,9 @@ trait CommandTestCaseTrait
     /**
      * @var array<string>
      */
-    private $files = [];
+    private array $files = [];
+
+    abstract public function getContainer(): Container;
 
     /**
      * @after
@@ -30,14 +34,17 @@ trait CommandTestCaseTrait
     }
 
     /**
-     * @return array<mixed>
+     * @return array<string>
      */
     protected function runCommand(string $command): array
     {
-        $application = new Application(Shopware()->Container()->get('kernel'));
+        $application = new Application($this->getContainer()->get('kernel'));
         $application->setAutoExit(true);
 
         $fp = \tmpfile();
+        if (!\is_resource($fp)) {
+            throw new \RuntimeException('Could not create tmp file');
+        }
         $input = new StringInput($command);
         $output = new StreamOutput($fp);
 
@@ -58,6 +65,9 @@ trait CommandTestCaseTrait
         return Shopware()->DocPath() . $fileName;
     }
 
+    /**
+     * @param resource $fp
+     */
     private function readConsoleOutput($fp): string
     {
         \fseek($fp, 0);
@@ -68,7 +78,7 @@ trait CommandTestCaseTrait
         \fclose($fp);
 
         if (!\is_string($output)) {
-            throw new \Exception(sprintf('Could not read filepath %s', $fp));
+            throw new \RuntimeException(sprintf('Could not read filepath %s', (string) $fp));
         }
 
         return $output;
