@@ -15,11 +15,22 @@
     <description lang="de">Das Importieren und Exportieren von Artikeln, Kunden oder Kategorien gehört zum Alltag vieler Shopbetreiber: Schnell lassen sich so Lagerbestände aktualisieren, Preise anpassen oder Erstimporte vornehmen.</description>
     <description lang="en">Importing and exporting product and customer data, categories as well as product images is a standard task of any shop owner. Keeping that in mind, Shopware wants to make it as easy as possible for you to quickly edit inventory, prices or even perform a customized import.</description>
 
+    <changelog version="3.0.0">
+        <changes lang="de">
+            PT-12610 - Umbau des Plugins auf das moderne Shopware-5-Plugin-System. Bitte testen Sie diese neue Version zuerst in einer Staging-Umgebung;
+        </changes>
+        <changes lang="en">
+            PT-12610 - Rebuild of the plugin to the modern Shopware 5 plugin system. Please test this new version in a staging environment first;
+        </changes>
+    </changelog>
+
     <changelog version="2.12.0">
         <changes lang="de">
+            PT-12662 - Neues Preisfeld 'Günstigster Preis der letztens 30 Tage' kann nun importiert und exportiert werden;
             PT-12695 - Zurückziehen der Änderungen aus PT-1238 und neue Events hinzugefügt;
         </changes>
         <changes lang="en">
+            PT-12662 - New price field 'Cheapest price of the last 30 days' can now be imported and exported;
             PT-12695 - Revert changes from PT-12384 and add new events;
         </changes>
     </changelog>
