@@ -145,7 +145,7 @@ class CategoryWriter
 
         $parentId = $this->db->fetchOne($sql, $params);
 
-        //check whether we have more than one category on the same level with the same name
+        // check whether we have more than one category on the same level with the same name
         $count = $this->db->fetchCol($sql, $params);
         if (\count($count) > 1) {
             $message = SnippetsHelper::getNamespace()
@@ -153,7 +153,7 @@ class CategoryWriter
             throw new AdapterException(\sprintf($message, $description));
         }
 
-        //check whether the category should be created
+        // check whether the category should be created
         if (!\is_numeric($parentId)) {
             $parentId = $this->insertCategory($description, $id, $path);
             $this->insertCategoryAttributes($parentId);
@@ -263,26 +263,26 @@ class CategoryWriter
                         $isCategoryExists = $this->isCategoryExists($category['categoryId']);
                     }
 
-                    //if categoryId exists, the article will be assigned to it, no matter of the categoryPath
+                    // if categoryId exists, the article will be assigned to it, no matter of the categoryPath
                     if ($isCategoryExists === true) {
                         $this->categoryIds[$category['categoryId']] = (int) $category['categoryId'];
 
                         return "({$articleId}, {$category['categoryId']})";
                     }
 
-                    //if categoryId does NOT exist and categoryPath is empty an error will be shown
+                    // if categoryId does NOT exist and categoryPath is empty an error will be shown
                     if ($isCategoryExists === false && empty($category['categoryPath'])) {
                         $message = SnippetsHelper::getNamespace()
                             ->get('adapters/articles/category_not_found', 'Category with id %s could not be found.');
                         throw new AdapterException(\sprintf($message, $category['categoryId']));
                     }
 
-                    //if categoryPath exists, the article will be assign based on the path
+                    // if categoryPath exists, the article will be assign based on the path
                     if (!empty($category['categoryPath'])) {
-                        //get categoryId by given path: 'English->Cars->Mazda'
+                        // get categoryId by given path: 'English->Cars->Mazda'
                         $category['categoryId'] = $this->getCategoryId($category['categoryPath']);
 
-                        //check whether the category is a leaf
+                        // check whether the category is a leaf
                         $isLeaf = $this->isLeaf($category['categoryId']);
 
                         if (!$isLeaf) {

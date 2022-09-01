@@ -50,7 +50,7 @@ JavaScript analyze:
         - unzip -q plugin.zip -d shopware/engine/Shopware/Plugins/Local/Backend/${PLUGIN_NAME}
     script:
         - cd shopware
-        - make install-theme-depencencies
+        - make .make.install.npm-dependencies
         - cd engine/Shopware/Plugins/Local/Backend/${PLUGIN_NAME}
         - make check-eslint-backend
 

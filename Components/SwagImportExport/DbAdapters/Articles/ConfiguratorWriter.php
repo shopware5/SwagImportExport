@@ -138,7 +138,7 @@ class ConfiguratorWriter
                     throw new AdapterException(\sprintf($message, $configurator['configOptionId']));
                 }
             } else {
-                //gets or creates configurator group
+                // gets or creates configurator group
                 $groupId = $this->getConfiguratorGroup($configurator);
             }
 
@@ -148,7 +148,7 @@ class ConfiguratorWriter
                 $optionId = $this->getOptionIdByOptionNameAndGroupId($configurator['configOptionName'], $groupId);
             }
 
-            //creates option
+            // creates option
             if (!$optionId) {
                 if (isset($configurator['configOptionPosition']) && !empty($configurator['configOptionPosition'])) {
                     $position = $configurator['configOptionPosition'];
@@ -307,7 +307,7 @@ class ConfiguratorWriter
      */
     protected function createSet($data)
     {
-        //Delete id to avoid unique constraint violations
+        // Delete id to avoid unique constraint violations
         unset($data['id']);
 
         $builder = $this->dbalHelper

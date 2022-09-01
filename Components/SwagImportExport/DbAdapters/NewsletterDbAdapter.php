@@ -98,7 +98,7 @@ class NewsletterDbAdapter implements DataDbAdapter
             'DATE_FORMAT(na.doubleOptinConfirmed, \'%Y-%m-%d %H:%i:%s\') as doubleOptinConfirmed',
         ];
 
-        //removes street number for shopware 5
+        // removes street number for shopware 5
         if (!$this->hasAdditionalShippingAddress()) {
             $columns[] = 'CASE WHEN (cb.streetNumber IS NULL) THEN cd.streetNumber ELSE cb.streetNumber END as streetNumber';
         }

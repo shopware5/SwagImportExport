@@ -80,7 +80,7 @@ class ImportCommand extends ShopwareCommand
         /** @var UploadPathProvider $uploadPathProvider */
         $uploadPathProvider = $this->container->get('swag_import_export.upload_path_provider');
 
-        //loops the unprocessed data
+        // loops the unprocessed data
         $pathInfo = \pathinfo($this->filePath);
         foreach ($profilesMapper as $profileName) {
             $tmpFile = $uploadPathProvider->getRealPath(

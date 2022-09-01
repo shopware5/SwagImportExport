@@ -66,7 +66,7 @@ class DbalHelper
         if ($primaryId) {
             $id = $builder->createNamedParameter($primaryId, \PDO::PARAM_INT);
             $builder->update($table);
-            //update article id in case we don't have any field for update
+            // update article id in case we don't have any field for update
             $builder->set('id', $id);
             $builder->where('id = ' . $id);
         } else {

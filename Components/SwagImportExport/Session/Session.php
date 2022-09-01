@@ -96,21 +96,21 @@ class Session
         $sessionEntity = $this->getEntity();
 
         if (isset($data['totalCountedIds']) && $data['totalCountedIds'] > 0) {
-            //set count
+            // set count
             $sessionEntity->setTotalCount($data['totalCountedIds']);
         }
-        //set ids
+        // set ids
         $sessionEntity->setIds($data['serializedIds']);
 
-        //set type
+        // set type
         $sessionEntity->setType($data['type']);
 
-        //set position
+        // set position
         $sessionEntity->setPosition(0);
 
         $dateTime = new \DateTime('now');
 
-        //set date/time
+        // set date/time
         $sessionEntity->setCreatedAt($dateTime);
 
         if (!isset($data['fileName'])) {
@@ -119,7 +119,7 @@ class Session
 
         /** @var UploadPathProvider $uploadPathProvider */
         $uploadPathProvider = Shopware()->Container()->get('swag_import_export.upload_path_provider');
-        //set fileName
+        // set fileName
         $sessionEntity->setFileName(
             $uploadPathProvider->getFileNameFromPath($data['fileName'])
         );
@@ -132,16 +132,16 @@ class Session
             throw new \Exception('Invalid format.');
         }
 
-        //set username
+        // set username
         $sessionEntity->setUserName($data['username']);
 
-        //set format
+        // set format
         $sessionEntity->setFormat($data['format']);
 
-        //change state
+        // change state
         $sessionEntity->setState('active');
 
-        //set profile
+        // set profile
         $sessionEntity->setProfile($profile->getEntity());
 
         $this->getManager()->persist($sessionEntity);

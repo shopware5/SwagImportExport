@@ -75,7 +75,7 @@ class DataWorkflow
         }
 
         if ($this->dataIO->getSessionState() === 'new') {
-            //todo: create file here ?
+            // todo: create file here ?
             if ($outputFileName === '') {
                 $fileName = $this->dataIO->generateFileName($this->profile);
                 $this->dataIO->getDirectory();
@@ -159,7 +159,7 @@ class DataWorkflow
 
         $this->dataIO->usernameSession();
         if ($this->dataIO->getSessionState() === 'active') {
-            //get current session position
+            // get current session position
             $batchSize = (int) $postData['batchSize'];
 
             $position = $this->dataIO->getSessionPosition();
@@ -170,16 +170,16 @@ class DataWorkflow
 
             $defaultValues = $this->profile->getDefaultValues($tree);
 
-            //inserts/update data into the database
+            // inserts/update data into the database
             $this->dataIO->write($data, $defaultValues);
 
-            //writes into database log table
+            // writes into database log table
             $profileName = $this->profile->getName();
             $this->dataIO->writeLog($inputFile, $profileName);
 
             $this->dataIO->progressSession($batchSize);
 
-            //gets unprocessed data from the adapter
+            // gets unprocessed data from the adapter
             $postData['unprocessedData'] = $this->dataIO->getUnprocessedData();
         }
 

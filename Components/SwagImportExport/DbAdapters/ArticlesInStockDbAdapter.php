@@ -88,7 +88,7 @@ class ArticlesInStockDbAdapter implements DataDbAdapter
             throw new \Exception($message);
         }
 
-        //prices
+        // prices
         $columns = \array_merge(
             $columns,
             ['customerGroup.taxInput as taxInput', 'articleTax.tax as tax']

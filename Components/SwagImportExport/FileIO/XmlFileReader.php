@@ -32,7 +32,7 @@ class XmlFileReader implements FileReader
      */
     public function readRecords($fileName, $position, $count)
     {
-        //todo: add string argument
+        // todo: add string argument
         $reader = new \XMLReader();
         $reader->open($fileName);
 

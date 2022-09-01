@@ -10,7 +10,6 @@ use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\SwagImportExport\UploadPathProvider;
 use Shopware\CustomModels\ImportExport\Logger;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\FileBag;
 
 /**
  * Shopware ImportExport Plugin
@@ -34,7 +33,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
         /** @var UploadedFile $file */
         $file = $this->Request()->files->get('fileId');
 
-        if(!$file->isValid()) {
+        if (!$file->isValid()) {
             return $this->View()->assign(['success' => false, 'message' => $file->getErrorMessage()]);
         }
 
@@ -118,7 +117,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
             $response->sendHeaders();
 
             \readfile($filePath);
-            exit();
+            exit;
         } catch (\Exception $e) {
             $this->View()->assign(
                 [
@@ -148,10 +147,10 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
         $paginator = $this->getModelManager()->createPaginator($query);
 
-        //returns the total count of the query
+        // returns the total count of the query
         $total = $paginator->count();
 
-        //returns the customer data
+        // returns the customer data
         $data = $paginator->getIterator()->getArrayCopy();
 
         $this->View()->assign([

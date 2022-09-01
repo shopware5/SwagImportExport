@@ -325,13 +325,13 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                         foreach ($variantConfig as $config) {
                             list($group, $option) = \explode(':', $config);
 
-                            //Get configurator group
+                            // Get configurator group
                             $cGroupModel = $this->manager->getRepository(Group::class)->findOneBy(['name' => $group]);
                             if ($cGroupModel === null) {
                                 continue;
                             }
 
-                            //Get configurator option
+                            // Get configurator option
                             $cOptionModel = $this->manager->getRepository(Option::class)->findOneBy(['name' => $option, 'groupId' => $cGroupModel->getId()]);
                             if ($cOptionModel === null) {
                                 continue;
@@ -353,7 +353,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                     $media = $mediaRepository->findOneBy(['name' => $name]);
                 }
 
-                //create new media
+                // create new media
                 if ($this->imageImportMode === 2 || empty($media)) {
                     $path = $this->load($record['image'], $name);
                     $file = new File($path);
@@ -371,11 +371,11 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
                     $this->manager->persist($media);
                     $this->manager->flush();
 
-                    //thumbnail flag
-                    //TODO: validate thumbnail
+                    // thumbnail flag
+                    // TODO: validate thumbnail
                     $thumbnail = (bool) $record['thumbnail'];
 
-                    //generate thumbnails
+                    // generate thumbnails
                     if ($media->getType() === Media::TYPE_IMAGE && $thumbnail) {
                         $this->thumbnailManager->createMediaThumbnail($media, [], true);
                     }
@@ -677,7 +677,7 @@ class ArticlesImagesDbAdapter implements DataDbAdapter
             throw new AdapterException(\sprintf($message), $destPath, $filename);
         }
 
-        //replace empty spaces
+        // replace empty spaces
         $url = \str_replace(' ', '%20', $url);
 
         if ($urlScheme === self::PROTOCOL_FILE) {

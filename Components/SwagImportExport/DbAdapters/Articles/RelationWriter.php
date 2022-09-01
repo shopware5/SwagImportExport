@@ -90,7 +90,7 @@ class RelationWriter
         $newRelations = [];
         $allRelations = [];
         foreach ($relations as $relation) {
-            //if relation data has only 'parentIndexElement' element
+            // if relation data has only 'parentIndexElement' element
             if (\count($relation) < 2) {
                 break;
             }
@@ -140,12 +140,12 @@ class RelationWriter
         }
 
         if ($allRelations && !$processedFlag) {
-            //delete the relations that don't exist in the csv file, but exist in the db"
+            // delete the relations that don't exist in the csv file, but exist in the db"
             $this->deleteRelations($allRelations, $articleId);
         }
 
         if ($newRelations) {
-            $this->insertRelations($newRelations, $articleId); //insert only new relations
+            $this->insertRelations($newRelations, $articleId); // insert only new relations
         }
     }
 

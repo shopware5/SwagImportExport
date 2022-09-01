@@ -14,7 +14,7 @@ use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 class ArticlePriceValidator extends Validator
 {
     public static $mapper = [
-        'string' => [ //TODO: maybe we don't need to check fields which contains string?
+        'string' => [ // TODO: maybe we don't need to check fields which contains string?
             'orderNumber',
             'priceGroup',
             'name',

@@ -37,7 +37,7 @@ class Shopware_Controllers_Backend_SwagImportExportCron extends Shopware_Control
      */
     public function preDispatch()
     {
-        //Call cron only if request is not from browser
+        // Call cron only if request is not from browser
         if (\PHP_SAPI === 'cli') {
             $this->cronAction();
         }

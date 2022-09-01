@@ -286,7 +286,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         }
         unset($record);
 
-        //images
+        // images
         $imageBuilder = $this->getImageBuilder($columns['image'], $ids);
         $tempImageResult = $imageBuilder->getQuery()->getResult();
         foreach ($tempImageResult as &$tempImage) {
@@ -295,23 +295,23 @@ class ArticlesDbAdapter implements DataDbAdapter
         unset($tempImage);
         $result['image'] = $tempImageResult;
 
-        //filter values
+        // filter values
         $propertyValuesBuilder = $this->getPropertyValueBuilder($columns['propertyValues'], $ids);
         $result['propertyValue'] = $propertyValuesBuilder->getQuery()->getResult();
 
-        //configurator
+        // configurator
         $configBuilder = $this->getConfiguratorBuilder($columns['configurator'], $ids);
         $result['configurator'] = $configBuilder->getQuery()->getResult();
 
-        //similar
+        // similar
         $similarsBuilder = $this->getSimilarBuilder($columns['similar'], $ids);
         $result['similar'] = $similarsBuilder->getQuery()->getResult();
 
-        //accessories
+        // accessories
         $accessoryBuilder = $this->getAccessoryBuilder($columns['accessory'], $ids);
         $result['accessory'] = $accessoryBuilder->getQuery()->getResult();
 
-        //categories
+        // categories
         $result['category'] = $this->prepareCategoryExport($ids, $columns['category']);
 
         $result['translation'] = $this->prepareTranslationExport($ids);
@@ -331,7 +331,7 @@ class ArticlesDbAdapter implements DataDbAdapter
 
         $categoryMapper = $this->getAssignedCategoryNames($articleCategories);
 
-        //convert path
+        // convert path
         foreach ($articleCategories as &$pathIds) {
             $pathIds['categoryPath'] = $this->generatePath($pathIds, $categoryMapper);
         }
@@ -356,7 +356,7 @@ class ArticlesDbAdapter implements DataDbAdapter
                 ";
         $translations = $this->db->query($sql)->fetchAll();
 
-        //all translation fields that can be translated for an article
+        // all translation fields that can be translated for an article
         $translationFields = $this->getTranslationFields();
         $rows = [];
         foreach ($translations as $index => $record) {
@@ -382,7 +382,7 @@ class ArticlesDbAdapter implements DataDbAdapter
         }
 
         $shops = $this->getShops();
-        unset($shops[0]); //removes default language
+        unset($shops[0]); // removes default language
 
         $result = [];
         foreach ($rows as $vId => $row) {
@@ -401,7 +401,7 @@ class ArticlesDbAdapter implements DataDbAdapter
             }
         }
 
-        //Sets missing translation fields with empty string
+        // Sets missing translation fields with empty string
         foreach ($result as &$resultRow) {
             foreach ($translationFields as $field) {
                 if (!isset($resultRow[$field])) {
@@ -503,7 +503,7 @@ class ArticlesDbAdapter implements DataDbAdapter
      */
     public function write($records)
     {
-        //articles
+        // articles
         if (empty($records['article'])) {
             $message = SnippetsHelper::getNamespace()->get(
                 'adapters/articles/no_records',
@@ -1237,10 +1237,10 @@ class ArticlesDbAdapter implements DataDbAdapter
             }
         }
 
-        //only unique ids
+        // only unique ids
         $categoryIds = \array_unique($categoryIds);
 
-        //removes empty value
+        // removes empty value
         $categoryIds = \array_filter($categoryIds);
 
         $categoriesNames = $this->modelManager->createQueryBuilder()

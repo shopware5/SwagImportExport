@@ -27,11 +27,11 @@ class MinimalCategoriesProfileTest extends TestCase
         $createdCategory = $this->executeQuery("SELECT * FROM s_categories WHERE description='NewCategoryWithId'");
         $createdChildCategory = $this->executeQuery("SELECT * FROM s_categories WHERE description='NewChildCategoryWithId'");
 
-        //Parent category assertion
+        // Parent category assertion
         static::assertEquals('NewCategoryWithId', $createdCategory[0]['description']);
         static::assertEquals('9999', $createdCategory[0]['id']);
 
-        //Child category assertion
+        // Child category assertion
         static::assertEquals('NewChildCategoryWithId', $createdChildCategory[0]['description']);
         static::assertEquals('10000', $createdChildCategory[0]['id']);
         static::assertEquals('9999', $createdChildCategory[0]['parent']);
