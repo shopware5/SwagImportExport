@@ -9,7 +9,9 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
         start: '{s name="swag_import_export/import/start"}Start importing{/s}',
         close: '{s name="swag_import_export/import/close"}Close{/s}',
         failure: '{s name="swag_import_export/import/failure-title"}An error occurred{/s}',
-        unprocess: '{s name="swag_import_export/import/unprocessed"}Start importing unprocessed data{/s}'
+        unprocess: '{s name="swag_import_export/import/unprocessed"}Start importing unprocessed data{/s}',
+        invalidFileName: '{s name="swag_import_export/import/invalidFileName"}Not a valid file name. Please use only alphanumeric, - or _ as characters with the corresponding file extension.{/s}',
+        invalidFileFormat: '{s name="swag_import_export/import/invalidFileFormat"}No valid file format. Please use xml or csv.{/s}'
     },
 
     refs: [
@@ -100,9 +102,15 @@ Ext.define('Shopware.apps.SwagImportExport.controller.Import', {
                     me.onCreateImportWindow();
                 },
                 failure: function(fp, response) {
+                    var text = response.result.message;
+
+                    if (this.snippets[response.result.error]) {
+                        text = this.snippets[response.result.error];
+                    }
+
                     Shopware.Msg.createStickyGrowlMessage({
                         title: me.snippets.failure,
-                        text: response.result.message
+                        text: text
                     });
                     var mask = Ext.get(Ext.getBody().query('.x-mask'));
                     mask.hide();
