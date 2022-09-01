@@ -31,16 +31,28 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
     public function uploadFileAction()
     {
+        /** @var UploadedFile $file */
+        $file = $this->Request()->files->get('fileId');
+
+        if(!$file->isValid()) {
+            return $this->View()->assign(['success' => false, 'message' => $file->getErrorMessage()]);
+        }
+
+        $clientOriginalName = $file->getClientOriginalName();
+
+        if (!preg_match('/^[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/', $clientOriginalName)) {
+            return $this->View()->assign(['success' => false, 'message' => 'No valid file name']);
+        }
+
+        $extension = $file->getClientOriginalExtension();
+
+        if (!$this->isFormatValid($extension) || \in_array($extension, Shopware_Controllers_Backend_MediaManager::$fileUploadBlacklist, true)) {
+            return $this->View()->assign(['success' => false, 'message' => 'No valid file format']);
+        }
+
         /** @var UploadPathProvider $uploadPathProvider */
         $uploadPathProvider = $this->get('swag_import_export.upload_path_provider');
-        $fileBag = new FileBag($_FILES);
-
-        $clientOriginalName = '';
-        /** @var UploadedFile $file */
-        foreach ($fileBag->getIterator() as $file) {
-            $clientOriginalName = $file->getClientOriginalName();
-            $file->move($uploadPathProvider->getPath(), $clientOriginalName);
-        }
+        $file->move($uploadPathProvider->getPath(), $clientOriginalName);
 
         $this->view->assign([
             'success' => true,
@@ -154,5 +166,23 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
     {
         $this->addAclPermission('uploadFile', 'import', 'Insuficient Permissions (uploadFile)');
         $this->addAclPermission('downloadFile', 'export', 'Insuficient Permissions (downloadFile)');
+    }
+
+    /**
+     * Check is file format valid
+     *
+     * @param string $extension
+     *
+     * @return bool
+     */
+    private function isFormatValid($extension)
+    {
+        switch ($extension) {
+            case 'csv':
+            case 'xml':
+                return true;
+            default:
+                return false;
+        }
     }
 }
