@@ -64,7 +64,6 @@ PHP analyze:
                 sed -i "s|reportUnmatchedIgnoredErrors: true|reportUnmatchedIgnoredErrors: false|g" phpstan.neon
             fi
         - make fix-cs-dry
-        - make phpstan
 
 Code Coverage:
     stage: PHPUnit

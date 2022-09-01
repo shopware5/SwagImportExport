@@ -71,7 +71,7 @@ class SwagImportExportTest extends TestCase
             'php',
             false,
         ];
-        yield 'With php.jpeg file' => [
+        yield 'With php.csv file' => [
             'test.php.csv',
             true,
             'csv',

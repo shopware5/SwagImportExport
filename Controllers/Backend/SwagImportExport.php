@@ -45,7 +45,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends Shopware_Controllers
 
         $extension = $file->getClientOriginalExtension();
 
-        if (!$this->isFormatValid($extension) || \in_array($extension, Shopware_Controllers_Backend_MediaManager::$fileUploadBlacklist, true)) {
+        if (!$this->isFormatValid($extension)) {
             return $this->View()->assign(['success' => false, 'message' => 'No valid file format']);
         }
 
