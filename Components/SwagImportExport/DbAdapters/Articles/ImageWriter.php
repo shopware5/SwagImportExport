@@ -53,7 +53,7 @@ class ImageWriter
     {
         $newImages = [];
         foreach ($images as $image) {
-            //if image data has only 'parentIndexElement' element
+            // if image data has only 'parentIndexElement' element
             if (\count($image) < 2) {
                 break;
             }
@@ -104,7 +104,7 @@ class ImageWriter
         }
 
         if ($newImages) {
-            $this->insertImages($newImages, $articleId); //insert only new images
+            $this->insertImages($newImages, $articleId); // insert only new images
         }
     }
 

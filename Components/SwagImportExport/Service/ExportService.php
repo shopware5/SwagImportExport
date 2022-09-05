@@ -134,7 +134,7 @@ class ExportService extends AbstractImportExportService implements ExportService
             }
         }
 
-        //customer stream filter for addresses and customers
+        // customer stream filter for addresses and customers
         if (\in_array($profileType, [DataDbAdapter::CUSTOMER_ADAPTER, DataDbAdapter::ADDRESS_ADAPTER], true)) {
             if (isset($filterParams['customerStreamId'])) {
                 $filter['customerStreamId'] = $filterParams['customerStreamId'];

@@ -14,7 +14,7 @@ use Shopware\Components\SwagImportExport\Utils\SnippetsHelper;
 class TranslationValidator extends Validator
 {
     public static $mapper = [
-        'string' => ['name', 'baseName', 'objectType', 'description'], //TODO: maybe we don't need to check fields which contains string?
+        'string' => ['name', 'baseName', 'objectType', 'description'], // TODO: maybe we don't need to check fields which contains string?
         'int' => ['objectKey', 'languageId'],
     ];
 

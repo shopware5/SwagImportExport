@@ -74,10 +74,10 @@ class Shopware_Controllers_Backend_SwagImportExportSession extends Shopware_Cont
 
         $paginator = $manager->createPaginator($query);
 
-        //returns the total count of the query
+        // returns the total count of the query
         $total = $paginator->count();
 
-        //returns the customer data
+        // returns the customer data
         $data = $paginator->getIterator()->getArrayCopy();
 
         foreach ($data as $key => $row) {
@@ -124,7 +124,7 @@ class Shopware_Controllers_Backend_SwagImportExportSession extends Shopware_Cont
                 }
             }
 
-            //Performs all of the collected actions.
+            // Performs all of the collected actions.
             $manager->flush();
 
             $this->View()->assign([

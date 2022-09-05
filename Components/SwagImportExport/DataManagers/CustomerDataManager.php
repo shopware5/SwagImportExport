@@ -167,13 +167,13 @@ class CustomerDataManager extends DataManager
 
         $subShopId = $record['subshopID'];
 
-        //get defaultPaymentId for subShop
+        // get defaultPaymentId for subShop
         $defaultPaymentId = $this->getSubShopDefaultPaymentId($subShopId);
         if ($defaultPaymentId) {
             return \unserialize($defaultPaymentId);
         }
 
-        //get defaultPaymentId for mainShop
+        // get defaultPaymentId for mainShop
         $defaultPaymentId = $this->getMainShopDefaultPaymentId($subShopId);
         if ($defaultPaymentId) {
             return \unserialize($defaultPaymentId);

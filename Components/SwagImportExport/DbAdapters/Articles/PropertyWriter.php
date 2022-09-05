@@ -360,7 +360,7 @@ class PropertyWriter
     private function updateOrCreateOptionAndValuesByValueName($orderNumber, $propertyData)
     {
         if (isset($propertyData['propertyOptionId']) && !empty($propertyData['propertyOptionId'])) {
-            //todo: check  propertyOptionId existence
+            // todo: check  propertyOptionId existence
             $optionId = $propertyData['propertyOptionId'];
         } elseif (isset($propertyData['propertyOptionName']) && !empty($propertyData['propertyOptionName'])) {
             $optionName = $propertyData['propertyOptionName'];

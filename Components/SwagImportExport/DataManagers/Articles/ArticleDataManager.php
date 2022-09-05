@@ -385,7 +385,7 @@ class ArticleDataManager extends DataManager
         $name = $record['supplierName'];
         $supplierId = $this->suppliers[$name];
 
-        //creates supplier if does not exists
+        // creates supplier if does not exists
         if (!$supplierId) {
             $data = ['name' => $name];
             $builder = $this->dbalHelper->getQueryBuilderForEntity(

@@ -604,7 +604,7 @@ class CustomerDbAdapter implements DataDbAdapter
 
             $customer = $this->manager->getRepository(Customer::class)->findBy($filter);
 
-            //checks for multiple email address
+            // checks for multiple email address
             if (\count($customer) > 0 && $customer[0]->getNumber() !== $record['customerNumber']) {
                 $message = SnippetsHelper::getNamespace()
                     ->get('adapters/customer/multiple_email', 'There are existing email address/es with %s having different customer numbers. Please provide subshopID or equalize customer number');
@@ -722,7 +722,7 @@ class CustomerDbAdapter implements DataDbAdapter
         $billingData = [];
 
         foreach ($record as $key => $value) {
-            //prepares the attributes
+            // prepares the attributes
             if (strpos($key, 'attrBilling') === 0) {
                 $newKey = \lcfirst(\preg_replace('/^attrBilling/', '', $key));
                 $billingData['attribute'][$newKey] = $value;
@@ -757,7 +757,7 @@ class CustomerDbAdapter implements DataDbAdapter
 
         $shippingData = [];
 
-        //use shipping as billing
+        // use shipping as billing
         if ($newCustomer && empty($record['shippingFirstname']) && empty($record['shippingLastname'])) {
             foreach ($this->shippingMap as $mapKey => $addressKey) {
                 if (!isset($record[$mapKey]) && isset($billing[$addressKey])) {
@@ -770,7 +770,7 @@ class CustomerDbAdapter implements DataDbAdapter
         }
 
         foreach ($record as $key => $value) {
-            //prepares the attributes
+            // prepares the attributes
             if (strpos($key, 'attrShipping') === 0) {
                 $newKey = \lcfirst(\preg_replace('/^attrShipping/', '', $key));
                 $shippingData['attribute'][$newKey] = $value;
@@ -811,18 +811,18 @@ class CustomerDbAdapter implements DataDbAdapter
      */
     protected function preparePayment($subShopID)
     {
-        //on missing shopId return defaultPaymentId
+        // on missing shopId return defaultPaymentId
         if (!isset($subShopID) || $subShopID === '') {
             return $this->config->get('sDEFAULTPAYMENT');
         }
 
-        //get defaultPaymentId for subShiopId = $subShopID
+        // get defaultPaymentId for subShiopId = $subShopID
         $defaultPaymentId = $this->getSubShopDefaultPaymentId($subShopID);
         if ($defaultPaymentId) {
             return \unserialize($defaultPaymentId['value']);
         }
 
-        //get defaultPaymentId for mainShiopId
+        // get defaultPaymentId for mainShiopId
         $defaultPaymentId = $this->getMainShopDefaultPaymentId($subShopID);
         if ($defaultPaymentId) {
             return \unserialize($defaultPaymentId['value']);

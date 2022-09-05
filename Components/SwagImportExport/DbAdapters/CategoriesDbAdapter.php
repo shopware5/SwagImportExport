@@ -397,7 +397,7 @@ class CategoriesDbAdapter implements DataDbAdapter
      */
     protected function prepareData(array $data, $index, $categoryId, $groups)
     {
-        //prepares attribute associated data
+        // prepares attribute associated data
         foreach ($data as $column => $value) {
             if (strpos($column, 'attribute') === 0) {
                 $newKey = \lcfirst(\preg_replace('/^attribute/', '', $column));
@@ -406,7 +406,7 @@ class CategoriesDbAdapter implements DataDbAdapter
             }
         }
 
-        //prepares customer groups associated data
+        // prepares customer groups associated data
         $customerGroups = [];
         $customerGroupIds = $this->getCustomerGroupIdsFromIndex($groups, $index);
         foreach ($customerGroupIds as $customerGroupID) {

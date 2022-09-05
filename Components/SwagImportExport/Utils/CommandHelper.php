@@ -320,7 +320,7 @@ class CommandHelper
         $dbAdapter = $dataFactory->createDbAdapter($profile->getType());
         $dataSession = $dataFactory->loadSession($postData);
 
-        //create dataIO
+        // create dataIO
         $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession, $this->logger);
 
         $colOpts = $dataFactory->createColOpts($postData['columnOptions']);
@@ -390,10 +390,10 @@ class CommandHelper
             'file' => $this->filePath,
         ];
 
-        //get file format
+        // get file format
         $inputFileName = $postData['file'];
 
-        //get profile type
+        // get profile type
         $postData['adapter'] = $this->profileEntity->getType();
 
         // we create the file reader that will read the result file
@@ -411,7 +411,7 @@ class CommandHelper
         $dbAdapter = $dataFactory->createDbAdapter($this->profileEntity->getType());
         $dataSession = $dataFactory->loadSession($postData);
 
-        //create dataIO
+        // create dataIO
         $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession, $this->logger);
 
         $position = $dataIO->getSessionPosition();
@@ -457,14 +457,14 @@ class CommandHelper
         $fileFactory = $this->plugin->getFileIOFactory();
         $fileReader = $fileFactory->createFileReader($postData['format']);
 
-        //load profile
+        // load profile
         /** @var Profile $profile */
         $profile = $this->plugin->getProfileFactory()->loadProfile($postData);
 
-        //get profile type
+        // get profile type
         $postData['adapter'] = $profile->getType();
 
-        //setting up the batch size
+        // setting up the batch size
         $postData['batchSize'] = $profile->getType() === 'articlesImages' ? 1 : 50;
 
         /** @var DataFactory $dataFactory */
@@ -473,7 +473,7 @@ class CommandHelper
         $dbAdapter = $dataFactory->createDbAdapter($profile->getType());
         $dataSession = $dataFactory->loadSession($postData);
 
-        //create dataIO
+        // create dataIO
         $dataIO = $dataFactory->createDataIO($dbAdapter, $dataSession, $this->logger);
 
         $colOpts = $dataFactory->createColOpts($postData['columnOptions']);
@@ -573,7 +573,7 @@ class CommandHelper
         /** @var FileIOFactory $fileFactory */
         $fileFactory = $this->plugin->getFileIOFactory();
 
-        //loads hidden profile for article
+        // loads hidden profile for article
         /** @var Profile $profile */
         $profile = $this->plugin->getProfileFactory()->loadHiddenProfile($profileName);
 

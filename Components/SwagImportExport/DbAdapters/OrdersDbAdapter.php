@@ -276,7 +276,7 @@ class OrdersDbAdapter implements DataDbAdapter
                     $orderDetailModel->fromArray($orderDetailData);
                 }
 
-                //prepares the attributes
+                // prepares the attributes
                 foreach ($record as $key => $value) {
                     if (strpos($key, 'attribute') === 0 && $newKey = \preg_replace('/^attribute/', '', $key)) {
                         $newKey = \lcfirst($newKey);

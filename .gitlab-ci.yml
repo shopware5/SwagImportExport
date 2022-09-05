@@ -50,7 +50,7 @@ JavaScript analyze:
         - unzip -q plugin.zip -d shopware/engine/Shopware/Plugins/Local/Backend/${PLUGIN_NAME}
     script:
         - cd shopware
-        - make install-theme-depencencies
+        - make .make.install.npm-dependencies
         - cd engine/Shopware/Plugins/Local/Backend/${PLUGIN_NAME}
         - make check-eslint-backend
 
@@ -64,7 +64,6 @@ PHP analyze:
                 sed -i "s|reportUnmatchedIgnoredErrors: true|reportUnmatchedIgnoredErrors: false|g" phpstan.neon
             fi
         - make fix-cs-dry
-        - make phpstan
 
 Code Coverage:
     stage: PHPUnit

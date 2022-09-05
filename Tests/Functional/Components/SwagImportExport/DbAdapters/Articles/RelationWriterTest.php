@@ -22,7 +22,7 @@ class RelationWriterTest extends TestCase
      */
     public function createRelationWriterAdapter()
     {
-        //We need to get an instance of the ArticlesDbAdapter because of the given dependency
+        // We need to get an instance of the ArticlesDbAdapter because of the given dependency
         $articlesDbAdapter = new ArticlesDbAdapter();
 
         return new RelationWriter($articlesDbAdapter);

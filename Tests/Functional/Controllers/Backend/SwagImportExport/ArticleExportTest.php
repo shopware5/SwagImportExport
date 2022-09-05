@@ -196,7 +196,7 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
-        //Fetch all article nodes with given category
+        // Fetch all article nodes with given category
         $articleDomNodeList = $this->queryXpath($file, "//article/category[categories='{$categoryId}']");
         static::assertEquals(10, $articleDomNodeList->length);
     }
@@ -442,7 +442,7 @@ class ArticleExportTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
-        //Fetch all article nodes with given category
+        // Fetch all article nodes with given category
         $variantNodeListWithCategoryFilter = $this->queryXpath($file, "//article/category[categories='{$categoryId}']");
         static::assertEquals(10, $variantNodeListWithCategoryFilter->length);
     }

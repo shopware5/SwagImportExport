@@ -248,7 +248,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
         if (isset($this->iterationParts[$nodePath])) { // iteration
             ++$iteration;
             if ($node['adapter'] == 'price') {
-                //find name of column with *price* values
+                // find name of column with *price* values
                 $priceColumnName = $this->findNodeByShopwareField($node, 'price');
                 if ($priceColumnName === false) {
                     throw new \Exception('Price column not found');
@@ -330,7 +330,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 $values = \explode($separator, $this->getDataValue($data, $columnMapper['configOptionName']));
                 $optionIds = \explode($separator, $this->getDataValue($data, $columnMapper['configOptionId']));
 
-                //creates configOptionId to have more priority than configOptionName
+                // creates configOptionId to have more priority than configOptionName
                 $counter = $columnMapper['configOptionId'] !== false ? \count($optionIds) : \count($values);
 
                 for ($i = 0; $i < $counter; ++$i) {
@@ -538,7 +538,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
             $priceProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'price');
             $priceNodeMapper = $this->createMapperFromProfile($priceProfile);
 
-            //saving nodes different from price groups
+            // saving nodes different from price groups
             foreach ($this->getCustomerGroups() as $group) {
                 $this->createHeaderPriceNodes($priceNodeMapper, $group->getKey());
             }
@@ -546,14 +546,14 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
             $configuratorProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'configurator');
             $configuratorNodeMapper = $this->createMapperFromProfile($configuratorProfile);
 
-            //group name, group description and group id is skipped
+            // group name, group description and group id is skipped
             $skipList = ['configGroupId', 'configGroupName', 'configGroupDescription'];
             $this->createHeaderValues($configuratorNodeMapper, $skipList);
         } elseif ($this->iterationParts[$path] === 'propertyValue') {
             $propertyProfile = $this->getNodeFromProfile($this->getMainIterationPart(), 'propertyValue');
             $propertyProfileNodeMapper = $this->createMapperFromProfile($propertyProfile);
 
-            //group name, group description and group id is skipped
+            // group name, group description and group id is skipped
             $skipList = ['propertyOptionName'];
             $this->createHeaderValues($propertyProfileNodeMapper, $skipList);
         } elseif ($this->iterationParts[$path] === 'translation') {
@@ -661,7 +661,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 $currentPath = $path . '/' . $key;
                 $this->createHeaderPriceGroup($value, $currentPath);
             } else {
-                //skipping price group
+                // skipping price group
                 if ($value !== 'priceGroup') {
                     continue;
                 }
@@ -750,7 +750,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 $priceTreeMapper = $this->createMapperFromProfile($priceProfile);
                 $priceFlatMapper = $this->treeToFlat($priceTreeMapper);
 
-                //todo: check price group flag
+                // todo: check price group flag
                 foreach ($this->getCustomerGroups() as $group) {
                     $priceNode = $this->findNodeByPriceGroup($node, $group->getKey(), $priceFlatMapper);
 
@@ -855,7 +855,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                     unset($taxRateNode);
                 }
             } else {
-                //processing images, similar and accessories
+                // processing images, similar and accessories
                 foreach ($node as $value) {
                     $this->collectIterationData($value);
                 }
@@ -1125,7 +1125,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
                 if ($mapper[$currentPath] === 'configOptionName') {
                     $group = $this->findConfigurationGroupValue($originalNode, $mapper);
 
-                    //check if configuration group and value are not empty or string 0
+                    // check if configuration group and value are not empty or string 0
                     if ((!empty($value) || $value == '0') && !empty($group)) {
                         $mixedValue = $group . ':' . $value;
                     }

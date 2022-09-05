@@ -74,7 +74,7 @@ class XmlConverter
                 }
             } else {
                 if (\preg_match('#<|>|&(?<!amp;)#', $item)) {
-                    //$item = str_replace("<![CDATA[", "&lt;![CDATA[", $item);
+                    // $item = str_replace("<![CDATA[", "&lt;![CDATA[", $item);
                     $item = \str_replace(']]>', ']]]]><![CDATA[>', $item);
                     $ret .= "$pad<$key$attributes><![CDATA[" . $item . "]]></$key>{$this->sSettings['newline']}";
                 } else {
@@ -112,21 +112,21 @@ class XmlConverter
         $current = &$xml_array;
 
         foreach ($xml_values as $data) {
-            unset($attributes, $value); //Remove existing values, or there will be trouble
-            \extract($data); //We could use the array by itself, but this cooler.
+            unset($attributes, $value); // Remove existing values, or there will be trouble
+            \extract($data); // We could use the array by itself, but this cooler.
             $result = '';
-            if (!empty($attributes)) { //The second argument of the function decides this.
+            if (!empty($attributes)) { // The second argument of the function decides this.
                 $result = [];
                 if (isset($value)) {
                     $result['_value'] = $value;
                 }
 
-                //Set the attributes too.
+                // Set the attributes too.
                 if (isset($attributes)) {
                     foreach ($attributes as $attr => $val) {
                         if ($this->sSettings['attributes']) {
                             $result['_attributes'][$attr] = $val;
-                        } //Set all the attributes in a array called 'attr'
+                        } // Set all the attributes in a array called 'attr'
                         /*  TO DO should we change the key name to '_attr'? Someone may use the tagname 'attr'. Same goes for 'value' too */
                     }
                 }
@@ -134,14 +134,14 @@ class XmlConverter
                 $result = $value;
             }
 
-            //See tag status and do the needed.
-            if ($type === 'open') { //The starting of the tag '<tag>'
+            // See tag status and do the needed.
+            if ($type === 'open') { // The starting of the tag '<tag>'
                 $parent[$level - 1] = &$current;
 
-                if (!\is_array($current) || (!\in_array($tag, \array_keys($current)))) { //Insert New tag
+                if (!\is_array($current) || (!\in_array($tag, \array_keys($current)))) { // Insert New tag
                     $current[$tag] = $result;
                     $current = &$current[$tag];
-                } else { //There was another element with the same tag name
+                } else { // There was another element with the same tag name
                     if (isset($current[$tag][0])) {
                         $current[$tag][] = $result;
                     } else {
@@ -150,27 +150,27 @@ class XmlConverter
                     $last = \count($current[$tag]) - 1;
                     $current = &$current[$tag][$last];
                 }
-            } elseif ($type === 'complete') { //Tags that ends in 1 line '<tag />'
-                //See if the key is already taken.
-                if (!isset($current[$tag])) { //New Key
+            } elseif ($type === 'complete') { // Tags that ends in 1 line '<tag />'
+                // See if the key is already taken.
+                if (!isset($current[$tag])) { // New Key
                     $current[$tag] = $result;
-                } else { //If taken, put all things inside a list(array)
+                } else { // If taken, put all things inside a list(array)
                     if ((\is_array(
                         $current[$tag]
-                    ) && $this->sSettings['attributes'] == 0) //If it is already an array...
+                    ) && $this->sSettings['attributes'] == 0) // If it is already an array...
                         || (isset($current[$tag][0]) && \is_array(
                             $current[$tag]
                         ) && $this->sSettings['attributes'] == 1)
                     ) {
-                        //array_push($current[$tag],$result); // ...push the new element into that array.
+                        // array_push($current[$tag],$result); // ...push the new element into that array.
                         $current[$tag][] = $result;
-                    } else { //If it is not an array...
+                    } else { // If it is not an array...
                         $current[$tag] = [
                             $current[$tag], $result,
-                        ]; //...Make it an array using the existing value and the new value
+                        ]; // ...Make it an array using the existing value and the new value
                     }
                 }
-            } elseif ($type === 'close') { //End of tag '</tag>'
+            } elseif ($type === 'close') { // End of tag '</tag>'
                 $current = &$parent[$level - 1];
             }
         }

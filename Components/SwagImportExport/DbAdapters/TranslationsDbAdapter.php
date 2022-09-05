@@ -144,7 +144,7 @@ class TranslationsDbAdapter implements DataDbAdapter
         foreach ($translations as $index => $translation) {
             $data = \unserialize($translation['objectdata']);
 
-            //key for different translation types
+            // key for different translation types
             $key = $mapper[$translation['objecttype']];
 
             $result[] = [

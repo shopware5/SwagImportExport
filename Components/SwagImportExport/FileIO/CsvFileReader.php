@@ -56,7 +56,7 @@ class CsvFileReader implements FileReader
 
         $columnNames = $this->getColumnNames($file);
 
-        //moves the file pointer to a certain line
+        // moves the file pointer to a certain line
         // +1 to ignore the first line of the file
         $file->seek($position + 1);
 
@@ -124,7 +124,7 @@ class CsvFileReader implements FileReader
 
         \fclose($fileHandler);
 
-        //removing first row /column names/
+        // removing first row /column names/
         return $counter - 1;
     }
 
@@ -160,11 +160,11 @@ class CsvFileReader implements FileReader
      */
     private function getColumnNames(\SplFileObject $file)
     {
-        //Rewinds to first line
+        // Rewinds to first line
         $file->rewind();
         $columnNames = $file->current();
 
-        //removes UTF-8 BOM
+        // removes UTF-8 BOM
         foreach ($columnNames as $index => $name) {
             $columnNames[$index] = \str_replace("\xEF\xBB\xBF", '', $name);
         }

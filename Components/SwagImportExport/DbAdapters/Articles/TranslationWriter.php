@@ -106,17 +106,17 @@ class TranslationWriter
             } else {
                 $data = $this->filterWhitelistedFields($translation, $variantWhiteList);
 
-                //checks for empty translations
+                // checks for empty translations
                 if (!empty($data)) {
                     foreach ($data as $index => $rows) {
-                        //removes empty rows
+                        // removes empty rows
                         if (empty($rows)) {
                             unset($data[$index]);
                         }
                     }
                 }
 
-                //saves if there is available data
+                // saves if there is available data
                 if (!empty($data)) {
                     $data = $this->prepareAttributePrefix($data, $attributes);
 
