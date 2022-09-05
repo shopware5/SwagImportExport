@@ -14,7 +14,7 @@ use Shopware\Components\CSRFWhitelistAware;
 use SwagImportExport\Components\UploadPathProvider;
 use SwagImportExport\Models\Logger;
 use SwagImportExport\Models\LoggerRepository;
-use Symfony\Component\HttpFoundation\FileBag;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Shopware ImportExport Plugin
@@ -42,13 +42,32 @@ class Shopware_Controllers_Backend_SwagImportExport extends \Shopware_Controller
 
     public function uploadFileAction(): void
     {
-        $fileBag = new FileBag($_FILES);
+        /** @var UploadedFile $file */
+        $file = $this->Request()->files->get('fileId');
 
-        $clientOriginalName = '';
-        foreach ($fileBag->getIterator() as $file) {
-            $clientOriginalName = $file->getClientOriginalName();
-            $file->move($this->uploadPathProvider->getPath(), $clientOriginalName);
+        if (!$file->isValid()) {
+            $this->View()->assign(['success' => false, 'message' => $file->getErrorMessage()]);
+
+            return;
         }
+
+        $clientOriginalName = $file->getClientOriginalName();
+
+        if (!preg_match('/^[a-zA-Z0-9-_]+\.[a-zA-Z0-9]+$/', $clientOriginalName)) {
+            $this->View()->assign(['success' => false, 'error' => 'invalidFileName', 'message' => 'Not a valid file name. Please use only alphanumeric, - or _ as characters with the corresponding file extension.']);
+
+            return;
+        }
+
+        $extension = $file->getClientOriginalExtension();
+
+        if (!$this->isFormatValid($extension)) {
+            $this->View()->assign(['success' => false, 'error' => 'invalidFileFormat', 'message' => 'No valid file format. Please use xml or csv.']);
+
+            return;
+        }
+
+        $file->move($this->uploadPathProvider->getPath(), $clientOriginalName);
 
         $this->view->assign([
             'success' => true,
@@ -159,5 +178,16 @@ class Shopware_Controllers_Backend_SwagImportExport extends \Shopware_Controller
     {
         $this->addAclPermission('uploadFile', 'import', 'Insufficient Permissions (uploadFile)');
         $this->addAclPermission('downloadFile', 'export', 'Insufficient Permissions (downloadFile)');
+    }
+
+    private function isFormatValid(string $extension): bool
+    {
+        switch ($extension) {
+            case 'csv':
+            case 'xml':
+                return true;
+            default:
+                return false;
+        }
     }
 }
