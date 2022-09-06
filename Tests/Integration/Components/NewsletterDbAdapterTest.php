@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Tests\Integration\Components;
 
+use SwagImportExport\Components\DbAdapters\DataDbAdapter;
+use SwagImportExport\Tests\Helper\DataProvider\ProfileDataProvider;
 use SwagImportExport\Tests\Helper\DbAdapterTestHelper;
 
 class NewsletterDbAdapterTest extends DbAdapterTestHelper
@@ -19,8 +21,8 @@ class NewsletterDbAdapterTest extends DbAdapterTestHelper
     {
         parent::setUp();
 
-        $this->dbAdapter = 'newsletter';
-        $this->dbTable = 's_campaigns_mailaddresses';
+        $this->dbAdapter = DataDbAdapter::NEWSLETTER_RECIPIENTS_ADAPTER;
+        $this->dbTable = ProfileDataProvider::NEWSLETTER_TABLE;
     }
 
     /**

@@ -9,6 +9,8 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Tests\Integration\Components;
 
+use SwagImportExport\Components\DbAdapters\DataDbAdapter;
+use SwagImportExport\Tests\Helper\DataProvider\ProfileDataProvider;
 use SwagImportExport\Tests\Helper\DbAdapterTestHelper;
 
 class ProductsPricesDbAdapterTest extends DbAdapterTestHelper
@@ -18,8 +20,8 @@ class ProductsPricesDbAdapterTest extends DbAdapterTestHelper
     public function setUp(): void
     {
         parent::setUp();
-        $this->dbAdapter = 'articlesPrices';
-        $this->dbTable = 's_articles_prices';
+        $this->dbAdapter = DataDbAdapter::PRODUCT_PRICE_ADAPTER;
+        $this->dbTable = ProfileDataProvider::PRODUCTS_PRICES_TABLE;
     }
 
     /**

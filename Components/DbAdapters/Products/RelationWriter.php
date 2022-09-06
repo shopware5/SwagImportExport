@@ -12,6 +12,7 @@ namespace SwagImportExport\Components\DbAdapters\Products;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
 use Enlight_Components_Db_Adapter_Pdo_Mysql as PDOConnection;
+use SwagImportExport\Components\DbAdapters\DataDbAdapter;
 use SwagImportExport\Components\DbAdapters\ProductsDbAdapter;
 use SwagImportExport\Components\Exception\AdapterException;
 use SwagImportExport\Components\Utils\SnippetsHelper;
@@ -92,7 +93,7 @@ class RelationWriter
                     ];
 
                     $this->productsDbAdapter->saveUnprocessedData(
-                        'articles',
+                        DataDbAdapter::PRODUCT_ADAPTER,
                         \strtolower($relationType),
                         $mainOrderNumber,
                         $data

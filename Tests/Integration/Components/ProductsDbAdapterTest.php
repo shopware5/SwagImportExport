@@ -13,6 +13,7 @@ use Doctrine\DBAL\Query\QueryBuilder;
 use SwagImportExport\Components\DbAdapters\DataDbAdapter;
 use SwagImportExport\Components\DbAdapters\ProductsDbAdapter;
 use SwagImportExport\Components\Providers\DataProvider;
+use SwagImportExport\Tests\Helper\DataProvider\ProfileDataProvider;
 use SwagImportExport\Tests\Helper\DbAdapterTestHelper;
 use SwagImportExport\Tests\Helper\FixturesImportTrait;
 
@@ -28,8 +29,8 @@ class ProductsDbAdapterTest extends DbAdapterTestHelper
     {
         parent::setUp();
 
-        $this->dbAdapter = 'articles';
-        $this->dbTable = 's_articles';
+        $this->dbAdapter = DataDbAdapter::PRODUCT_ADAPTER;
+        $this->dbTable = ProfileDataProvider::PRODUCT_TABLE;
     }
 
     /**
