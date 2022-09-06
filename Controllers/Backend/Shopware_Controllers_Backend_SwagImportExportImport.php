@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Controllers\Backend;
 
+use SwagImportExport\Components\DbAdapters\DataDbAdapter;
 use SwagImportExport\Components\Factories\ProfileFactory;
 use SwagImportExport\Components\Service\ImportServiceInterface;
 use SwagImportExport\Components\Session\SessionService;
@@ -128,7 +129,7 @@ class Shopware_Controllers_Backend_SwagImportExportImport extends \Shopware_Cont
             'inputFile' => $inputFile,
             'format' => $this->uploadPathProvider->getFileExtension($inputFile),
             'username' => $this->auth->getIdentity()->name ?: 'Cli',
-            'batchSize' => $profile->getType() === 'articlesImages' ? 1 : (int) $config->getByNamespace('SwagImportExport', 'batch-size-import', 1000),
+            'batchSize' => $profile->getType() === DataDbAdapter::PRODUCT_IMAGE_ADAPTER ? 1 : (int) $config->getByNamespace('SwagImportExport', 'batch-size-import', 1000),
         ]);
 
         return $importRequest;

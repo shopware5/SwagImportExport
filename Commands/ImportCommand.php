@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace SwagImportExport\Commands;
 
 use Shopware\Commands\ShopwareCommand;
+use SwagImportExport\Components\DbAdapters\DataDbAdapter;
 use SwagImportExport\Components\Factories\ProfileFactory;
 use SwagImportExport\Components\Profile\Profile;
 use SwagImportExport\Components\Service\ImportServiceInterface;
@@ -100,7 +101,7 @@ class ImportCommand extends ShopwareCommand
             'inputFile' => $file,
             'format' => $format,
             'username' => 'Commandline',
-            'batchSize' => $profileModel->getType() === 'articlesImages' ? 1 : 50,
+            'batchSize' => $profileModel->getType() === DataDbAdapter::PRODUCT_IMAGE_ADAPTER ? 1 : 50,
         ]);
 
         $output->writeln('<info>' . \sprintf('Using profile: %s.', $profileModel->getName()) . '</info>');

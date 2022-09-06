@@ -11,6 +11,7 @@ namespace SwagImportExport\Tests\Integration\Components;
 
 use PHPUnit\Framework\TestCase;
 use SwagImportExport\Components\DataIO;
+use SwagImportExport\Components\DbAdapters\DataDbAdapter;
 use SwagImportExport\Components\Factories\ProfileFactory;
 use SwagImportExport\Components\Logger\Logger;
 use SwagImportExport\Components\Providers\DataProvider;
@@ -28,7 +29,7 @@ class DataIOTest extends TestCase
     {
         $dataProvider = $this->getContainer()->get(DataProvider::class);
         $session = $this->getContainer()->get(SessionService::class)->createSession();
-        $dbAdapter = $dataProvider->createDbAdapter('categories');
+        $dbAdapter = $dataProvider->createDbAdapter(DataDbAdapter::CATEGORIES_ADAPTER);
         $logger = $this->getContainer()->get(Logger::class);
         $profile = $this->getContainer()->get(ProfileFactory::class)->loadProfile(1);
 

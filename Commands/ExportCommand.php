@@ -12,6 +12,7 @@ namespace SwagImportExport\Commands;
 use Doctrine\ORM\EntityManagerInterface;
 use Shopware\Commands\ShopwareCommand;
 use Shopware\Models\CustomerStream\CustomerStream;
+use SwagImportExport\Components\DbAdapters\DataDbAdapter;
 use SwagImportExport\Components\Factories\ProfileFactory;
 use SwagImportExport\Components\Logger\LogDataStruct;
 use SwagImportExport\Components\Logger\LoggerInterface;
@@ -24,7 +25,6 @@ use SwagImportExport\Components\Utils\FileNameGenerator;
 use SwagImportExport\Components\Utils\SnippetsHelper;
 use SwagImportExport\Models\Profile as ProfileModel;
 use SwagImportExport\Models\ProfileRepository;
-use SwagImportExport\Tests\Helper\DataProvider\ProfileDataProvider;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -293,11 +293,11 @@ class ExportCommand extends ShopwareCommand
             throw new \RuntimeException(\sprintf('Invalid profile: \'%s\'!', $this->profile));
         }
 
-        if ($this->profileEntity->getType() !== ProfileDataProvider::PRODUCT_PROFILE_TYPE && $input->getOption('exportVariants')) {
+        if ($this->profileEntity->getType() !== DataDbAdapter::PRODUCT_ADAPTER && $input->getOption('exportVariants')) {
             throw new \InvalidArgumentException('You can only export variants when exporting the articles profile type.');
         }
 
-        if ($this->profileEntity->getType() === ProfileDataProvider::PRODUCTS_IMAGES_PROFILE_TYPE) {
+        if ($this->profileEntity->getType() === DataDbAdapter::PRODUCT_IMAGE_ADAPTER) {
             throw new \InvalidArgumentException('articlesImages profile type is not supported at the moment.');
         }
     }
@@ -308,7 +308,7 @@ class ExportCommand extends ShopwareCommand
             throw new \RuntimeException(\sprintf('Invalid stream: \'%s\'! There is no customer stream with this id.', $this->customerStream));
         }
 
-        if (!\in_array($this->profileEntity->getType(), [ProfileDataProvider::CUSTOMER_PROFILE_TYPE, 'addresses'], true)) {
+        if (!\in_array($this->profileEntity->getType(), [DataDbAdapter::CUSTOMER_ADAPTER, DataDbAdapter::ADDRESS_ADAPTER], true)) {
             throw new \RuntimeException(\sprintf('Customer stream export can not be used with profile: \'%s\'!', $this->profile));
         }
     }

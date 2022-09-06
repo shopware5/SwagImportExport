@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace SwagImportExport\Components\Service;
 
 use Shopware\Components\Model\ModelManager;
+use SwagImportExport\Components\DbAdapters\DataDbAdapter;
 use SwagImportExport\Components\Factories\ProfileFactory;
 use SwagImportExport\Components\Logger\LoggerInterface;
 use SwagImportExport\Components\Providers\FileIOProvider;
@@ -18,13 +19,12 @@ use SwagImportExport\Components\Session\SessionService;
 use SwagImportExport\Components\Structs\ImportRequest;
 use SwagImportExport\Components\UploadPathProvider;
 use SwagImportExport\Components\Utils\SnippetsHelper;
-use SwagImportExport\Tests\Helper\DataProvider\ProfileDataProvider;
 
 class ImportService implements ImportServiceInterface
 {
     private const SUPPORTED_UNPROCESSED_DATA_PROFILE_TYPES = [
-        ProfileDataProvider::PRODUCT_PROFILE_TYPE,
-        ProfileDataProvider::PRODUCTS_IMAGES_PROFILE_TYPE,
+        DataDbAdapter::PRODUCT_ADAPTER,
+        DataDbAdapter::PRODUCT_IMAGE_ADAPTER,
     ];
 
     private UploadPathProvider $uploadPathProvider;
@@ -113,7 +113,7 @@ class ImportService implements ImportServiceInterface
                     'inputFile' => $tmpFile,
                     'format' => 'csv',
                     'username' => $request->username,
-                    'batchSize' => $profile->getEntity()->getType() === 'articlesImages' ? 1 : $request->batchSize,
+                    'batchSize' => $profile->getEntity()->getType() === DataDbAdapter::PRODUCT_IMAGE_ADAPTER ? 1 : $request->batchSize,
                 ]
             );
 
