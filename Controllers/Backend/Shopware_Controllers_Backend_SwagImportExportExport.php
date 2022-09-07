@@ -34,22 +34,18 @@ class Shopware_Controllers_Backend_SwagImportExportExport extends \Shopware_Cont
 
     private \Shopware_Components_Config $config;
 
-    private \Shopware_Components_Auth $auth;
-
     public function __construct(
         ExportServiceInterface $exportService,
         ProfileFactory $profileFactory,
         SessionService $sessionService,
         UploadPathProvider $uploadPathProvider,
-        \Shopware_Components_Config $config,
-        \Shopware_Components_Auth $auth
+        \Shopware_Components_Config $config
     ) {
         $this->exportService = $exportService;
         $this->profileFactory = $profileFactory;
         $this->sessionService = $sessionService;
         $this->uploadPathProvider = $uploadPathProvider;
         $this->config = $config;
-        $this->auth = $auth;
     }
 
     public function prepareExportAction(): void
@@ -122,6 +118,8 @@ class Shopware_Controllers_Backend_SwagImportExportExport extends \Shopware_Cont
 
     private function getExportRequest(Profile $profile, string $format): ExportRequest
     {
+        $auth = $this->get('auth');
+
         $exportRequest = new ExportRequest();
         $exportRequest->setData([
             'sessionId' => $this->Request()->getParam('sessionId') ? (int) $this->Request()->getParam('sessionId') : null,
@@ -130,7 +128,7 @@ class Shopware_Controllers_Backend_SwagImportExportExport extends \Shopware_Cont
             'filter' => [],
             'limit' => $this->Request()->getParam('limit') ? (int) $this->Request()->getParam('limit') : null,
             'offset' => $this->Request()->getParam('offset') ? (int) $this->Request()->getParam('offset') : null,
-            'username' => $this->auth->getIdentity()->name ?: 'Cli',
+            'username' => $auth->getIdentity()->name ?: 'Cli',
             'category' => $this->Request()->getParam('categories') ? [$this->Request()->getParam('categories')] : null,
             'batchSize' => $this->config->getByNamespace('SwagImportExport', 'batch-size-export', 1),
             'productStream' => $this->Request()->getParam('productStreamId') ? [$this->Request()->getParam('productStreamId')] : null,

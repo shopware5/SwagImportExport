@@ -32,20 +32,16 @@ class Shopware_Controllers_Backend_SwagImportExportImport extends \Shopware_Cont
 
     private SessionService $sessionService;
 
-    private \Shopware_Components_Auth $auth;
-
     public function __construct(
         UploadPathProvider $uploadPathProvider,
         ImportServiceInterface $importService,
         ProfileFactory $profileFactory,
-        SessionService $sessionService,
-        \Shopware_Components_Auth $auth
+        SessionService $sessionService
     ) {
         $this->uploadPathProvider = $uploadPathProvider;
         $this->importService = $importService;
         $this->profileFactory = $profileFactory;
         $this->sessionService = $sessionService;
-        $this->auth = $auth;
     }
 
     public function prepareImportAction(Request $request): void
@@ -123,12 +119,14 @@ class Shopware_Controllers_Backend_SwagImportExportImport extends \Shopware_Cont
         $inputFile = $this->uploadPathProvider->getRealPath($request->get('importFile'));
         $profile = $this->profileFactory->loadProfile((int) $request->get('profileId'));
 
+        $auth = $this->get('auth');
+
         $importRequest = new ImportRequest();
         $importRequest->setData([
             'profileEntity' => $profile,
             'inputFile' => $inputFile,
             'format' => $this->uploadPathProvider->getFileExtension($inputFile),
-            'username' => $this->auth->getIdentity()->name ?: 'Cli',
+            'username' => $auth->getIdentity()->name ?: 'Cli',
             'batchSize' => $profile->getType() === DataDbAdapter::PRODUCT_IMAGE_ADAPTER ? 1 : (int) $config->getByNamespace('SwagImportExport', 'batch-size-import', 1000),
         ]);
 
