@@ -46,29 +46,30 @@ class AutoImportService implements AutoImportServiceInterface
     public function runAutoImport(): void
     {
         $files = $this->getFiles();
+        if (\count($files) === 0) {
+            echo 'No import files are found.' . \PHP_EOL;
 
-        $lockerFileLocation = $this->directory . '/' . self::LOCKED_FILENAME;
+            return;
+        }
+
+        $lockerFileLocation = sprintf('%s/%s', $this->directory, self::LOCKED_FILENAME);
 
         if (\in_array(self::LOCKED_FILENAME, $files)) {
             $file = \fopen($lockerFileLocation, 'rb');
             if (!\is_resource($file)) {
-                throw new \RuntimeException(sprintf('Could not open file at "%s"', $lockerFileLocation));
+                echo sprintf('Could not open file at "%s"%s', $lockerFileLocation, \PHP_EOL);
+
+                return;
             }
             $fileContent = (int) \fread($file, (int) \filesize($lockerFileLocation));
             \fclose($file);
 
             if ($fileContent > \time()) {
-                echo 'There is already an import in progress.' . \PHP_EOL;
+                echo sprintf('There is already an import in progress.%s', \PHP_EOL);
 
                 return;
             }
             \unlink($lockerFileLocation);
-        }
-
-        if (\count($files) === 0) {
-            echo 'No import files are found.' . \PHP_EOL;
-
-            return;
         }
 
         $this->flagCronAsRunning($lockerFileLocation);
@@ -101,9 +102,7 @@ class AutoImportService implements AutoImportServiceInterface
                     \unlink($mediaPath);
                 } catch (\Exception $e) {
                     // copy file as broken
-                    $brokenFilePath = $this->uploadPathProvider->getRealPath(
-                        'broken-' . $file
-                    );
+                    $brokenFilePath = $this->uploadPathProvider->getRealPath('broken-' . $file);
                     \copy($mediaPath, $brokenFilePath);
 
                     echo $e->getMessage() . \PHP_EOL;
@@ -122,7 +121,7 @@ class AutoImportService implements AutoImportServiceInterface
         if (!$profile instanceof Profile) {
             $message = SnippetsHelper::getNamespace()->get('cronjob/no_profile', 'No profile found %s');
 
-            throw new \Exception(\sprintf($message, $fileName));
+            throw new \RuntimeException(\sprintf($message, $fileName));
         }
 
         return $profile;
@@ -135,7 +134,9 @@ class AutoImportService implements AutoImportServiceInterface
     {
         $allFiles = \scandir($this->directory);
         if (!\is_array($allFiles)) {
-            throw new \RuntimeException(sprintf('Could not scan directory "%s"', $this->directory));
+            echo sprintf('Could not scan directory "%s"', $this->directory);
+
+            return [];
         }
 
         return \array_diff($allFiles, ['.', '..', '.htaccess']);
@@ -149,7 +150,9 @@ class AutoImportService implements AutoImportServiceInterface
         $timeout = \time() + 1800;
         $file = \fopen($lockerFileLocation, 'wb');
         if (!\is_resource($file)) {
-            throw new \RuntimeException(sprintf('Could not open file at "%s"', $lockerFileLocation));
+            echo sprintf('Could not open file at "%s"%s', $lockerFileLocation, \PHP_EOL);
+
+            return;
         }
         \fwrite($file, (string) $timeout);
         \fclose($file);

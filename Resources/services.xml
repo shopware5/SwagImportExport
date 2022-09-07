@@ -17,7 +17,7 @@
         <import resource="services/providers.xml"/>
     </imports>
     <services>
-        <defaults public="true" />
+        <defaults public="true"/>
         <service id="SwagImportExport\Components\Utils\FileHelper"/>
 
         <service id="SwagImportExport\Subscribers\Cronjob">
@@ -29,22 +29,17 @@
         <service id="SwagImportExport\Subscribers\ControllerSubscriber">
             <argument>%swag_import_export.plugin_dir%</argument>
             <argument type="service" id="template"/>
+
             <tag name="shopware.event_subscriber"/>
         </service>
 
+        <service id="SwagImportExport\Components\Service\UnderscoreToCamelCaseService"/>
 
-        <service id="SwagImportExport\Components\Service\UnderscoreToCamelCaseService"
-                />
-
-        <service
-            id="SwagImportExport\Components\UploadPathProvider">
-            <argument type="expression">service('application').DocPath()</argument>
+        <service id="SwagImportExport\Components\UploadPathProvider">
+            <argument>%shopware.app.rootDir%</argument>
         </service>
 
-        <service
-            id="SwagImportExport\Components\Service\AutoImportService"
-
-        >
+        <service id="SwagImportExport\Components\Service\AutoImportService">
             <argument type="service" id="SwagImportExport\Components\UploadPathProvider"/>
             <argument type="service" id="SwagImportExport\Components\Factories\ProfileFactory"/>
             <argument type="service" id="SwagImportExport\Components\Session\SessionService"/>

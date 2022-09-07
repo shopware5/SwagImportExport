@@ -18,6 +18,7 @@
 
     <service id="SwagImportExport\Controllers\Backend\Shopware_Controllers_Backend_SwagImportExportCron">
         <argument type="service" id="plugins"/>
+        <argument type="service" id="SwagImportExport\Components\Service\AutoImportService"/>
 
         <tag name="shopware.controller" module="backend" controller="SwagImportExportCron"/>
     </service>
