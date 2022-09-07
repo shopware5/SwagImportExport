@@ -38,26 +38,29 @@ class ConfiguratorWriter
     ) {
         $this->dbalHelper = $dbalHelper;
         $this->connection = $connection;
-        $this->sets = $this->getSets();
         $this->db = $db;
         $this->configuratorValidator = new ConfiguratorValidator();
     }
 
     /**
-     * @param array<string, mixed> $configuratorData
+     * @param array<int, mixed> $configuratorData
      *
      * @throws AdapterException
      */
     public function writeOrUpdateConfiguratorSet(ProductWriterResult $productWriterResult, array $configuratorData): void
     {
-        $configuratorSetId = null;
+        if (!isset($this->sets)) {
+            $this->sets = $this->getSets();
+        }
 
         foreach ($configuratorData as $configurator) {
+            $configuratorSetId = null;
             $optionId = null;
 
             if (!$this->isValid($configurator)) {
                 continue;
             }
+
             $configurator = $this->configuratorValidator->filterEmptyString($configurator);
             $this->configuratorValidator->validate($configurator, ConfiguratorValidator::$mapper);
 
@@ -115,7 +118,7 @@ class ConfiguratorWriter
                 $groupId = $this->getConfiguratorGroup($configurator);
             }
 
-            $this->updateGroupsRelation($configuratorSetId, $groupId);
+            $this->updateGroupsRelation($configuratorSetId, (int) $groupId);
 
             if (isset($configurator['configOptionName']) && !$optionId) {
                 $optionId = $this->getOptionIdByOptionNameAndGroupId($configurator['configOptionName'], $groupId);
@@ -141,13 +144,13 @@ class ConfiguratorWriter
             $this->updateOptionRelation($productWriterResult->getDetailId(), $optionId);
             $this->updateSetOptionRelation($configuratorSetId, $optionId);
 
-            unset($groupId, $optionId);
+            unset($groupId, $optionId, $configuratorSetId);
         }
     }
 
     private function getSetIdBySetName(string $name): ?int
     {
-        return $this->sets[$name] ?? null;
+        return $this->sets[$name] ? (int) $this->sets[$name] : null;
     }
 
     /**

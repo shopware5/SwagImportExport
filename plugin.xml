@@ -17,9 +17,11 @@
 
     <changelog version="REPLACE_WITH_NEXT_VERSION">
         <changes lang="de">
+            PT-12900 - Fehler beim Schreiben von Konfigurationen behoben;
             PT-12902 - Korrigiert die Nutzung des Cron-Controllers;
         </changes>
         <changes lang="en">
+            PT-12900 - Fixed error writing configurations;
             PT-12902 - Fix usage of the cron controller;
         </changes>
     </changelog>

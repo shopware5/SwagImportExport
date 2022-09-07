@@ -53,12 +53,6 @@ class Shopware_Controllers_Backend_SwagImportExport extends \Shopware_Controller
 
         $clientOriginalName = $file->getClientOriginalName();
 
-        if (!preg_match('/^[a-zA-Z0-9-_]+\.[a-zA-Z0-9]+$/', $clientOriginalName)) {
-            $this->View()->assign(['success' => false, 'error' => 'invalidFileName', 'message' => 'Not a valid file name. Please use only alphanumeric, - or _ as characters with the corresponding file extension.']);
-
-            return;
-        }
-
         $extension = $file->getClientOriginalExtension();
 
         if (!$this->isFormatValid($extension)) {
