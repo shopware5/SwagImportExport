@@ -102,3 +102,8 @@ SW 5.7 PHP 7.4:
 SW 5.7 PHP 8.0:
     extends: .SW 5.7 default
     image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:8.0
+
+SW 5.7.4:
+    variables:
+        CHECKOUT_SHOPWARE_BRANCH: v5.7.4
+    extends: .SW 5.7 default
