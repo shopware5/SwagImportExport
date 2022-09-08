@@ -11,6 +11,7 @@ namespace SwagImportExport\Controllers\Backend;
 
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Models\Plugin\Plugin;
+use SwagImportExport\Components\Service\AutoImportServiceInterface;
 
 /**
  * This is a controller and not a correct implementation of a Shopware cron job. By implementing the cron job as
@@ -20,9 +21,14 @@ class Shopware_Controllers_Backend_SwagImportExportCron extends \Shopware_Contro
 {
     private \Enlight_Plugin_PluginManager $pluginManager;
 
-    public function __construct(\Enlight_Plugin_PluginManager $pluginManager)
-    {
+    private AutoImportServiceInterface $autoImportService;
+
+    public function __construct(
+        \Enlight_Plugin_PluginManager $pluginManager,
+        AutoImportServiceInterface $autoImportService
+    ) {
         $this->pluginManager = $pluginManager;
+        $this->autoImportService = $autoImportService;
     }
 
     /**
@@ -67,8 +73,7 @@ class Shopware_Controllers_Backend_SwagImportExportCron extends \Shopware_Contro
             return;
         }
 
-        $autoImporter = $this->get('swag_import_export.auto_importer');
-        $autoImporter->runAutoImport();
+        $this->autoImportService->runAutoImport();
     }
 
     /**
@@ -77,7 +82,7 @@ class Shopware_Controllers_Backend_SwagImportExportCron extends \Shopware_Contro
      */
     private function getCronPluginBootstrap(): ?\Shopware_Plugins_Core_Cron_Bootstrap
     {
-        $pluginBootstrap = $this->get('plugin_manager')->Core()->get('Cron');
+        $pluginBootstrap = $this->pluginManager->Core()->get('Cron');
 
         if (!$pluginBootstrap instanceof \Shopware_Plugins_Core_Cron_Bootstrap) {
             return null;

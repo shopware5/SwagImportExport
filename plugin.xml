@@ -15,6 +15,15 @@
     <description lang="de">Das Importieren und Exportieren von Artikeln, Kunden oder Kategorien gehört zum Alltag vieler Shopbetreiber: Schnell lassen sich so Lagerbestände aktualisieren, Preise anpassen oder Erstimporte vornehmen.</description>
     <description lang="en">Importing and exporting product and customer data, categories as well as product images is a standard task of any shop owner. Keeping that in mind, Shopware wants to make it as easy as possible for you to quickly edit inventory, prices or even perform a customized import.</description>
 
+    <changelog version="REPLACE_WITH_NEXT_VERSION">
+        <changes lang="de">
+            PT-12902 - Korrigiert die Nutzung des Cron-Controllers;
+        </changes>
+        <changes lang="en">
+            PT-12902 - Fix usage of the cron controller;
+        </changes>
+    </changelog>
+
     <changelog version="3.0.1">
         <changes lang="de">
             PT-12895 - Fehler bei dem Laden der Controller mit Shopware Version kleiner als 5.7.7 behoben;
