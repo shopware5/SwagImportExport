@@ -105,7 +105,7 @@ class ProductsPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
             ->orderBy('price.id', 'ASC');
 
         if (!empty($filter)) {
-            if ($filter['variants']) {
+            if (isset($filter['variants'])) {
                 $builder->andWhere('detail.kind <> 3');
             } else {
                 $builder->andWhere('detail.kind = 1');

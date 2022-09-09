@@ -42,9 +42,8 @@ class DecimalTransformer implements DataTransformerAdapter
 
     private ReaderInterface $reader;
 
-    public function __construct(
-        ReaderInterface $reader
-    ) {
+    public function __construct(ReaderInterface $reader)
+    {
         $this->reader = $reader;
     }
 
@@ -129,16 +128,16 @@ class DecimalTransformer implements DataTransformerAdapter
 
                 $realKey = $this->treeData['fields'][$key];
 
-                if (!\in_array($realKey, self::DECIMAL_VALUES) || !$realKey) {
+                if (!$realKey || !\in_array($realKey, self::DECIMAL_VALUES, true)) {
                     continue;
                 }
 
                 if ($isForward) {
-                    $value = \str_replace('.', ',', $value);
+                    $value = \str_replace('.', ',', (string) $value);
                     continue;
                 }
 
-                $value = \str_replace(',', '.', $value);
+                $value = \str_replace(',', '.', (string) $value);
             }
         }
 
