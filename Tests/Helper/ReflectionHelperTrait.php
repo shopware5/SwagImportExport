@@ -29,9 +29,9 @@ trait ReflectionHelperTrait
     /**
      * @param class-string $className
      */
-    public function getReflectionProperty(string $className, string $methodName): ReflectionProperty
+    public function getReflectionProperty(string $className, string $property): ReflectionProperty
     {
-        $property = (new ReflectionClass($className))->getProperty($methodName);
+        $property = (new ReflectionClass($className))->getProperty($property);
         $property->setAccessible(true);
 
         return $property;
