@@ -40,7 +40,7 @@ class ProductCompleteProfile implements ProfileMetaData, \JsonSerializable
     /**
      * {@inheritdoc}
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'id' => 'root',
