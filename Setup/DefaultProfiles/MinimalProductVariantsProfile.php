@@ -40,7 +40,7 @@ class MinimalProductVariantsProfile implements \JsonSerializable, ProfileMetaDat
     /**
      * {@inheritdoc}
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'id' => 'root',

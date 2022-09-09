@@ -566,7 +566,17 @@ parameters:
 			path: Setup/DefaultProfiles/AddressProfile.php
 
 		-
+			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\AddressProfile\\:\\:jsonSerialize\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Setup/DefaultProfiles/AddressProfile.php
+
+		-
 			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\CategoryProfile\\:\\:getCategoryFields\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Setup/DefaultProfiles/CategoryProfile.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\CategoryProfile\\:\\:jsonSerialize\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Setup/DefaultProfiles/CategoryProfile.php
 
@@ -576,12 +586,27 @@ parameters:
 			path: Setup/DefaultProfiles/CategoryTranslationProfile.php
 
 		-
+			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\CategoryTranslationProfile\\:\\:jsonSerialize\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Setup/DefaultProfiles/CategoryTranslationProfile.php
+
+		-
 			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\CustomerCompleteProfile\\:\\:getCustomerFields\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Setup/DefaultProfiles/CustomerCompleteProfile.php
 
 		-
+			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\CustomerCompleteProfile\\:\\:jsonSerialize\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Setup/DefaultProfiles/CustomerCompleteProfile.php
+
+		-
 			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\CustomerProfile\\:\\:getCustomerFields\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Setup/DefaultProfiles/CustomerProfile.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\CustomerProfile\\:\\:jsonSerialize\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Setup/DefaultProfiles/CustomerProfile.php
 
@@ -601,7 +626,17 @@ parameters:
 			path: Setup/DefaultProfiles/MinimalCategoryProfile.php
 
 		-
+			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\MinimalCategoryProfile\\:\\:jsonSerialize\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Setup/DefaultProfiles/MinimalCategoryProfile.php
+
+		-
 			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\MinimalOrdersProfile\\:\\:getOrderStatusFields\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Setup/DefaultProfiles/MinimalOrdersProfile.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\MinimalOrdersProfile\\:\\:jsonSerialize\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Setup/DefaultProfiles/MinimalOrdersProfile.php
 
@@ -611,12 +646,27 @@ parameters:
 			path: Setup/DefaultProfiles/MinimalProductProfile.php
 
 		-
+			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\MinimalProductProfile\\:\\:jsonSerialize\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Setup/DefaultProfiles/MinimalProductProfile.php
+
+		-
 			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\MinimalProductVariantsProfile\\:\\:getProductVariantFields\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Setup/DefaultProfiles/MinimalProductVariantsProfile.php
 
 		-
+			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\MinimalProductVariantsProfile\\:\\:jsonSerialize\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Setup/DefaultProfiles/MinimalProductVariantsProfile.php
+
+		-
 			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\NewsletterRecipientProfile\\:\\:getNewsletterFields\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Setup/DefaultProfiles/NewsletterRecipientProfile.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\NewsletterRecipientProfile\\:\\:jsonSerialize\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Setup/DefaultProfiles/NewsletterRecipientProfile.php
 
@@ -631,7 +681,17 @@ parameters:
 			path: Setup/DefaultProfiles/OrderMainDataProfile.php
 
 		-
+			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\OrderMainDataProfile\\:\\:jsonSerialize\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Setup/DefaultProfiles/OrderMainDataProfile.php
+
+		-
 			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\OrderProfile\\:\\:getOrderFields\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Setup/DefaultProfiles/OrderProfile.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\OrderProfile\\:\\:jsonSerialize\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Setup/DefaultProfiles/OrderProfile.php
 
@@ -641,7 +701,17 @@ parameters:
 			path: Setup/DefaultProfiles/ProductAccessoryProfile.php
 
 		-
+			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ProductAccessoryProfile\\:\\:jsonSerialize\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Setup/DefaultProfiles/ProductAccessoryProfile.php
+
+		-
 			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ProductCategoriesProfile\\:\\:getProductCategoriesFields\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Setup/DefaultProfiles/ProductCategoriesProfile.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ProductCategoriesProfile\\:\\:jsonSerialize\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Setup/DefaultProfiles/ProductCategoriesProfile.php
 
@@ -686,7 +756,22 @@ parameters:
 			path: Setup/DefaultProfiles/ProductCompleteProfile.php
 
 		-
+			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ProductCompleteProfile\\:\\:jsonSerialize\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Setup/DefaultProfiles/ProductCompleteProfile.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ProductImageUrlProfile\\:\\:jsonSerialize\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Setup/DefaultProfiles/ProductImageUrlProfile.php
+
+		-
 			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ProductImagesProfile\\:\\:getProductImagesFields\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Setup/DefaultProfiles/ProductImagesProfile.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ProductImagesProfile\\:\\:jsonSerialize\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Setup/DefaultProfiles/ProductImagesProfile.php
 
@@ -696,7 +781,17 @@ parameters:
 			path: Setup/DefaultProfiles/ProductInStockProfile.php
 
 		-
+			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ProductInStockProfile\\:\\:jsonSerialize\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Setup/DefaultProfiles/ProductInStockProfile.php
+
+		-
 			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ProductPriceProfile\\:\\:getProductPriceFields\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Setup/DefaultProfiles/ProductPriceProfile.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ProductPriceProfile\\:\\:jsonSerialize\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Setup/DefaultProfiles/ProductPriceProfile.php
 
@@ -706,7 +801,17 @@ parameters:
 			path: Setup/DefaultProfiles/ProductProfile.php
 
 		-
+			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ProductProfile\\:\\:jsonSerialize\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Setup/DefaultProfiles/ProductProfile.php
+
+		-
 			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ProductPropertiesProfile\\:\\:getProductPropertiesFields\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Setup/DefaultProfiles/ProductPropertiesProfile.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ProductPropertiesProfile\\:\\:jsonSerialize\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Setup/DefaultProfiles/ProductPropertiesProfile.php
 
@@ -716,7 +821,17 @@ parameters:
 			path: Setup/DefaultProfiles/ProductSimilarsProfile.php
 
 		-
+			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ProductSimilarsProfile\\:\\:jsonSerialize\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Setup/DefaultProfiles/ProductSimilarsProfile.php
+
+		-
 			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ProductTranslationProfile\\:\\:getProductTranslationFields\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Setup/DefaultProfiles/ProductTranslationProfile.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ProductTranslationProfile\\:\\:jsonSerialize\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Setup/DefaultProfiles/ProductTranslationProfile.php
 
@@ -726,7 +841,17 @@ parameters:
 			path: Setup/DefaultProfiles/ProductTranslationUpdateProfile.php
 
 		-
+			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\ProductTranslationUpdateProfile\\:\\:jsonSerialize\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Setup/DefaultProfiles/ProductTranslationUpdateProfile.php
+
+		-
 			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\TranslationProfile\\:\\:getTranslationFields\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Setup/DefaultProfiles/TranslationProfile.php
+
+		-
+			message: "#^Method SwagImportExport\\\\Setup\\\\DefaultProfiles\\\\TranslationProfile\\:\\:jsonSerialize\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Setup/DefaultProfiles/TranslationProfile.php
 

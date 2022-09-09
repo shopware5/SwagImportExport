@@ -99,9 +99,9 @@ SW 5.7 PHP 7.4:
     only:
         - master
 
-SW 5.7 PHP 8.0:
+SW 5.7 PHP 8.1:
     extends: .SW 5.7 default
-    image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:8.0
+    image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:8.1
 
 SW 5.7.4:
     variables:

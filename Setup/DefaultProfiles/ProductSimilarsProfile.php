@@ -40,7 +40,7 @@ class ProductSimilarsProfile implements \JsonSerializable, ProfileMetaData
     /**
      * {@inheritdoc}
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'id' => 'root',

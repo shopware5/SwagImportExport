@@ -118,6 +118,8 @@ class ExportCommandTest extends TestCase
 
     public function testProductsPricesCsvExportCommand(): void
     {
+        $this->getContainer()->get('config_writer')->save('useCommaDecimal', true, 'SwagImportExport');
+
         $expectedLineAmount = 406;
         $profileName = 'default_article_prices';
 
