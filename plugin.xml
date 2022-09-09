@@ -15,6 +15,15 @@
     <description lang="de">Das Importieren und Exportieren von Artikeln, Kunden oder Kategorien gehört zum Alltag vieler Shopbetreiber: Schnell lassen sich so Lagerbestände aktualisieren, Preise anpassen oder Erstimporte vornehmen.</description>
     <description lang="en">Importing and exporting product and customer data, categories as well as product images is a standard task of any shop owner. Keeping that in mind, Shopware wants to make it as easy as possible for you to quickly edit inventory, prices or even perform a customized import.</description>
 
+    <changelog version="REPLACE_WITH_NEXT_VERSION">
+        <changes lang="de">
+            PT-12905 - Fehler beim Exportieren von Product Streams via CLI-Kommando behoben;
+        </changes>
+        <changes lang="de">
+            PT-12905 - Fixed error when exporting product streams via CLI command;
+        </changes>
+    </changelog>
+
     <changelog version="3.0.2">
         <changes lang="de">
             PT-12900 - Fehler beim Schreiben von Konfigurationen behoben;

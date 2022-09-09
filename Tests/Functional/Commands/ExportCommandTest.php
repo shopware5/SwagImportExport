@@ -23,12 +23,25 @@ class ExportCommandTest extends TestCase
     use DatabaseTestCaseTrait;
     use ContainerTrait;
 
+    public function testExportCommandOptions(): void
+    {
+        $consoleOutput = $this->runCommand('sw:importexport:export -p default_articles product.csv -c 14 --productStream 1 --dateFrom 2022-08-01 --dateTo 2022-09-01');
+
+        static::assertSame('Using category as filter: 14.', $consoleOutput[3]);
+        static::assertSame('from: 2022-08-01 00:00:00.', $consoleOutput[4]);
+        static::assertSame('to: 2022-09-01 23:59:59.', $consoleOutput[5]);
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage("Invalid stream: '1'! There is no customer stream with this id.");
+        $this->runCommand('sw:importexport:export -p default_customers customer.xml --customerstream 1');
+    }
+
     public function testProductsCsvExportCommand(): void
     {
         $expectedLineAmount = 290;
         $profileName = 'default_articles';
 
-        $fileName = 'article.csv';
+        $fileName = 'product.csv';
         $this->addCreatedExportFile($fileName);
 
         $consoleOutput = $this->runCommand(sprintf('sw:importexport:export -p %s %s', $profileName, $fileName));
@@ -146,6 +159,7 @@ class ExportCommandTest extends TestCase
         $fileName = 'articlesimage.csv';
 
         $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('articlesImages profile type is not supported at the moment.');
         $this->runCommand(sprintf('sw:importexport:export -p %s %s', $profileName, $fileName));
     }
 
