@@ -106,7 +106,7 @@ class ConfiguratorWriter
                 $optionResult = $this->getOptionRow($configurator['configOptionId']);
 
                 $optionId = (int) $optionResult['id'];
-                $groupId = $optionResult['group_id'];
+                $groupId = (int) $optionResult['group_id'];
 
                 if (!$optionId) {
                     $message = SnippetsHelper::getNamespace()
@@ -118,7 +118,7 @@ class ConfiguratorWriter
                 $groupId = $this->getConfiguratorGroup($configurator);
             }
 
-            $this->updateGroupsRelation($configuratorSetId, (int) $groupId);
+            $this->updateGroupsRelation($configuratorSetId, $groupId);
 
             if (isset($configurator['configOptionName']) && !$optionId) {
                 $optionId = $this->getOptionIdByOptionNameAndGroupId($configurator['configOptionName'], $groupId);
@@ -390,10 +390,11 @@ class ConfiguratorWriter
     private function updateConfiguratorSetTypeIfConfigSetIdIsNotEmptyAndSetDoesExistAndMatchSetName(int $productId, ?int $configuratorSetId, array $configurator): ?int
     {
         if (!$configuratorSetId && !empty($configurator['configSetId'])) {
-            $setExists = $this->checkExistence('s_article_configurator_sets', (int) $configurator['configSetId']);
-            $match = $this->compareSetIdByName($productId, (int) $configurator['configSetId']);
+            $configSetId = (int) $configurator['configSetId'];
+            $setExists = $this->checkExistence('s_article_configurator_sets', $configSetId);
+            $match = $this->compareSetIdByName($productId, $configSetId);
             if ($setExists && $match) {
-                $configuratorSetId = $configurator['configSetId'];
+                $configuratorSetId = $configSetId;
                 $this->updateConfiguratorSet($configurator);
             }
         }
