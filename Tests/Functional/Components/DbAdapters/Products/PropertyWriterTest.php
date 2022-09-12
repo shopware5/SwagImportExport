@@ -19,24 +19,24 @@ class PropertyWriterTest extends TestCase
     use DatabaseTestCaseTrait;
     use ContainerTrait;
 
-    public const PRODUCT_ORDERNUMBER = 'SW10002.1';
-    public const PRODUCT_ORDERNUMBER_WITHOUT_PROPERTIES = 'SW10239';
+    private const PRODUCT_ORDER_NUMBER = 'SW10002.1';
+    private const PRODUCT_ORDER_NUMBER_WITHOUT_PROPERTIES = 'SW10239';
 
-    public const PRODUCT_ID_WITH_PROPERTIES = 2;
-    public const PRODUCT_ID_WITHOUT_PROPERTIES = 272;
+    private const PRODUCT_ID_WITH_PROPERTIES = 2;
+    private const PRODUCT_ID_WITHOUT_PROPERTIES = 272;
 
-    public const NOT_EXISTING_FILTER_GROUP_NAME = 'T-Shirts';
-    public const EXISTING_FILTER_GROUP_NAME = 'Edelbrände';
+    private const NOT_EXISTING_FILTER_GROUP_NAME = 'T-Shirts';
+    private const EXISTING_FILTER_GROUP_NAME = 'Edelbrände';
 
-    public const NOT_EXISTING_VALUE_NAME = 'Not existing property';
-    public const NOT_EXISTING_OPTION_NAME = 'Not existing option';
+    private const NOT_EXISTING_VALUE_NAME = 'Not existing property';
+    private const NOT_EXISTING_OPTION_NAME = 'Not existing option';
 
-    public const INVALID_VALUE_NAME = '';
-    public const INVALID_OPTION_NAME = '';
+    private const NOT_EXISTING_VALUE_NAME_ZERO = '0';
+    private const NOT_EXISTING_OPTION_NAME_ZERO = '0';
 
-    public const EXISTING_PROPERTY_VALUE_ID = '22';
+    private const INVALID_OPTION_NAME = '';
 
-    public const NOT_EXISTING_FILTER_GROUP_ID = '999999';
+    private const EXISTING_PROPERTY_VALUE_ID = '22';
 
     public function testWriteShouldNotCreateNewGroupWithExistingProductAndExistingProperties(): void
     {
@@ -50,7 +50,7 @@ class PropertyWriterTest extends TestCase
 
         $propertyWriter->writeUpdateCreatePropertyGroupsFilterAndValues(
             self::PRODUCT_ID_WITH_PROPERTIES,
-            self::PRODUCT_ORDERNUMBER,
+            self::PRODUCT_ORDER_NUMBER,
             [$importData]
         );
 
@@ -77,7 +77,7 @@ class PropertyWriterTest extends TestCase
 
         $propertyWriter->writeUpdateCreatePropertyGroupsFilterAndValues(
             self::PRODUCT_ID_WITHOUT_PROPERTIES,
-            self::PRODUCT_ORDERNUMBER_WITHOUT_PROPERTIES,
+            self::PRODUCT_ORDER_NUMBER_WITHOUT_PROPERTIES,
             $importData
         );
 
@@ -103,7 +103,7 @@ class PropertyWriterTest extends TestCase
 
         $propertyWriter->writeUpdateCreatePropertyGroupsFilterAndValues(
             self::PRODUCT_ID_WITHOUT_PROPERTIES,
-            self::PRODUCT_ORDERNUMBER_WITHOUT_PROPERTIES,
+            self::PRODUCT_ORDER_NUMBER_WITHOUT_PROPERTIES,
             $importData
         );
 
@@ -112,7 +112,7 @@ class PropertyWriterTest extends TestCase
             [self::NOT_EXISTING_VALUE_NAME]
         )->fetchOne();
 
-        static::assertEquals(self::NOT_EXISTING_VALUE_NAME, $createdPropertyValue, 'Could not create property value.');
+        static::assertSame(self::NOT_EXISTING_VALUE_NAME, $createdPropertyValue, 'Could not create property value.');
     }
 
     public function testWriteShouldCreateOption(): void
@@ -125,11 +125,17 @@ class PropertyWriterTest extends TestCase
                 'propertyValueName' => self::NOT_EXISTING_VALUE_NAME,
                 'propertyOptionName' => self::NOT_EXISTING_OPTION_NAME,
             ],
+            [
+                'articleId' => self::PRODUCT_ID_WITHOUT_PROPERTIES,
+                'propertyGroupName' => self::EXISTING_FILTER_GROUP_NAME,
+                'propertyValueName' => self::NOT_EXISTING_VALUE_NAME_ZERO,
+                'propertyOptionName' => self::NOT_EXISTING_OPTION_NAME_ZERO,
+            ],
         ];
 
         $propertyWriter->writeUpdateCreatePropertyGroupsFilterAndValues(
             self::PRODUCT_ID_WITHOUT_PROPERTIES,
-            self::PRODUCT_ORDERNUMBER_WITHOUT_PROPERTIES,
+            self::PRODUCT_ORDER_NUMBER_WITHOUT_PROPERTIES,
             $importData
         );
 
@@ -138,7 +144,14 @@ class PropertyWriterTest extends TestCase
             [self::NOT_EXISTING_OPTION_NAME]
         )->fetchOne();
 
-        static::assertEquals(self::NOT_EXISTING_OPTION_NAME, $createdPropertyValue, 'Could not create property value.');
+        static::assertSame(self::NOT_EXISTING_OPTION_NAME, $createdPropertyValue, 'Could not create property value.');
+
+        $createdPropertyValue = $this->getContainer()->get('dbal_connection')->executeQuery(
+            'SELECT `name` FROM s_filter_options WHERE name = ?',
+            [self::NOT_EXISTING_OPTION_NAME_ZERO]
+        )->fetchOne();
+
+        static::assertSame(self::NOT_EXISTING_OPTION_NAME_ZERO, $createdPropertyValue, 'Could not create property value.');
     }
 
     public function testWriteShouldThrowExceptionWithEmptyPropertyOptionName(): void
@@ -156,7 +169,7 @@ class PropertyWriterTest extends TestCase
         $this->expectException(\Exception::class);
         $propertyWriter->writeUpdateCreatePropertyGroupsFilterAndValues(
             self::PRODUCT_ID_WITHOUT_PROPERTIES,
-            self::PRODUCT_ORDERNUMBER_WITHOUT_PROPERTIES,
+            self::PRODUCT_ORDER_NUMBER_WITHOUT_PROPERTIES,
             $importData
         );
     }
@@ -174,7 +187,7 @@ class PropertyWriterTest extends TestCase
 
         $propertyWriter->writeUpdateCreatePropertyGroupsFilterAndValues(
             self::PRODUCT_ID_WITHOUT_PROPERTIES,
-            self::PRODUCT_ORDERNUMBER_WITHOUT_PROPERTIES,
+            self::PRODUCT_ORDER_NUMBER_WITHOUT_PROPERTIES,
             $importData
         );
 
@@ -183,7 +196,7 @@ class PropertyWriterTest extends TestCase
             [self::PRODUCT_ID_WITHOUT_PROPERTIES]
         )->fetchOne();
 
-        static::assertEquals(self::EXISTING_PROPERTY_VALUE_ID, $valueIdRelationToTestedProduct);
+        static::assertSame(self::EXISTING_PROPERTY_VALUE_ID, $valueIdRelationToTestedProduct);
     }
 
     public function testWriteShouldCreateOptionRelation(): void
@@ -199,7 +212,7 @@ class PropertyWriterTest extends TestCase
 
         $propertyWriter->writeUpdateCreatePropertyGroupsFilterAndValues(
             self::PRODUCT_ID_WITHOUT_PROPERTIES,
-            self::PRODUCT_ORDERNUMBER_WITHOUT_PROPERTIES,
+            self::PRODUCT_ORDER_NUMBER_WITHOUT_PROPERTIES,
             $importData
         );
 
@@ -224,7 +237,7 @@ class PropertyWriterTest extends TestCase
 
         $propertyWriter->writeUpdateCreatePropertyGroupsFilterAndValues(
             self::PRODUCT_ID_WITHOUT_PROPERTIES,
-            self::PRODUCT_ORDERNUMBER_WITHOUT_PROPERTIES,
+            self::PRODUCT_ORDER_NUMBER_WITHOUT_PROPERTIES,
             $importData
         );
 
@@ -233,7 +246,7 @@ class PropertyWriterTest extends TestCase
             [self::NOT_EXISTING_FILTER_GROUP_NAME]
         )->fetchOne();
 
-        static::assertEquals(self::NOT_EXISTING_FILTER_GROUP_NAME, $createdGroupName, 'Could not create filter group.');
+        static::assertSame(self::NOT_EXISTING_FILTER_GROUP_NAME, $createdGroupName, 'Could not create filter group.');
     }
 
     private function getPropertyWriterAdapter(): PropertyWriter
