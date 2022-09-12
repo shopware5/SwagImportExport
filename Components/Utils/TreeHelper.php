@@ -146,23 +146,25 @@ class TreeHelper
      */
     public static function getNodeById(string $id, array $node, string $parentId = 'root'): ?array
     {
-        if ($node['id'] == $id) { // the node is found
+        if ($node['id'] === $id) { // the node is found
             $node['parentId'] = $parentId;
 
             return $node;
         }
+
         if (isset($node['attributes'])) {
             foreach ($node['attributes'] as $attribute) {
                 $result = static::getNodeById($id, $attribute, $node['id']);
-                if ($result !== false) {
+                if (\is_array($result)) {
                     return $result;
                 }
             }
         }
+
         if (isset($node['children'])) {
             foreach ($node['children'] as $childNode) {
                 $result = static::getNodeById($id, $childNode, $node['id']);
-                if ($result !== false) {
+                if (\is_array($result)) {
                     return $result;
                 }
             }
