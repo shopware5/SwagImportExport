@@ -38,8 +38,8 @@ class ConfiguratorWriterTest extends TestCase
         $configuratorData = [
             [
                 'configSetType' => 0,
-                'configSetId' => 100,
-                'configGroupId' => 100,
+                'configSetId' => '100',
+                'configGroupId' => '100',
                 'configOptionName' => 'foo Liter',
             ],
         ];
