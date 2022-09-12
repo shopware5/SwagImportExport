@@ -22,7 +22,7 @@
             PT-12906 - Fehler beim Schreiben von Konfigurationen behoben;
             PT-12907 - Fehler beim Setzen von Standard-Werten eines Feldes in eigenen Profilen behoben;
         </changes>
-        <changes lang="de">
+        <changes lang="en">
             PT-12756 - Allows now importing property names with the value '0';
             PT-12905 - Fixed error when exporting product streams via CLI command;
             PT-12906 - Fixed error writing configurations;
