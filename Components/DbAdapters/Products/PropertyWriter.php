@@ -79,7 +79,7 @@ class PropertyWriter
             /*
              * Update or create options by value name
              */
-            if (!empty($propertyData['propertyValueName'])) {
+            if (isset($propertyData['propertyValueName']) && $propertyData['propertyValueName'] !== '') {
                 [$optionId, $valueId] = $this->updateOrCreateOptionAndValuesByValueName($orderNumber, $propertyData);
 
                 $optionRelationInsertStatements[] = "($optionId, $filterGroupId)";
@@ -269,7 +269,7 @@ class PropertyWriter
     {
         if (!empty($propertyData['propertyOptionId'])) {
             $optionId = $propertyData['propertyOptionId'];
-        } elseif (!empty($propertyData['propertyOptionName'])) {
+        } elseif (isset($propertyData['propertyOptionName']) && $propertyData['propertyOptionName'] !== '') {
             $optionName = $propertyData['propertyOptionName'];
             $optionId = $this->getOptionByName($optionName);
 

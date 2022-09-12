@@ -17,9 +17,11 @@
 
     <changelog version="REPLACE_WITH_NEXT_VERSION">
         <changes lang="de">
+            PT-12756 - Erlaubt nun das Importieren von Eigenschaftsnamen mit dem Wert '0';
             PT-12905 - Fehler beim Exportieren von Product Streams via CLI-Kommando behoben;
         </changes>
         <changes lang="de">
+            PT-12756 - Allows now importing property names with the value '0';
             PT-12905 - Fixed error when exporting product streams via CLI command;
         </changes>
     </changelog>
