@@ -46,15 +46,15 @@ class ExportCommand extends ShopwareCommand
 
     private string $filePath;
 
-    private ?\DateTimeInterface $dateFrom;
+    private ?string $dateFrom = null;
 
-    private ?\DateTimeInterface $dateTo;
+    private ?string $dateTo = null;
 
-    private ?string $category = null;
+    private ?int $categoryId = null;
 
-    private ?int $customerStream = null;
+    private ?int $customerStreamId = null;
 
-    private ?int $productStream = null;
+    private ?int $productStreamId = null;
 
     private ProfileRepository $profileRepository;
 
@@ -140,7 +140,7 @@ class ExportCommand extends ShopwareCommand
             [
                 'profileEntity' => $profile,
                 'filePath' => $this->filePath,
-                'customerStream' => $this->customerStream,
+                'customerStream' => $this->customerStreamId,
                 'format' => $this->format,
                 'exportVariants' => $this->exportVariants,
                 'limit' => $this->limit,
@@ -149,31 +149,31 @@ class ExportCommand extends ShopwareCommand
                 'dateTo' => $this->dateTo,
                 'filter' => [],
                 'username' => 'Commandline',
-                'category' => $this->category ? [$this->category] : null,
-                'productStream' => $this->productStream ? [$this->productStream] : null,
+                'category' => $this->categoryId ? [$this->categoryId] : null,
+                'productStream' => $this->productStreamId ? [$this->productStreamId] : null,
                 'batchSize' => $this->config->getByNamespace('SwagImportExport', 'batch-size-export', 1000),
             ]
         );
 
         $output->writeln('<info>' . \sprintf('Using profile: %s.', $this->profile) . '</info>');
-        if ($this->customerStream) {
-            $output->writeln('<info>' . \sprintf('Using customer stream: %d.', $this->customerStream) . '</info>');
+        if ($this->customerStreamId) {
+            $output->writeln('<info>' . \sprintf('Using customer stream: %d.', $this->customerStreamId) . '</info>');
         }
         $output->writeln('<info>' . \sprintf('Using format: %s.', $this->format) . '</info>');
         $output->writeln('<info>' . \sprintf('Using file: %s.', $this->filePath) . '</info>');
 
-        if ($this->category) {
-            $output->writeln('<info>' . \sprintf('Using category as filter: %s.', $this->category) . '</info>');
-        } elseif ($this->productStream) {
-            $output->writeln('<info>' . \sprintf('Using Product-Stream as filter: %s.', $this->productStream) . '</info>');
+        if ($this->categoryId) {
+            $output->writeln('<info>' . \sprintf('Using category as filter: %s.', $this->categoryId) . '</info>');
+        } elseif ($this->productStreamId) {
+            $output->writeln('<info>' . \sprintf('Using Product-Stream as filter: %s.', $this->productStreamId) . '</info>');
         }
 
         if ($this->dateFrom) {
-            $output->writeln('<info>' . \sprintf('from: %s.', $this->dateFrom->format('d.m.Y H:i:s')) . '</info>');
+            $output->writeln('<info>' . \sprintf('from: %s.', $this->dateFrom) . '</info>');
         }
 
         if ($this->dateTo) {
-            $output->writeln('<info>' . \sprintf('to: %s.', $this->dateTo->format('d.m.Y H:i:s')) . '</info>');
+            $output->writeln('<info>' . \sprintf('to: %s.', $this->dateTo) . '</info>');
         }
 
         $session = $this->sessionService->createSession();
@@ -210,30 +210,41 @@ class ExportCommand extends ShopwareCommand
 
     private function prepareExportInputValidation(InputInterface $input): void
     {
-        $this->profile = $input->getOption('profile');
-        $this->customerStream = $input->getOption('customerstream');
-        $this->format = $input->getOption('format');
         $this->exportVariants = $input->getOption('exportVariants');
         $this->offset = (int) $input->getOption('offset');
         $this->limit = (int) $input->getOption('limit');
-        $this->filePath = $input->getArgument('filepath');
-        $this->category = $input->getOption('category');
-        $this->productStream = $input->getOption('productStream');
-        $this->dateFrom = $input->getOption('dateFrom');
-        $this->dateTo = $input->getOption('dateTo');
 
-        if (!empty($this->dateFrom)) {
+        $categoryId = $input->getOption('category');
+        if ($categoryId !== null) {
+            if (is_numeric($categoryId)) {
+                $this->categoryId = (int) $categoryId;
+            } else {
+                throw new \RuntimeException('Option "category" must be a valid ID');
+            }
+        }
+
+        $productStreamId = $input->getOption('productStream');
+        if ($productStreamId !== null) {
+            if (is_numeric($productStreamId)) {
+                $this->productStreamId = (int) $productStreamId;
+            } else {
+                throw new \RuntimeException('Option "productStream" must be a valid ID');
+            }
+        }
+
+        $dateFrom = $input->getOption('dateFrom');
+        if (!empty($dateFrom)) {
             try {
-                $this->dateFrom = new \DateTime($this->dateFrom);
+                $this->dateFrom = (new \DateTime($dateFrom))->format('Y-m-d H:i:s');
             } catch (\Exception $e) {
                 throw new \RuntimeException(\sprintf('Invalid format! %s', $e->getMessage()));
             }
         }
 
-        if (!empty($this->dateTo)) {
+        $dateTo = $input->getOption('dateTo');
+        if (!empty($dateTo)) {
             try {
-                $this->dateTo = new \DateTime($this->dateTo);
-                $this->dateTo->setTime(23, 59, 59);
+                $this->dateTo = (new \DateTime($dateTo))->setTime(23, 59, 59)->format('Y-m-d H:i:s');
             } catch (\Exception $e) {
                 throw new \RuntimeException(\sprintf('Invalid format! %s', $e->getMessage()));
             }
@@ -243,10 +254,12 @@ class ExportCommand extends ShopwareCommand
             throw new \RuntimeException('from date must be greater than to date');
         }
 
+        $this->filePath = $input->getArgument('filepath');
         if (!$this->filePath) {
             throw new \RuntimeException('File path is required.');
         }
 
+        $this->profile = $input->getOption('profile');
         // if no profile is specified try to find it from the filename
         if ($this->profile === null) {
             $profile = $this->profileFactory->loadProfileByFileName($this->filePath);
@@ -268,11 +281,18 @@ class ExportCommand extends ShopwareCommand
 
         $this->validateProfiles($input);
 
-        if (!empty($this->customerStream)) {
-            $customerStream = $this->entityManager->find(CustomerStream::class, $this->customerStream);
-            $this->validateCustomerStream($customerStream);
+        $customerStreamId = $input->getOption('customerstream');
+        if ($customerStreamId !== null) {
+            if (is_numeric($customerStreamId)) {
+                $this->customerStreamId = (int) $customerStreamId;
+                $customerStream = $this->entityManager->find(CustomerStream::class, $this->customerStreamId);
+                $this->validateCustomerStream($customerStream);
+            } else {
+                throw new \RuntimeException('Option "productStream" must be a valid ID');
+            }
         }
 
+        $this->format = $input->getOption('format');
         // if no format is specified try to find it from the filename
         if (empty($this->format)) {
             $this->format = \pathinfo($this->filePath, \PATHINFO_EXTENSION);
@@ -293,7 +313,7 @@ class ExportCommand extends ShopwareCommand
             throw new \RuntimeException(\sprintf('Invalid profile: \'%s\'!', $this->profile));
         }
 
-        if ($this->profileEntity->getType() !== DataDbAdapter::PRODUCT_ADAPTER && $input->getOption('exportVariants')) {
+        if ($this->profileEntity->getType() !== DataDbAdapter::PRODUCT_ADAPTER && $this->exportVariants) {
             throw new \InvalidArgumentException('You can only export variants when exporting the articles profile type.');
         }
 
@@ -305,7 +325,7 @@ class ExportCommand extends ShopwareCommand
     private function validateCustomerStream(?CustomerStream $customerStream): void
     {
         if (!$customerStream) {
-            throw new \RuntimeException(\sprintf('Invalid stream: \'%s\'! There is no customer stream with this id.', $this->customerStream));
+            throw new \RuntimeException(\sprintf('Invalid stream: \'%s\'! There is no customer stream with this id.', $this->customerStreamId));
         }
 
         if (!\in_array($this->profileEntity->getType(), [DataDbAdapter::CUSTOMER_ADAPTER, DataDbAdapter::ADDRESS_ADAPTER], true)) {

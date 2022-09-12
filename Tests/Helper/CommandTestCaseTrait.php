@@ -11,8 +11,10 @@ namespace SwagImportExport\Tests\Helper;
 
 use Shopware\Components\Console\Application;
 use Shopware\Components\DependencyInjection\Container;
+use SwagImportExport\Commands\ExportCommand;
+use SwagImportExport\Commands\ImportCommand;
 use Symfony\Component\Console\Input\StringInput;
-use Symfony\Component\Console\Output\StreamOutput;
+use Symfony\Component\Console\Output\BufferedOutput;
 
 trait CommandTestCaseTrait
 {
@@ -38,21 +40,18 @@ trait CommandTestCaseTrait
      */
     protected function runCommand(string $command): array
     {
+        $this->getContainer()->reset(ExportCommand::class);
+        $this->getContainer()->reset(ImportCommand::class);
+
         $application = new Application($this->getContainer()->get('kernel'));
         $application->setAutoExit(true);
 
-        $fp = \tmpfile();
-        if (!\is_resource($fp)) {
-            throw new \RuntimeException('Could not create tmp file');
-        }
         $input = new StringInput($command);
-        $output = new StreamOutput($fp);
+        $output = new BufferedOutput();
 
         $application->doRun($input, $output);
 
-        $consoleOutput = $this->readConsoleOutput($fp);
-
-        return \explode(\PHP_EOL, $consoleOutput);
+        return \explode(\PHP_EOL, $output->fetch());
     }
 
     private function addCreatedExportFile(string $file): void
@@ -63,24 +62,5 @@ trait CommandTestCaseTrait
     private function getFilePath(string $fileName): string
     {
         return Shopware()->DocPath() . $fileName;
-    }
-
-    /**
-     * @param resource $fp
-     */
-    private function readConsoleOutput($fp): string
-    {
-        \fseek($fp, 0);
-        $output = '';
-        while (!\feof($fp)) {
-            $output = \fread($fp, 4096);
-        }
-        \fclose($fp);
-
-        if (!\is_string($output)) {
-            throw new \RuntimeException(sprintf('Could not read filepath %s', (string) $fp));
-        }
-
-        return $output;
     }
 }
