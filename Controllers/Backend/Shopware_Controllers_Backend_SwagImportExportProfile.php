@@ -428,7 +428,7 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends \Shopware_Con
 
         $defaultFieldsName = null;
         $defaultFields = [];
-        if ($dataManager) {
+        if ($dataManager instanceof DataManager) {
             $defaultFields = $dataManager->getDefaultFields();
             if (method_exists($dataManager, 'getDefaultFieldsName')) {
                 $defaultFieldsName = $dataManager->getDefaultFieldsName();

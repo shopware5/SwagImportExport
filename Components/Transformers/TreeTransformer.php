@@ -524,8 +524,8 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
      * Preparing/Modifying nodes to converting into xml
      * and puts db data into this formatted array
      *
-     * @param array<string, string> $mapper
-     * @param array<string, mixed>  $node
+     * @param array<string, mixed> $mapper
+     * @param array<string, mixed> $node
      *
      * @return array<array<mixed>|string>|string
      */
@@ -561,7 +561,7 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
 
                     if (isset($node['children']) && \count($node['children']) > 0) {
                         foreach ($node['children'] as $child) {
-                            if ($this->isAssociativeArray($currentNode)) {
+                            if (\is_array($currentNode) && $this->isAssociativeArray($currentNode)) {
                                 $currentNode[$child['name']] = $this->transformToTree($child, $currentNode, $node['adapter'] ?? null);
                             } else {
                                 foreach ($currentNode as $key => $currentNodeItem) {

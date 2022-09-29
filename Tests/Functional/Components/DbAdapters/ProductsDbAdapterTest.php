@@ -359,6 +359,22 @@ class ProductsDbAdapterTest extends TestCase
         $productDbAdapter->read($ids, $columns);
     }
 
+    public function testShouldReturnArticleSectionColumns(): void
+    {
+        $productDbAdapter = $this->getProductDbAdapter();
+        $columns = $productDbAdapter->getColumns('article');
+
+        static::assertNotEmpty($columns);
+    }
+
+    public function testShouldReturnArticleVariantSectionColumns(): void
+    {
+        $productDbAdapter = $this->getProductDbAdapter();
+        $columns = $productDbAdapter->getColumns('articleVariant');
+
+        static::assertNotEmpty($columns);
+    }
+
     private function getProductDbAdapter(): ProductsDbAdapter
     {
         return $this->getContainer()->get(ProductsDbAdapter::class);
