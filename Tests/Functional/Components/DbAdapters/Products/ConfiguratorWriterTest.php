@@ -58,6 +58,39 @@ class ConfiguratorWriterTest extends TestCase
         static::assertEquals(1, (int) $count);
     }
 
+    public function testSetConfigurationByConfigSetName(): void
+    {
+        $connection = $this->getContainer()->get('dbal_connection');
+        $sql = \file_get_contents(__DIR__ . '/_fixtures/configurator.sql');
+        static::assertIsString($sql);
+        $connection->executeQuery($sql);
+
+        $configuratorWriter = $this->getConfiguratorWriter();
+
+        $cacheUpdate = $this->getReflectionMethod(ConfiguratorWriter::class, 'getSets')->invoke($configuratorWriter);
+
+        $this->getReflectionProperty(ConfiguratorWriter::class, 'sets')->setValue($configuratorWriter, $cacheUpdate);
+
+        $productWriterResult = new ProductWriterResult(110, 110, 110);
+        $configuratorData = [
+            [
+                'configSetName' => 'Set-SW10002.3',
+                'configSetType' => 0,
+                'configGroupId' => 100,
+                'configOptionName' => 'foo Liter',
+            ],
+        ];
+        $configuratorWriter->writeOrUpdateConfiguratorSet($productWriterResult, $configuratorData);
+
+        $count = $this->getContainer()->get('dbal_connection')
+            ->executeQuery('SELECT COUNT(*) FROM s_article_configurator_set_group_relations WHERE set_id=? AND group_id=?', [100, 100])->fetchOne();
+        static::assertEquals(1, (int) $count);
+
+        $count = $this->getContainer()->get('dbal_connection')
+            ->executeQuery('SELECT COUNT(*) FROM s_article_configurator_options WHERE name=?', ['foo Liter'])->fetchOne();
+        static::assertEquals(1, (int) $count);
+    }
+
     private function getConfiguratorWriter(): ConfiguratorWriter
     {
         return $this->getContainer()->get(ConfiguratorWriter::class);
