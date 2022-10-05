@@ -241,12 +241,22 @@ parameters:
 			path: Components/FileIO/FileReader.php
 
 		-
+			message: "#^Cannot assign new offset to array\\|string\\.$#"
+			count: 1
+			path: Components/FileIO/XmlFileReader.php
+
+		-
 			message: "#^Method SwagImportExport\\\\Components\\\\FileIO\\\\XmlFileReader\\:\\:readRecords\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/FileIO/XmlFileReader.php
 
 		-
 			message: "#^Method SwagImportExport\\\\Components\\\\FileIO\\\\XmlFileReader\\:\\:setTree\\(\\) has parameter \\$tree with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: Components/FileIO/XmlFileReader.php
+
+		-
+			message: "#^array\\|string does not accept array\\|string\\.$#"
 			count: 1
 			path: Components/FileIO/XmlFileReader.php
 

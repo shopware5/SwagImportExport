@@ -621,6 +621,26 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
     }
 
     /**
+     * Accessed by the article mapping in the database
+     *
+     * @return array<string>
+     */
+    private function getArticleColumns(): array
+    {
+        return $this->getProductColumns();
+    }
+
+    /**
+     * Accessed by the article mapping in the database
+     *
+     * @return array<string>
+     */
+    private function getArticleVariantColumns(): array
+    {
+        return $this->getProductVariantColumns();
+    }
+
+    /**
      * @return array<string>
      */
     private function getProductVariantColumns(): array
