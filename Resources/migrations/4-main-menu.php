@@ -28,5 +28,8 @@ SQL);
 
     public function down(bool $keepUserData): void
     {
+        $this->connection->exec(<<<SQL
+        UPDATE s_core_menu SET controller = 'PluginManager', action = 'ImportExport', class = 'sprite-arrow-circle-double-135 contents--import-export'  WHERE name = 'Import/Export'
+SQL);
     }
 }
