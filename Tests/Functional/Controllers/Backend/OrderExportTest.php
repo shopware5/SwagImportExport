@@ -54,6 +54,7 @@ class OrderExportTest extends \Enlight_Components_Test_Controller_TestCase
 
         $this->assertOrderAttributeInXmlFile($file, '20001', 'orderId', '15');
         $this->assertOrderAttributeInXmlFile($file, '20001', 'paymentStatusId', '17');
+        $this->assertXmlCount($file, 17);
     }
 
     public function testOrdersCsvExport(): void
@@ -96,6 +97,7 @@ class OrderExportTest extends \Enlight_Components_Test_Controller_TestCase
 
         $this->assertOrderAttributeInXmlFile($file, '20001', 'orderId', '15');
         $this->assertOrderAttributeInXmlFile($file, '20001', 'paymentStatusId', '17');
+        $this->assertXmlCount($file, 8);
     }
 
     public function testOrdersCsvExportWithOrderstateFilter(): void
@@ -296,6 +298,12 @@ class OrderExportTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertInstanceOf(\DOMNode::class, $node);
         $nodeValue = $node->nodeValue;
         static::assertEquals($expected, $nodeValue);
+    }
+
+    private function assertXmlCount(string $filePath, int $number): void
+    {
+        $orderDomNodeList = $this->queryXpath($filePath, '//order');
+        static::assertCount($number, $orderDomNodeList);
     }
 
     private function readCsvMappedByNumber(string $file): array
