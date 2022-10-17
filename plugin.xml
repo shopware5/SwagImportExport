@@ -18,11 +18,18 @@
     <changelog version="3.0.4">
         <changes lang="de">
             PT-12919 - Fehler beim Hinzufügen von Datenbankspalten zu einem Artikelprofil behoben;
+            PT-12927 - Bestellungen können beim Export wieder nach Status gefiltert werden;
+            PT-12930 - Menüpunkt wird nun auch nach Neuinstallation korrekt angezeigt;
+            PT-12933 - Import von Konfiguratoren verbessert;
         </changes>
         <changes lang="en">
             PT-12919 - Fix error when adding database columns to an article profile;
+            PT-12927 - Orders can be filtered by status again while exporting;
+            PT-12930 - Menu item is now correctly displayed after re-installation;
+            PT-12933 - Improved import of configurators;
         </changes>
     </changelog>
+
     <changelog version="3.0.3">
         <changes lang="de">
             PT-12756 - Erlaubt nun das Importieren von Eigenschaftsnamen mit dem Wert '0';
