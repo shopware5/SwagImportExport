@@ -139,8 +139,8 @@ class Shopware_Controllers_Backend_SwagImportExportExport extends \Shopware_Cont
             'ordernumberFrom' => $this->Request()->getParam('ordernumberFrom') ?: null,
             'dateFrom' => $this->Request()->getParam('dateFrom') ?: null,
             'dateTo' => $this->Request()->getParam('dateTo') ?: null,
-            'orderstate' => $this->Request()->getParam('orderstate') ?: null,
-            'paymentstate' => $this->Request()->getParam('paymentstate') ?: null,
+            'orderstate' => $this->Request()->getParam('orderstate'),
+            'paymentstate' => $this->Request()->getParam('paymentstate'),
             'customerStreamId' => $this->Request()->getParam('customerStreamId') ?: null,
             'customerId' => $this->Request()->getParam('customerId') ?: null,
         ]);
