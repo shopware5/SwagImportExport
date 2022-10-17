@@ -82,13 +82,13 @@ class ConfiguratorWriter
                 }
 
                 $dataSet['public'] = false;
-                $dataSet['id'] = $configurator['configSetId'];
+                $dataSet['id'] = $configurator['configSetId'] ?? null;
                 if ($configurator['configSetType']) {
                     $dataSet['type'] = $configurator['configSetType'];
                 }
 
                 if (\array_key_exists($dataSet['name'], $this->sets)) {
-                    $configuratorSetId = $this->sets[$dataSet['name']];
+                    $configuratorSetId = (int) $this->sets[$dataSet['name']];
                 } else {
                     $configuratorSetId = $this->createSet($dataSet);
                     $this->sets[$dataSet['name']] = $configuratorSetId;
@@ -226,9 +226,11 @@ class ConfiguratorWriter
         return $this->connection->fetchAllKeyValue('SELECT `name`, `id` FROM s_article_configurator_sets');
     }
 
-    private function getConfiguratorSetIdByProductId(int $productId): int
+    private function getConfiguratorSetIdByProductId(int $productId): ?int
     {
-        return (int) $this->connection->fetchOne('SELECT configurator_set_id FROM s_articles WHERE id = ?', [$productId]);
+        $result = $this->connection->fetchOne('SELECT configurator_set_id FROM s_articles WHERE id = ?', [$productId]);
+
+        return $result ? (int) $result : null;
     }
 
     private function createSet(array $data): int
