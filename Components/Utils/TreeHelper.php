@@ -321,7 +321,7 @@ class TreeHelper
         $reorderedNode = [];
         if (isset($node['children'])) {
             foreach ($node as $key => $value) {
-                if ($key === 'children' || $key === 'attributes') {
+                if (($key === 'children' || $key === 'attributes') && \is_array($value)) {
                     $count = \count($value);
                     foreach ($value as $currentIndex => $innerValue) {
                         $value3 = self::reorderTree($innerValue);

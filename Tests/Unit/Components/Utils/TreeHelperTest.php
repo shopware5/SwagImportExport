@@ -25,4 +25,36 @@ class TreeHelperTest extends TestCase
         static::assertSame('active', $node['name']);
         static::assertSame('leaf', $node['type']);
     }
+
+    public function testReorderTree(): void
+    {
+        $node = [
+            'id' => '53e0d45110b1d',
+            'name' => 'price',
+            'index' => 0,
+            'type' => 'iteration',
+            'adapter' => 'price',
+            'parentKey' => 'variantId',
+            'shopwareField' => '',
+            'children' => [
+                [
+                    'id' => '53eddba5e3471',
+                    'type' => 'leaf',
+                    'index' => 0,
+                    'name' => 'group',
+                    'shopwareField' => 'priceGroup',
+                ],
+                [
+                    'id' => '53e0d472a0aa8',
+                    'type' => 'leaf',
+                    'index' => 1,
+                    'name' => 'price',
+                    'shopwareField' => 'price',
+                ],
+            ],
+            'attributes' => null,
+        ];
+        $reorderedNode = TreeHelper::reorderTree($node);
+        static::assertSame($node, $reorderedNode);
+    }
 }
