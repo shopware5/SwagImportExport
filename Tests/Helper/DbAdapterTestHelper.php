@@ -82,7 +82,7 @@ class DbAdapterTestHelper extends TestCase
         static::assertCount($expectedCount, $ids);
     }
 
-    public function write(array $records, int $expectedInsertedRows): void
+    public function write(array $records, int $expectedRowDifference): void
     {
         $recordsCountBeforeImport = $this->getTableCount($this->dbTable);
 
@@ -91,7 +91,7 @@ class DbAdapterTestHelper extends TestCase
 
         $recordsCountAfterImport = $this->getTableCount($this->dbTable);
 
-        static::assertEquals($expectedInsertedRows, $recordsCountAfterImport - $recordsCountBeforeImport);
+        static::assertEquals($expectedRowDifference, $recordsCountAfterImport - $recordsCountBeforeImport, 'Table row difference is not as expected');
     }
 
     protected function getYamlFile(string $fileName): string

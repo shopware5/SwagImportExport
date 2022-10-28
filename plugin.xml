@@ -17,10 +17,12 @@
 
     <changelog version="REPLACE_GLOBALLY_WITH_NEXT_VERSION(3.1.0)">
         <changes lang="de">
+            PT-7994 - Import von Staffelpreisen verbessert;
             PT-12928 - Exporte über die CLI können wieder mit dem Product Stream Namen ausgeführt werden;
             PT-12958 - Korrigiert das Entfernen von Feldern aus eigenen Profilen;
         </changes>
         <changes lang="en">
+            PT-7994 - Improve import of graduated prices;
             PT-12928 - Exports via the CLI can be executed with the Product Stream name again;
             PT-12958 - Fix deleting fields from custom profiles;
         </changes>
