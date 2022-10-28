@@ -336,13 +336,9 @@ class ProductsPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
                     $record['percent'] = (float) \str_replace(',', '.', (string) $record['percent']);
                 }
 
-                // removes price with same from value from database
-                $this->updateProductFromPrice($record, $productVariant->getId());
-                // checks if price belongs to graduation price
-                if ((int) $record['from'] !== 1) {
-                    // updates graduation to value with from value - 1
-                    $this->updateProductToPrice($record, $productVariant->getId(), $productVariant->getArticleId());
-                }
+                $this->removePriceWithSameFromValue($record, $productVariant->getId());
+                $this->removePriceWithSameToValue($record, $productVariant->getId());
+                $this->removeObsoleteGraduatedPrices($record, $productVariant->getId());
 
                 // remove tax
                 if ($customerGroup->getTaxInput()) {
@@ -492,17 +488,15 @@ class ProductsPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * @param array<string, mixed> $record
      */
-    private function updateProductFromPrice(array $record, int $articleDetailId): void
+    private function removePriceWithSameFromValue(array $record, int $productVariantId): void
     {
         $dql = 'DELETE FROM Shopware\Models\Article\Price price
                 WHERE price.customerGroup = :customerGroup
-                AND price.articleDetailsId = :detailId
+                AND price.articleDetailsId = :variantId
                 AND price.from = :fromValue';
-
         $query = $this->manager->createQuery($dql);
-
         $query->setParameter('customerGroup', $record['priceGroup'])
-            ->setParameter('detailId', $articleDetailId)
+            ->setParameter('variantId', $productVariantId)
             ->setParameter('fromValue', $record['from'])
             ->execute();
     }
@@ -510,21 +504,55 @@ class ProductsPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * @param array<string, mixed> $record
      */
-    private function updateProductToPrice(array $record, int $articleDetailId, int $articleId): void
+    private function removePriceWithSameToValue(array $record, int $productVariantId): void
     {
-        $dql = "UPDATE Shopware\Models\Article\Price price SET price.to = :toValue
+        $dql = 'DELETE FROM Shopware\Models\Article\Price price
                 WHERE price.customerGroup = :customerGroup
-                AND price.articleDetailsId = :detailId
-                AND price.articleId = :articleId
-                AND price.to LIKE :noUpperLimitGraduatedPrices";
-
+                AND price.articleDetailsId = :variantId
+                AND price.to = :toValue';
         $query = $this->manager->createQuery($dql);
+        $query->setParameter('customerGroup', $record['priceGroup'])
+            ->setParameter('variantId', $productVariantId)
+            ->setParameter('toValue', $record['to'])
+            ->execute();
+    }
 
-        $query->setParameter('toValue', $record['from'] - 1)
-            ->setParameter('customerGroup', $record['priceGroup'])
-            ->setParameter('detailId', $articleDetailId)
-            ->setParameter('articleId', $articleId)
-            ->setParameter('noUpperLimitGraduatedPrices', PriceDataManager::NO_UPPER_LIMIT_GRADUATED_PRICES)
+    /**
+     * @param array<string, mixed> $record
+     */
+    private function removeObsoleteGraduatedPrices(array $record, int $productVariantId): void
+    {
+        $fromValue = $record['from'];
+        $toValue = $record['to'];
+
+        // Remove graduated price where the old "from" and "to" values are between the new ones
+        // E.g: old price from 5 to 10, new price from 1 to 15
+        $dql = 'DELETE FROM Shopware\Models\Article\Price price
+                WHERE price.customerGroup = :customerGroup
+                AND price.articleDetailsId = :variantId
+                AND price.from > :fromValue
+                AND price.to < :toValue';
+        $query = $this->manager->createQuery($dql);
+        $query->setParameter('customerGroup', $record['priceGroup'])
+            ->setParameter('variantId', $productVariantId)
+            ->setParameter('fromValue', $fromValue)
+            ->setParameter('toValue', $toValue)
+            ->execute();
+
+        if ($toValue !== PriceDataManager::NO_UPPER_LIMIT_GRADUATED_PRICES) {
+            return;
+        }
+
+        // Remove graduated prices where the old "to" price is between the new "from" and the new UPPER_LIMIT
+        // E.g: old price from 11 to 20, new price from 16 to "beliebig"
+        $dql = 'DELETE FROM Shopware\Models\Article\Price price
+                WHERE price.customerGroup = :customerGroup
+                AND price.articleDetailsId = :variantId
+                AND price.to > :fromValue';
+        $query = $this->manager->createQuery($dql);
+        $query->setParameter('customerGroup', $record['priceGroup'])
+            ->setParameter('variantId', $productVariantId)
+            ->setParameter('fromValue', $fromValue)
             ->execute();
     }
 }
