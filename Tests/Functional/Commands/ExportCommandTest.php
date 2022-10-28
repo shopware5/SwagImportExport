@@ -9,12 +9,14 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Tests\Functional\Commands;
 
+use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use SwagImportExport\Components\Utils\SwagVersionHelper;
 use SwagImportExport\Tests\Helper\CommandTestCaseTrait;
 use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Helper\FixturesImportTrait;
+use Symfony\Component\Console\Exception\RuntimeException;
 
 class ExportCommandTest extends TestCase
 {
@@ -31,9 +33,158 @@ class ExportCommandTest extends TestCase
         static::assertSame('from: 2022-08-01 00:00:00.', $consoleOutput[4]);
         static::assertSame('to: 2022-09-01 23:59:59.', $consoleOutput[5]);
 
-        $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage("Invalid stream: '1'! There is no customer stream with this id.");
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid stream: "1"! There is no customer stream with this id.');
         $this->runCommand('sw:importexport:export -p default_customers customer.xml --customerstream 1');
+    }
+
+    public function testExportCommandWithProductStreamName(): void
+    {
+        $productStreamOneId = 1234;
+        $productStreamTwoId = 5678;
+        $sql = file_get_contents(__DIR__ . '/Fixture/productStreams.sql');
+        static::assertIsString($sql);
+        $connection = $this->getContainer()->get(Connection::class);
+        $connection->executeStatement($sql, ['productStreamOneId' => $productStreamOneId, 'productStreamTwoId' => $productStreamTwoId]);
+
+        $consoleOutput = $this->runCommand('sw:importexport:export -p default_articles product.csv --productStream "Foo Bar"');
+        static::assertSame(sprintf('Using Product Stream as filter: %d.', $productStreamTwoId), $consoleOutput[3]);
+    }
+
+    public function testExportCommandWithProductStreamNameTooManyStreamResults(): void
+    {
+        $productStreamOneId = 1234;
+        $productStreamTwoId = 5678;
+        $sql = file_get_contents(__DIR__ . '/Fixture/productStreams.sql');
+        static::assertIsString($sql);
+        $connection = $this->getContainer()->get(Connection::class);
+        $connection->executeStatement($sql, ['productStreamOneId' => $productStreamOneId, 'productStreamTwoId' => $productStreamTwoId]);
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(sprintf(
+            <<<EOD
+There are 2 streams with the name "Foo"
+
+- Test Foo (ID: %d)
+- Test Foo Bar (ID: %d)
+
+Please specify more or use the ID.
+EOD
+            ,
+            $productStreamOneId,
+            $productStreamTwoId
+        ));
+        $this->runCommand('sw:importexport:export -p default_articles product.csv --productStream "Foo"');
+    }
+
+    public function testExportCommandWithProductStreamNameNoStreamResult(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('There are no streams with the name: Foo Bar');
+        $this->runCommand('sw:importexport:export -p default_articles product.csv --productStream "Foo Bar"');
+    }
+
+    public function testExportCommandCategoryOptionIsNotNumeric(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Option "category" must be a valid ID');
+        $this->runCommand('sw:importexport:export -p default_articles product.csv -c Foo');
+    }
+
+    public function testExportCommandWithInvalidFromDate(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessageMatches('/Invalid format for "from" date!/');
+        $this->runCommand('sw:importexport:export -p default_articles product.csv --dateFrom abc123');
+    }
+
+    public function testExportCommandWithInvalidToDate(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessageMatches('/Invalid format for "to" date!/');
+        $this->runCommand('sw:importexport:export -p default_articles product.csv --dateTo abc123');
+    }
+
+    public function testExportCommandWithFromDateGreaterThanToDate(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('"From" date must be smaller than "to" date');
+        $this->runCommand('sw:importexport:export -p default_articles product.csv --dateTo 2022-08-01 --dateFrom 2022-09-01');
+    }
+
+    public function testExportCommandWithUnknownProfile(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Profile not found by name "unknown_profile".');
+        $this->runCommand('sw:importexport:export -p unknown_profile product.csv');
+    }
+
+    public function testExportCommandProfileNameDetectionByFileName(): void
+    {
+        $consoleOutput = $this->runCommand('sw:importexport:export test.default_articles.csv');
+        static::assertSame('Using profile: default_articles.', $consoleOutput[0]);
+    }
+
+    public function testExportCommandWithUnknownProfileThroughFileNameDetection(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Profile could not be determinated by file path "product.csv".');
+        $this->runCommand('sw:importexport:export product.csv');
+    }
+
+    public function testExportCommandWithoutFileName(): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Not enough arguments (missing: "filepath").');
+        $this->runCommand('sw:importexport:export');
+    }
+
+    public function testExportCommandCustomerStreamOptionIsNotNumeric(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Option "customerstream" must be a valid ID');
+        $this->runCommand('sw:importexport:export -p default_articles product.csv --customerstream Foo');
+    }
+
+    public function testExportCommandWithInvalidFileExtension(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid file format: "txt"! Valid file formats are: CSV and XML.');
+        $this->runCommand('sw:importexport:export -p default_articles product.txt');
+    }
+
+    public function testExportCommandWithVariantsAndInvalidProfile(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('You can only export variants when exporting the articles profile type.');
+        $this->runCommand('sw:importexport:export -p default_addresses addresses.csv --exportVariants');
+    }
+
+    public function testExportCommandWithCustomerStream(): void
+    {
+        $customerStreamId = 1234;
+        $sql = file_get_contents(__DIR__ . '/Fixture/customerStreams.sql');
+        static::assertIsString($sql);
+        $connection = $this->getContainer()->get(Connection::class);
+        $connection->executeStatement($sql, ['customerStreamId' => $customerStreamId]);
+
+        $consoleOutput = $this->runCommand(
+            sprintf('sw:importexport:export -p default_customers customers.csv --customerstream %d', $customerStreamId)
+        );
+        static::assertStringContainsString(sprintf('Using Customer Stream as filter: %d', $customerStreamId), $consoleOutput[3]);
+    }
+
+    public function testExportCommandWithCustomerStreamAndInvalidProfile(): void
+    {
+        $customerStreamId = 1234;
+        $sql = file_get_contents(__DIR__ . '/Fixture/customerStreams.sql');
+        static::assertIsString($sql);
+        $connection = $this->getContainer()->get(Connection::class);
+        $connection->executeStatement($sql, ['customerStreamId' => $customerStreamId]);
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Customer stream export can not be used with profile: "default_articles"!');
+        $this->runCommand(sprintf('sw:importexport:export -p default_articles customers.csv --customerstream %d', $customerStreamId));
     }
 
     public function testProductsCsvExportCommand(): void

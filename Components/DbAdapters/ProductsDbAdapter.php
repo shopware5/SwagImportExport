@@ -189,13 +189,17 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
             $context = $this->contextService->createShopContext($shop->getId());
             $criteria = new Criteria();
             $this->streamRepo->prepareCriteria($criteria, $productStreamId);
+            if (empty($criteria->getBaseConditions())) {
+                // If the base condition of the newly created Criteria object is still empty, the ID was not valid
+                throw new \RuntimeException(sprintf('Product Stream with ID "%d" not found', $productStreamId));
+            }
 
             $products = $this->productNumberSearch->search($criteria, $context);
             if (empty($products->getProducts())) {
                 return [];
             }
 
-            if ($filter[self::VARIANTS_FILTER_KEY]) {
+            if (isset($filter[self::VARIANTS_FILTER_KEY])) {
                 $productIds = array_values(array_map(static function (BaseProduct $product) {
                     return $product->getId();
                 }, $products->getProducts()));

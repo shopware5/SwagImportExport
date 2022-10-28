@@ -1,0 +1,3 @@
+INSERT INTO `s_product_streams` (`id`, `name`, `conditions`, `type`, `sorting`, `description`, `sorting_id`)
+VALUES (:productStreamOneId, 'Test Foo', '{\"Shopware\\\\Bundle\\\\SearchBundle\\\\Condition\\\\ManufacturerCondition\":{\"manufacturerIds\":[2]}}', 1, '\"{\\\"Shopware\\\\\\\\Bundle\\\\\\\\SearchBundle\\\\\\\\Sorting\\\\\\\\PopularitySorting\\\":{\\\"direction\\\":\\\"DESC\\\"}}\"', '', 2),
+       (:productStreamTwoId, 'Test Foo Bar', '{\"Shopware\\\\Bundle\\\\SearchBundle\\\\Condition\\\\ManufacturerCondition\":{\"manufacturerIds\":[2]}}', 1, '\"{\\\"Shopware\\\\\\\\Bundle\\\\\\\\SearchBundle\\\\\\\\Sorting\\\\\\\\PopularitySorting\\\":{\\\"direction\\\":\\\"DESC\\\"}}\"', '', 2);

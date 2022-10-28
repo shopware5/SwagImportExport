@@ -19,11 +19,11 @@
             <argument type="service" id="SwagImportExport\Components\Factories\ProfileFactory"/>
             <argument type="service" id="models"/>
             <argument type="service" id="SwagImportExport\Components\Session\SessionService"/>
-            <argument type="service" id="SwagImportExport\Components\UploadPathProvider"/>
             <argument>%kernel.root_dir%</argument>
             <argument type="service" id="SwagImportExport\Components\Logger\Logger"/>
             <argument type="service" id="SwagImportExport\Components\Service\ExportService"/>
             <argument type="service" id="config"/>
+            <argument type="service" id="dbal_connection"/>
 
             <tag name="console.command" command="sw:importexport:export"/>
         </service>
