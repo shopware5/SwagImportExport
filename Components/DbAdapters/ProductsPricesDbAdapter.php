@@ -15,7 +15,7 @@ use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\Model\Exception\ModelNotFoundException;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\QueryBuilder;
-use Shopware\Components\ProductStream\Repository;
+use Shopware\Components\ProductStream\RepositoryInterface;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Detail;
 use Shopware\Models\Article\Price as ProductPrice;
@@ -54,7 +54,7 @@ class ProductsPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
 
     private StoreFrontCriteriaFactoryInterface $storeFrontCriteriaFactory;
 
-    private Repository $productStreamRepository;
+    private RepositoryInterface $productStreamRepository;
 
     private ProductNumberSearchInterface $productNumberSearch;
 
@@ -67,7 +67,7 @@ class ProductsPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
         ModelManager $manager,
         ContextServiceInterface $contextService,
         StoreFrontCriteriaFactoryInterface $storeFrontCriteriaFactory,
-        Repository $productStreamRepository,
+        RepositoryInterface $productStreamRepository,
         ProductNumberSearchInterface $productNumberSearch,
         \Enlight_Event_EventManager $eventManager,
         \Shopware_Components_Config $config
