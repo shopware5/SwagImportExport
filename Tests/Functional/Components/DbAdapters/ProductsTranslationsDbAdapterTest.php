@@ -10,13 +10,13 @@ declare(strict_types=1);
 namespace SwagImportExport\Tests\Functional\Components\DbAdapters;
 
 use PHPUnit\Framework\TestCase;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use SwagImportExport\Components\DbAdapters\ProductsTranslationsDbAdapter;
 use SwagImportExport\Tests\Helper\ContainerTrait;
-use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
 class ProductsTranslationsDbAdapterTest extends TestCase
 {
-    use DatabaseTestCaseTrait;
+    use DatabaseTransactionBehaviour;
     use ContainerTrait;
 
     public function testReadShouldThrowExceptionIfIdsAreEmpty(): void

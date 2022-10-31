@@ -11,10 +11,10 @@ namespace SwagImportExport\Tests\Functional\Commands;
 
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use SwagImportExport\Components\Utils\SwagVersionHelper;
 use SwagImportExport\Tests\Helper\CommandTestCaseTrait;
 use SwagImportExport\Tests\Helper\ContainerTrait;
-use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Helper\FixturesImportTrait;
 use Symfony\Component\Console\Exception\RuntimeException;
 
@@ -22,7 +22,7 @@ class ExportCommandTest extends TestCase
 {
     use FixturesImportTrait;
     use CommandTestCaseTrait;
-    use DatabaseTestCaseTrait;
+    use DatabaseTransactionBehaviour;
     use ContainerTrait;
 
     public function testExportCommandOptions(): void

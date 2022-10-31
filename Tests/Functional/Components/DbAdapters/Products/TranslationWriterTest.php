@@ -10,15 +10,15 @@ declare(strict_types=1);
 namespace SwagImportExport\Tests\Functional\Components\DbAdapters\Products;
 
 use PHPUnit\Framework\TestCase;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use SwagImportExport\Components\DbAdapters\Products\TranslationWriter;
 use SwagImportExport\Components\Exception\AdapterException;
 use SwagImportExport\Tests\Helper\ContainerTrait;
-use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
 class TranslationWriterTest extends TestCase
 {
     use ContainerTrait;
-    use DatabaseTestCaseTrait;
+    use DatabaseTransactionBehaviour;
 
     public function testWriteShouldThrowExceptionIfLanguageIdIsNotAvailable(): void
     {

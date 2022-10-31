@@ -10,14 +10,14 @@ declare(strict_types=1);
 namespace SwagImportExport\Tests\Functional\Components\DataManagers;
 
 use PHPUnit\Framework\TestCase;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use SwagImportExport\Tests\Functional\Components\DataManagers\Mocks\CustomerDataManagerMock;
 use SwagImportExport\Tests\Helper\ContainerTrait;
-use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
 class CustomerDataManagerTest extends TestCase
 {
     use ContainerTrait;
-    use DatabaseTestCaseTrait;
+    use DatabaseTransactionBehaviour;
 
     public function testSetDefaultFieldsForCreateShouldAddANewCustomerNumber(): void
     {

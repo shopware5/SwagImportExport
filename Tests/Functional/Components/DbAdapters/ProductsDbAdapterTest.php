@@ -10,14 +10,14 @@ declare(strict_types=1);
 namespace SwagImportExport\Tests\Functional\Components\DbAdapters;
 
 use PHPUnit\Framework\TestCase;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use SwagImportExport\Components\DbAdapters\ProductsDbAdapter;
 use SwagImportExport\Tests\Helper\ContainerTrait;
-use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
 class ProductsDbAdapterTest extends TestCase
 {
     use ContainerTrait;
-    use DatabaseTestCaseTrait;
+    use DatabaseTransactionBehaviour;
 
     public function testWriteShouldThrowExceptionIfRecordsAreEmpty(): void
     {

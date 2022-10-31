@@ -12,9 +12,9 @@ namespace SwagImportExport\Tests\Functional\Commands;
 use Doctrine\DBAL\Connection;
 use ImportExportTestKernel;
 use PHPUnit\Framework\TestCase;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use SwagImportExport\Tests\Helper\CommandTestCaseTrait;
 use SwagImportExport\Tests\Helper\ContainerTrait;
-use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Helper\DataProvider\ProfileDataProvider;
 use SwagImportExport\Tests\Helper\FixturesImportTrait;
 
@@ -22,7 +22,7 @@ class ImportCommandTest extends TestCase
 {
     use FixturesImportTrait;
     use CommandTestCaseTrait;
-    use DatabaseTestCaseTrait;
+    use DatabaseTransactionBehaviour;
     use ContainerTrait;
 
     public const CLI_IMPORT_COMMAND = 'sw:importexport:import -p';

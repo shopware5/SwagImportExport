@@ -10,15 +10,15 @@ declare(strict_types=1);
 namespace SwagImportExport\Tests\Functional\Services;
 
 use PHPUnit\Framework\TestCase;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use SwagImportExport\Components\Service\ProfileService;
 use SwagImportExport\Components\UploadPathProvider;
 use SwagImportExport\Tests\Helper\ContainerTrait;
-use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ProfileServiceTest extends TestCase
 {
-    use DatabaseTestCaseTrait;
+    use DatabaseTransactionBehaviour;
 
     use ContainerTrait;
 

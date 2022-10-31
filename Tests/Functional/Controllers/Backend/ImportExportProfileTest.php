@@ -10,14 +10,14 @@ declare(strict_types=1);
 namespace SwagImportExport\Tests\Functional\Controllers\Backend;
 
 use PHPUnit\Framework\TestCase;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use SwagImportExport\Controllers\Backend\Shopware_Controllers_Backend_SwagImportExportProfile;
 use SwagImportExport\Tests\Helper\ContainerTrait;
-use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use Symfony\Component\HttpFoundation\Request;
 
 class ImportExportProfileTest extends TestCase
 {
-    use DatabaseTestCaseTrait;
+    use DatabaseTransactionBehaviour;
     use ContainerTrait;
 
     public function testExportProfile(): void

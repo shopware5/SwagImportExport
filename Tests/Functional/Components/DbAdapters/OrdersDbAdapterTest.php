@@ -10,13 +10,13 @@ declare(strict_types=1);
 namespace SwagImportExport\Tests\Functional\Components\DbAdapters;
 
 use PHPUnit\Framework\TestCase;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use SwagImportExport\Components\DbAdapters\OrdersDbAdapter;
 use SwagImportExport\Tests\Helper\ContainerTrait;
-use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
 class OrdersDbAdapterTest extends TestCase
 {
-    use DatabaseTestCaseTrait;
+    use DatabaseTransactionBehaviour;
     use ContainerTrait;
 
     public function testWriteShouldBeValid(): void

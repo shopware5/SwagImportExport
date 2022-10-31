@@ -9,15 +9,15 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Tests\Functional\Controllers\Backend;
 
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use SwagImportExport\Models\Profile;
 use SwagImportExport\Tests\Helper\ContainerTrait;
-use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Helper\ExportControllerTrait;
 
 class AddressExportTest extends \Enlight_Components_Test_Controller_TestCase
 {
     use ExportControllerTrait;
-    use DatabaseTestCaseTrait;
+    use DatabaseTransactionBehaviour;
     use ContainerTrait;
 
     public function setUp(): void

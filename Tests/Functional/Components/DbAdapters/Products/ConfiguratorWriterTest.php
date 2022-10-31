@@ -10,15 +10,15 @@ declare(strict_types=1);
 namespace SwagImportExport\Tests\Functional\Components\DbAdapters\Products;
 
 use PHPUnit\Framework\TestCase;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use SwagImportExport\Components\DbAdapters\Products\ConfiguratorWriter;
 use SwagImportExport\Components\DbAdapters\Results\ProductWriterResult;
 use SwagImportExport\Tests\Helper\ContainerTrait;
-use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Helper\ReflectionHelperTrait;
 
 class ConfiguratorWriterTest extends TestCase
 {
-    use DatabaseTestCaseTrait;
+    use DatabaseTransactionBehaviour;
     use ContainerTrait;
     use ReflectionHelperTrait;
 
