@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace SwagImportExport\Tests\Integration\Components;
 
 use PHPUnit\Framework\TestCase;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use SwagImportExport\Components\DataIO;
 use SwagImportExport\Components\DbAdapters\DataDbAdapter;
 use SwagImportExport\Components\Factories\ProfileFactory;
@@ -18,11 +19,10 @@ use SwagImportExport\Components\Providers\DataProvider;
 use SwagImportExport\Components\Session\SessionService;
 use SwagImportExport\Components\Structs\ExportRequest;
 use SwagImportExport\Tests\Helper\ContainerTrait;
-use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
 class DataIOTest extends TestCase
 {
-    use DatabaseTestCaseTrait;
+    use DatabaseTransactionBehaviour;
     use ContainerTrait;
 
     public function testPreloadRecordIds(): void

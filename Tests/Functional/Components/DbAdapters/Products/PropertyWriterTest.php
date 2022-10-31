@@ -10,13 +10,13 @@ declare(strict_types=1);
 namespace SwagImportExport\Tests\Functional\Components\DbAdapters\Products;
 
 use PHPUnit\Framework\TestCase;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use SwagImportExport\Components\DbAdapters\Products\PropertyWriter;
 use SwagImportExport\Tests\Helper\ContainerTrait;
-use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
 class PropertyWriterTest extends TestCase
 {
-    use DatabaseTestCaseTrait;
+    use DatabaseTransactionBehaviour;
     use ContainerTrait;
 
     private const PRODUCT_ORDER_NUMBER = 'SW10002.1';

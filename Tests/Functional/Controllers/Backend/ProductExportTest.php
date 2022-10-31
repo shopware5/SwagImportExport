@@ -10,8 +10,8 @@ declare(strict_types=1);
 namespace SwagImportExport\Tests\Functional\Controllers\Backend;
 
 use Doctrine\DBAL\Connection;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use SwagImportExport\Tests\Helper\ContainerTrait;
-use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Helper\DataProvider\ProfileDataProvider;
 use SwagImportExport\Tests\Helper\ExportControllerTrait;
 use SwagImportExport\Tests\Helper\FixturesImportTrait;
@@ -21,7 +21,7 @@ class ProductExportTest extends \Enlight_Components_Test_Controller_TestCase
 {
     use ExportControllerTrait;
     use FixturesImportTrait;
-    use DatabaseTestCaseTrait;
+    use DatabaseTransactionBehaviour;
     use ContainerTrait;
     use ReflectionHelperTrait;
 

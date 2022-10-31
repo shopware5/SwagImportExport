@@ -10,14 +10,14 @@ declare(strict_types=1);
 namespace SwagImportExport\Tests\Functional\Components\DbAdapters\Products;
 
 use PHPUnit\Framework\TestCase;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use SwagImportExport\Components\DbAdapters\Products\PriceWriter;
 use SwagImportExport\Components\Utils\SwagVersionHelper;
 use SwagImportExport\Tests\Helper\ContainerTrait;
-use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
 class PriceWriterTest extends TestCase
 {
-    use DatabaseTestCaseTrait;
+    use DatabaseTransactionBehaviour;
     use ContainerTrait;
 
     public function testWriteThrowsExceptionIfPriceGroupNotExists(): void

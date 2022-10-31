@@ -10,14 +10,14 @@ declare(strict_types=1);
 namespace SwagImportExport\Tests\Integration\Components;
 
 use PHPUnit\Framework\TestCase;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use SwagImportExport\Components\Profile\Profile;
 use SwagImportExport\Components\Transformers\FlattenTransformer;
 use SwagImportExport\Tests\Helper\ContainerTrait;
-use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
 class DataFlattenTransformerTest extends TestCase
 {
-    use DatabaseTestCaseTrait;
+    use DatabaseTransactionBehaviour;
     use ContainerTrait;
 
     public function getExampleExportData(): string

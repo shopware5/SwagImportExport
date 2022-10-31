@@ -10,13 +10,13 @@ declare(strict_types=1);
 namespace SwagImportExport\Tests\Integration\Components;
 
 use PHPUnit\Framework\TestCase;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use SwagImportExport\Components\Transformers\SmartyExpressionEvaluator;
 use SwagImportExport\Tests\Helper\ContainerTrait;
-use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 
 class ExpressionEvaluatorTest extends TestCase
 {
-    use DatabaseTestCaseTrait;
+    use DatabaseTransactionBehaviour;
     use ContainerTrait;
 
     public function testSmartyEvaluator(): void

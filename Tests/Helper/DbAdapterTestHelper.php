@@ -10,12 +10,13 @@ declare(strict_types=1);
 namespace SwagImportExport\Tests\Helper;
 
 use PHPUnit\Framework\TestCase;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use SwagImportExport\Components\Providers\DataProvider;
 use Symfony\Component\Yaml\Parser;
 
 class DbAdapterTestHelper extends TestCase
 {
-    use DatabaseTestCaseTrait;
+    use DatabaseTransactionBehaviour;
     use ContainerTrait;
 
     protected string $dbAdapter;

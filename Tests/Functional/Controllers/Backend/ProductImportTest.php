@@ -10,16 +10,16 @@ declare(strict_types=1);
 namespace SwagImportExport\Tests\Functional\Controllers\Backend;
 
 use PHPUnit\Framework\TestCase;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use SwagImportExport\Components\UploadPathProvider;
 use SwagImportExport\Controllers\Backend\Shopware_Controllers_Backend_SwagImportExportImport;
 use SwagImportExport\Tests\Helper\ContainerTrait;
-use SwagImportExport\Tests\Helper\DatabaseTestCaseTrait;
 use SwagImportExport\Tests\Helper\FrontendTestViewMock;
 use Symfony\Component\HttpFoundation\Request;
 
 class ProductImportTest extends TestCase
 {
-    use DatabaseTestCaseTrait;
+    use DatabaseTransactionBehaviour;
     use ContainerTrait;
 
     public const FORMAT_XML = 'xml';
