@@ -10,8 +10,8 @@ declare(strict_types=1);
 namespace SwagImportExport\Commands;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\ORM\EntityManagerInterface;
 use Shopware\Commands\ShopwareCommand;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Models\CustomerStream\CustomerStream;
 use SwagImportExport\Components\DbAdapters\DataDbAdapter;
 use SwagImportExport\Components\Factories\ProfileFactory;
@@ -57,7 +57,7 @@ class ExportCommand extends ShopwareCommand
 
     private ProfileRepository $profileRepository;
 
-    private EntityManagerInterface $entityManager;
+    private ModelManager $entityManager;
 
     private string $path;
 
@@ -76,7 +76,7 @@ class ExportCommand extends ShopwareCommand
     public function __construct(
         ProfileRepository $profileRepository,
         ProfileFactory $profileFactory,
-        EntityManagerInterface $entityManager,
+        ModelManager $entityManager,
         SessionService $sessionService,
         string $path,
         LoggerInterface $logger,

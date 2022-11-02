@@ -21,7 +21,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Components\ContainerAwareEventManager;
 use Shopware\Components\Model\Exception\ModelNotFoundException;
 use Shopware\Components\Model\ModelManager;
-use Shopware\Components\ProductStream\Repository;
+use Shopware\Components\ProductStream\RepositoryInterface;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Detail;
 use Shopware\Models\Attribute\Configuration;
@@ -77,7 +77,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
 
     private ContextServiceInterface $contextService;
 
-    private Repository $streamRepo;
+    private RepositoryInterface $streamRepo;
 
     private ProductNumberSearchInterface $productNumberSearch;
 
@@ -107,7 +107,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
         ContainerAwareEventManager $eventManager,
         UnderscoreToCamelCaseServiceInterface $underscoreToCamelCaseService,
         ContextServiceInterface $contextService,
-        Repository $streamRepo,
+        RepositoryInterface $streamRepo,
         ProductNumberSearchInterface $productNumberSearch,
         ProductWriter $productWriter,
         PriceWriter $priceWriter,

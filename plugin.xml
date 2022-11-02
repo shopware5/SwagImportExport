@@ -21,12 +21,14 @@
             PT-12928 - Exporte über die CLI können wieder mit dem Product Stream Namen ausgeführt werden;
             PT-12958 - Korrigiert das Entfernen von Feldern aus eigenen Profilen;
             PT-12967 - Menüpunkt wird nun auch nach Neuinstallation korrekt angezeigt;
+            PT-12971 - Verbessert Erweiterbarkeit durch Dritt-Anbieter-Plugins;
         </changes>
         <changes lang="en">
             PT-7994 - Improve import of graduated prices;
             PT-12928 - Exports via the CLI can be executed with the Product Stream name again;
             PT-12958 - Fix deleting fields from custom profiles;
             PT-12967 - Menu item is now correctly displayed after re-installation;
+            PT-12971 - Improves extensibility via third-party plugins;
         </changes>
     </changelog>
 
