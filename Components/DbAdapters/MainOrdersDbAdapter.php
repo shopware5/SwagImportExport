@@ -242,6 +242,7 @@ class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
             'billing.street as billingStreet',
             'billing.zipCode as billingZipCode',
             'billing.city as billingCity',
+            'billing.vatId as billingVatId',
             'billing.phone as billingPhone',
             'billing.additionalAddressLine1 as billingAdditionalAddressLine1',
             'billing.additionalAddressLine2 as billingAdditionalAddressLine2',
