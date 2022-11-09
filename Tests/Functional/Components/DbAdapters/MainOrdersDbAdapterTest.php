@@ -56,6 +56,7 @@ class MainOrdersDbAdapterTest extends TestCase
         static::assertArrayHasKey('orderId', $exportedOrders['order'][0], 'Could not fetch order id.');
         static::assertArrayHasKey('invoiceAmount', $exportedOrders['order'][0], 'Could not fetch amount.');
         static::assertArrayHasKey('clearedDate', $exportedOrders['order'][0], 'Could not fetch clear date.');
+        static::assertArrayHasKey('billingVatId', $exportedOrders['order'][0], 'Could not fetch billing VAT ID.');
         static::assertArrayHasKey('taxRateSum', $exportedOrders, 'Could not fetch tax rates.');
         static::assertArrayHasKey('orderId', $exportedOrders['taxRateSum'][0], 'Could not fetch order id.');
         static::assertArrayHasKey('taxRateSums', $exportedOrders['taxRateSum'][0], 'Could not fetch tax sum.');
