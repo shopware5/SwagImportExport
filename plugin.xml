@@ -18,9 +18,11 @@
     <changelog version="REPLACE_GLOBALLY_WITH_NEXT_VERSION(3.1.1)">
         <changes lang="de">
             PT-12979 - Ust-ID zum MainOrder-Profil hinzugefügt;
+            PT-12981 - Menüpunkt wird nun auch nach Neuinstallation korrekt angezeigt;
         </changes>
         <changes lang="en">
             PT-12979 - Add VAT ID to the MainOrder profile;
+            PT-12981 - Menu item is now correctly displayed after re-installation;
         </changes>
     </changelog>
 
