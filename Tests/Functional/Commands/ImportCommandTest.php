@@ -17,6 +17,7 @@ use SwagImportExport\Tests\Helper\CommandTestCaseTrait;
 use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\DataProvider\ProfileDataProvider;
 use SwagImportExport\Tests\Helper\FixturesImportTrait;
+use Symfony\Component\Console\Exception\RuntimeException;
 
 class ImportCommandTest extends TestCase
 {
@@ -36,6 +37,12 @@ class ImportCommandTest extends TestCase
 
     public function testCustomerXmlImport(): void
     {
+        $config = $this->getContainer()->get(\Shopware_Components_Config::class);
+        $previousBatchSize = (int) $config->getByNamespace('SwagImportExport', 'batch-size-import', 50);
+        $this->getContainer()->get('config_writer')->save('batch-size-import', 1);
+        $this->getContainer()->get(\Zend_Cache_Core::class)->clean();
+        $config->setShop(Shopware()->Shop());
+
         $actualLineAmount = $this->getRowCountForTable(ProfileDataProvider::CUSTOMER_TABLE);
         $profile = 'default_customers';
         $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'CustomerImport.xml';
@@ -46,9 +53,14 @@ class ImportCommandTest extends TestCase
         $resultLineAmount = $this->getRowCountForTable(ProfileDataProvider::CUSTOMER_TABLE);
         $importedCustomersAmount = $resultLineAmount - $actualLineAmount;
 
-        static::assertEquals('Using format: xml.', $consoleOutput[1]);
-        static::assertEquals(sprintf('Total count: %s.', $expectedImportedCustomersAmount), $consoleOutput[3]);
-        static::assertEquals($expectedImportedCustomersAmount, $importedCustomersAmount);
+        static::assertSame('Using format: xml.', $consoleOutput[1]);
+        static::assertSame(sprintf('Total count: %s.', $expectedImportedCustomersAmount), $consoleOutput[3]);
+        static::assertSame($expectedImportedCustomersAmount, $importedCustomersAmount);
+        static::assertSame('Processed default_customers: 1.', $consoleOutput[4]);
+
+        $this->getContainer()->get('config_writer')->save('batch-size-import', $previousBatchSize);
+        $this->getContainer()->get(\Zend_Cache_Core::class)->clean();
+        $config->setShop(Shopware()->Shop());
     }
 
     public function testCustomerCsvImport(): void
@@ -63,9 +75,9 @@ class ImportCommandTest extends TestCase
         $resultLineAmount = $this->getRowCountForTable(ProfileDataProvider::CUSTOMER_TABLE);
         $importedCustomersAmount = $resultLineAmount - $actualLineAmount;
 
-        static::assertEquals('Using format: csv.', $consoleOutput[1]);
-        static::assertEquals(sprintf('Total count: %s.', $expectedImportedCustomersAmount), $consoleOutput[3]);
-        static::assertEquals($expectedImportedCustomersAmount, $importedCustomersAmount);
+        static::assertSame('Using format: csv.', $consoleOutput[1]);
+        static::assertSame(sprintf('Total count: %s.', $expectedImportedCustomersAmount), $consoleOutput[3]);
+        static::assertSame($expectedImportedCustomersAmount, $importedCustomersAmount);
     }
 
     public function testCategoryXmlImport(): void
@@ -80,9 +92,9 @@ class ImportCommandTest extends TestCase
         $resultLineAmount = $this->getRowCountForTable(ProfileDataProvider::CATEGORY_TABLE);
         $importedCategoriesAmount = $resultLineAmount - $actualLineAmount;
 
-        static::assertEquals('Using format: xml.', $consoleOutput[1]);
-        static::assertEquals("Total count: {$expectedImportedCategories}.", $consoleOutput[3]);
-        static::assertEquals($expectedImportedCategories, $importedCategoriesAmount);
+        static::assertSame('Using format: xml.', $consoleOutput[1]);
+        static::assertSame("Total count: {$expectedImportedCategories}.", $consoleOutput[3]);
+        static::assertSame($expectedImportedCategories, $importedCategoriesAmount);
     }
 
     public function testCategoryCsvImport(): void
@@ -97,9 +109,9 @@ class ImportCommandTest extends TestCase
         $resultLineAmount = $this->getRowCountForTable(ProfileDataProvider::CATEGORY_TABLE);
         $importedCategoriesAmount = $resultLineAmount - $actualLineAmount;
 
-        static::assertEquals('Using format: csv.', $consoleOutput[1]);
-        static::assertEquals("Total count: {$expectedImportedCategories}.", $consoleOutput[3]);
-        static::assertEquals($expectedImportedCategories, $importedCategoriesAmount);
+        static::assertSame('Using format: csv.', $consoleOutput[1]);
+        static::assertSame("Total count: {$expectedImportedCategories}.", $consoleOutput[3]);
+        static::assertSame($expectedImportedCategories, $importedCategoriesAmount);
     }
 
     public function testNewsletterRecipientXmlImport(): void
@@ -114,9 +126,9 @@ class ImportCommandTest extends TestCase
         $resultLineAmount = $this->getRowCountForTable(ProfileDataProvider::NEWSLETTER_TABLE);
         $importedNewsletterAmount = $resultLineAmount - $actualLineAmount;
 
-        static::assertEquals('Using format: xml.', $consoleOutput[1]);
-        static::assertEquals("Total count: {$expectedImportedNewsletterRecipients}.", $consoleOutput[3]);
-        static::assertEquals($expectedImportedNewsletterRecipients, $importedNewsletterAmount);
+        static::assertSame('Using format: xml.', $consoleOutput[1]);
+        static::assertSame("Total count: {$expectedImportedNewsletterRecipients}.", $consoleOutput[3]);
+        static::assertSame($expectedImportedNewsletterRecipients, $importedNewsletterAmount);
     }
 
     public function testNewsletterRecipientCsvImport(): void
@@ -131,9 +143,9 @@ class ImportCommandTest extends TestCase
         $resultLineAmount = $this->getRowCountForTable(ProfileDataProvider::NEWSLETTER_TABLE);
         $importedNewsletterAmount = $resultLineAmount - $actualLineAmount;
 
-        static::assertEquals('Using format: csv.', $consoleOutput[1]);
-        static::assertEquals("Total count: {$expectedImportedNewsletterRecipients}.", $consoleOutput[3]);
-        static::assertEquals($expectedImportedNewsletterRecipients, $importedNewsletterAmount);
+        static::assertSame('Using format: csv.', $consoleOutput[1]);
+        static::assertSame("Total count: {$expectedImportedNewsletterRecipients}.", $consoleOutput[3]);
+        static::assertSame($expectedImportedNewsletterRecipients, $importedNewsletterAmount);
     }
 
     public function testProductXmlImport(): void
@@ -148,9 +160,9 @@ class ImportCommandTest extends TestCase
         $resultLineAmount = $this->getRowCountForTable(ProfileDataProvider::PRODUCT_TABLE);
         $importedProductsAmount = $resultLineAmount - $actualLineAmount;
 
-        static::assertEquals('Using format: xml.', $consoleOutput[1]);
-        static::assertEquals("Total count: {$expectedImportedProducts}.", $consoleOutput[3]);
-        static::assertEquals($expectedImportedProducts, $importedProductsAmount);
+        static::assertSame('Using format: xml.', $consoleOutput[1]);
+        static::assertSame("Total count: {$expectedImportedProducts}.", $consoleOutput[3]);
+        static::assertSame($expectedImportedProducts, $importedProductsAmount);
     }
 
     public function testProductCsvImport(): void
@@ -165,9 +177,9 @@ class ImportCommandTest extends TestCase
         $resultLineAmount = $this->getRowCountForTable(ProfileDataProvider::PRODUCT_TABLE);
         $importedProductsAmount = $resultLineAmount - $actualLineAmount;
 
-        static::assertEquals('Using format: csv.', $consoleOutput[1]);
-        static::assertEquals("Total count: {$expectedImportedProducts}.", $consoleOutput[3]);
-        static::assertEquals($expectedImportedProducts, $importedProductsAmount);
+        static::assertSame('Using format: csv.', $consoleOutput[1]);
+        static::assertSame("Total count: {$expectedImportedProducts}.", $consoleOutput[3]);
+        static::assertSame($expectedImportedProducts, $importedProductsAmount);
     }
 
     public function testVariantXmlImport(): void
@@ -182,9 +194,9 @@ class ImportCommandTest extends TestCase
         $resultLineAmount = $this->getRowCountForTable(ProfileDataProvider::VARIANT_TABLE);
         $importedVariantsAmount = $resultLineAmount - $actualLineAmount;
 
-        static::assertEquals('Using format: xml.', $consoleOutput[1]);
-        static::assertEquals("Total count: {$expectedImportedVariants}.", $consoleOutput[3]);
-        static::assertEquals($expectedImportedVariants, $importedVariantsAmount);
+        static::assertSame('Using format: xml.', $consoleOutput[1]);
+        static::assertSame("Total count: {$expectedImportedVariants}.", $consoleOutput[3]);
+        static::assertSame($expectedImportedVariants, $importedVariantsAmount);
     }
 
     public function testVariantCsvImport(): void
@@ -199,9 +211,9 @@ class ImportCommandTest extends TestCase
         $resultLineAmount = $this->getRowCountForTable(ProfileDataProvider::VARIANT_TABLE);
         $importedVariantsAmount = $resultLineAmount - $actualLineAmount;
 
-        static::assertEquals('Using format: csv.', $consoleOutput[1], 'Returned not the expected export file format.');
-        static::assertEquals("Total count: {$expectedImportedVariants}.", $consoleOutput[3], 'Did not process the expected amount of data rows.');
-        static::assertEquals($expectedImportedVariants, $importedVariantsAmount, 'Expected 2 new rows in s_articles_details.');
+        static::assertSame('Using format: csv.', $consoleOutput[1], 'Returned not the expected export file format.');
+        static::assertSame("Total count: {$expectedImportedVariants}.", $consoleOutput[3], 'Did not process the expected amount of data rows.');
+        static::assertSame($expectedImportedVariants, $importedVariantsAmount, 'Expected 2 new rows in s_articles_details.');
     }
 
     public function testProductInStockXmlImport(): void
@@ -211,8 +223,8 @@ class ImportCommandTest extends TestCase
 
         $consoleOutput = $this->runCommand(sprintf('%s %s %s', self::CLI_IMPORT_COMMAND, $profile, $filePath));
 
-        static::assertEquals('Using format: xml.', $consoleOutput[1]);
-        static::assertEquals('Total count: 405.', $consoleOutput[3]);
+        static::assertSame('Using format: xml.', $consoleOutput[1]);
+        static::assertSame('Total count: 405.', $consoleOutput[3]);
     }
 
     public function testProductInStockCsvImport(): void
@@ -222,8 +234,8 @@ class ImportCommandTest extends TestCase
 
         $consoleOutput = $this->runCommand(sprintf('%s %s %s', self::CLI_IMPORT_COMMAND, $profile, $filePath));
 
-        static::assertEquals('Using format: csv.', $consoleOutput[1]);
-        static::assertEquals('Total count: 405.', $consoleOutput[3]);
+        static::assertSame('Using format: csv.', $consoleOutput[1]);
+        static::assertSame('Total count: 405.', $consoleOutput[3]);
     }
 
     public function testProductPriceXmlImport(): void
@@ -233,8 +245,8 @@ class ImportCommandTest extends TestCase
 
         $consoleOutput = $this->runCommand(sprintf('%s %s %s', self::CLI_IMPORT_COMMAND, $profile, $filePath));
 
-        static::assertEquals('Using format: xml.', $consoleOutput[1]);
-        static::assertEquals('Total count: 27.', $consoleOutput[3]);
+        static::assertSame('Using format: xml.', $consoleOutput[1]);
+        static::assertSame('Total count: 27.', $consoleOutput[3]);
     }
 
     public function testProductPriceCsvImport(): void
@@ -244,8 +256,8 @@ class ImportCommandTest extends TestCase
 
         $consoleOutput = $this->runCommand(sprintf('%s %s %s', self::CLI_IMPORT_COMMAND, $profile, $filePath));
 
-        static::assertEquals('Using format: csv.', $consoleOutput[1]);
-        static::assertEquals('Total count: 98.', $consoleOutput[3]);
+        static::assertSame('Using format: csv.', $consoleOutput[1]);
+        static::assertSame('Total count: 98.', $consoleOutput[3]);
     }
 
     public function testProductTranslationXmlImport(): void
@@ -255,8 +267,8 @@ class ImportCommandTest extends TestCase
 
         $consoleOutput = $this->runCommand(sprintf('%s %s %s', self::CLI_IMPORT_COMMAND, $profile, $filePath));
 
-        static::assertEquals('Using format: xml.', $consoleOutput[1]);
-        static::assertEquals('Total count: 103.', $consoleOutput[3]);
+        static::assertSame('Using format: xml.', $consoleOutput[1]);
+        static::assertSame('Total count: 103.', $consoleOutput[3]);
     }
 
     public function testProductTranslationCsvImport(): void
@@ -266,8 +278,8 @@ class ImportCommandTest extends TestCase
 
         $consoleOutput = $this->runCommand(sprintf('%s %s %s', self::CLI_IMPORT_COMMAND, $profile, $filePath));
 
-        static::assertEquals('Using format: csv.', $consoleOutput[1]);
-        static::assertEquals('Total count: 103.', $consoleOutput[3]);
+        static::assertSame('Using format: csv.', $consoleOutput[1]);
+        static::assertSame('Total count: 103.', $consoleOutput[3]);
     }
 
     public function testOrderXmlImport(): void
@@ -282,9 +294,9 @@ class ImportCommandTest extends TestCase
         $resultLineAmount = $this->getRowCountForTable(ProfileDataProvider::ORDER_TABLE);
         $importedOrdersAmount = $resultLineAmount - $actualLineAmount;
 
-        static::assertEquals($expectedImportedOrders, $importedOrdersAmount);
-        static::assertEquals('Using format: xml.', $consoleOutput[1]);
-        static::assertEquals('Total count: 17.', $consoleOutput[3]);
+        static::assertSame($expectedImportedOrders, $importedOrdersAmount);
+        static::assertSame('Using format: xml.', $consoleOutput[1]);
+        static::assertSame('Total count: 17.', $consoleOutput[3]);
     }
 
     public function testOrderCsvImport(): void
@@ -299,9 +311,9 @@ class ImportCommandTest extends TestCase
         $resultLineAmount = $this->getRowCountForTable(ProfileDataProvider::ORDER_TABLE);
         $importedOrdersAmount = $resultLineAmount - $actualLineAmount;
 
-        static::assertEquals($expectedImportedOrders, $importedOrdersAmount);
-        static::assertEquals('Using format: csv.', $consoleOutput[1]);
-        static::assertEquals('Total count: 17.', $consoleOutput[3]);
+        static::assertSame($expectedImportedOrders, $importedOrdersAmount);
+        static::assertSame('Using format: csv.', $consoleOutput[1]);
+        static::assertSame('Total count: 17.', $consoleOutput[3]);
     }
 
     public function testMainOrderXmlImport(): void
@@ -329,8 +341,8 @@ class ImportCommandTest extends TestCase
 
         $consoleOutput = $this->runCommand(sprintf('%s %s %s', self::CLI_IMPORT_COMMAND, $profile, $filePath));
 
-        static::assertEquals('Using format: xml.', $consoleOutput[1]);
-        static::assertEquals('Total count: 15.', $consoleOutput[3]);
+        static::assertSame('Using format: xml.', $consoleOutput[1]);
+        static::assertSame('Total count: 15.', $consoleOutput[3]);
     }
 
     public function testTranslationCsvImport(): void
@@ -340,8 +352,50 @@ class ImportCommandTest extends TestCase
 
         $consoleOutput = $this->runCommand(sprintf('%s %s %s', self::CLI_IMPORT_COMMAND, $profile, $filePath));
 
-        static::assertEquals('Using format: csv.', $consoleOutput[1]);
-        static::assertEquals('Total count: 15.', $consoleOutput[3]);
+        static::assertSame('Using format: csv.', $consoleOutput[1]);
+        static::assertSame('Total count: 15.', $consoleOutput[3]);
+    }
+
+    public function testExportCommandWithUnknownProfile(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Profile not found by name "unknown_profile".');
+        $this->runCommand('sw:importexport:import -p unknown_profile product.csv');
+    }
+
+    public function testExportCommandProfileNameDetectionByFileName(): void
+    {
+        $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'test.default_customers.xml';
+        $consoleOutput = $this->runCommand('sw:importexport:import ' . $filePath);
+        static::assertSame('Using profile: default_customers.', $consoleOutput[0]);
+    }
+
+    public function testExportCommandWithUnknownProfileThroughFileNameDetection(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Profile could not be determinated by file path "product.csv".');
+        $this->runCommand('sw:importexport:import product.csv');
+    }
+
+    public function testExportCommandWithoutFileName(): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Not enough arguments (missing: "filepath").');
+        $this->runCommand('sw:importexport:import');
+    }
+
+    public function testExportCommandWithInvalidFileExtension(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid file format: "txt"! Valid file formats are: CSV and XML.');
+        $this->runCommand('sw:importexport:import -p default_articles product.txt');
+    }
+
+    public function testExportCommandWithInvalidFilePath(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('File "product.csv" not found');
+        $this->runCommand('sw:importexport:import -p default_articles product.csv');
     }
 
     private function getRowCountForTable(string $table): int

@@ -86,6 +86,12 @@ class AutoImportServiceTest extends TestCase
 
     public function testRunAutoImportShouldImportFiles(): void
     {
+        $config = $this->getContainer()->get(\Shopware_Components_Config::class);
+        $previousBatchSize = (int) $config->getByNamespace('SwagImportExport', 'batch-size-import', 50);
+        $this->getContainer()->get('config_writer')->save('batch-size-import', 1);
+        $this->getContainer()->get(\Zend_Cache_Core::class)->clean();
+        $config->setShop(Shopware()->Shop());
+
         $service = $this->getService();
 
         $property = (new \ReflectionClass(AutoImportService::class))->getProperty('directory');
@@ -99,8 +105,16 @@ class AutoImportServiceTest extends TestCase
 
         $this->installProfile($userFile, (string) \file_get_contents(__DIR__ . '/_fixtures/export.customers.csv'));
 
-        $this->expectOutputString('3 default_customers imported successfully' . \PHP_EOL);
+        $this->expectOutputString(
+            '1 default_customers imported successfully' . \PHP_EOL .
+            '2 default_customers imported successfully' . \PHP_EOL .
+            '3 default_customers imported successfully' . \PHP_EOL
+        );
         $service->runAutoImport();
+
+        $this->getContainer()->get('config_writer')->save('batch-size-import', $previousBatchSize);
+        $this->getContainer()->get(\Zend_Cache_Core::class)->clean();
+        $config->setShop(Shopware()->Shop());
     }
 
     private function installProfile(string $filename, string $content): void
