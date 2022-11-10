@@ -26,7 +26,8 @@ UPDATE s_core_menu
 SET controller = 'SwagImportExport',
     action = 'index',
     class = 'sprite-arrow-circle-double-135 contents--import-export',
-    pluginID = @pluginId
+    pluginID = @pluginId,
+    active = 1
 WHERE name = 'Import/Export'
 SQL);
     }
