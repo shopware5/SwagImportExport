@@ -10,6 +10,7 @@
             <argument type="service" id="SwagImportExport\Models\ProfileRepository"/>
             <argument type="service" id="SwagImportExport\Components\Session\SessionService"/>
             <argument type="service" id="SwagImportExport\Components\Service\ImportService"/>
+            <argument type="service" id="config"/>
 
             <tag name="console.command" command="sw:importexport:import"/>
         </service>

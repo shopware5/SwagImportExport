@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Root>
+    <Header>
+        <HeaderChild></HeaderChild>
+    </Header>
+    <customers>
+        <customer>
+            <customernumber>120005</customernumber>
+            <email>test12345@example.com</email>
+            <password>$2y$10$NKkGdvYGkDg1RbvEWqVZe.6MeAG74uJMv9Uk9RO2Gmt9ZgovFpznq</password>
+            <encoder>bcrypt</encoder>
+            <active>1</active>
+            <billing_company>Test</billing_company>
+            <billing_department></billing_department>
+            <billing_salutation>mr</billing_salutation>
+            <billing_firstname>Test</billing_firstname>
+            <billing_lastname>Test</billing_lastname>
+            <billing_street>Teststr 43</billing_street>
+            <billing_zipcode>55555</billing_zipcode>
+            <billing_city>Berlin</billing_city>
+            <phone></phone>
+            <billing_countryID>2</billing_countryID>
+            <billing_stateID>7</billing_stateID>
+            <ustid></ustid>
+            <shipping_company>Test</shipping_company>
+            <shipping_department></shipping_department>
+            <shipping_salutation>mr</shipping_salutation>
+            <shipping_firstname>Test</shipping_firstname>
+            <shipping_lastname>Test</shipping_lastname>
+            <shipping_street>Teststr 43</shipping_street>
+            <shipping_zipcode>55555</shipping_zipcode>
+            <shipping_city>Berlin</shipping_city>
+            <shipping_countryID>2</shipping_countryID>
+            <paymentID>3</paymentID>
+            <newsletter>0</newsletter>
+            <accountmode>0</accountmode>
+            <customergroup>EK</customergroup>
+            <language>1</language>
+            <subshopID>1</subshopID>
+        </customer>
+    </customers>
+</Root>

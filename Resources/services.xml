@@ -44,6 +44,7 @@
             <argument type="service" id="SwagImportExport\Components\Factories\ProfileFactory"/>
             <argument type="service" id="SwagImportExport\Components\Session\SessionService"/>
             <argument type="service" id="SwagImportExport\Components\Service\ImportService"/>
+            <argument type="service" id="config"/>
         </service>
 
         <service id="SwagImportExport\Components\Service\ProfileService">

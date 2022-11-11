@@ -19,10 +19,12 @@
         <changes lang="de">
             PT-12979 - Ust-ID zum MainOrder-Profil hinzugefügt;
             PT-12981 - Menüpunkt wird nun auch nach Neuinstallation korrekt angezeigt;
+            PT-12983 - Importe über die CLI berücksichtigen nun korrekt die Batch-Size;
         </changes>
         <changes lang="en">
             PT-12979 - Add VAT ID to the MainOrder profile;
             PT-12981 - Menu item is now correctly displayed after re-installation;
+            PT-12983 - Imports via the CLI consider the batch size correctly now;
         </changes>
     </changelog>
 

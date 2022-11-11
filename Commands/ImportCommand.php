@@ -25,9 +25,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ImportCommand extends ShopwareCommand
 {
-    private ?string $profile = null;
-
-    private ?Profile $profileEntity;
+    private Profile $profile;
 
     private ?string $format = null;
 
@@ -41,18 +39,22 @@ class ImportCommand extends ShopwareCommand
 
     private ImportServiceInterface $importService;
 
+    private \Shopware_Components_Config $config;
+
     public function __construct(
         ProfileFactory $profileFactory,
         ProfileRepository $profileRepository,
         SessionService $sessionService,
-        ImportServiceInterface $importService
+        ImportServiceInterface $importService,
+        \Shopware_Components_Config $config
     ) {
         $this->profileFactory = $profileFactory;
         $this->profileRepository = $profileRepository;
-
-        parent::__construct();
         $this->sessionService = $sessionService;
         $this->importService = $importService;
+        $this->config = $config;
+
+        parent::__construct();
     }
 
     /**
@@ -75,16 +77,11 @@ class ImportCommand extends ShopwareCommand
     {
         $this->prepareImportInputValidation($input);
 
-        // validate profile
-        if (!$this->profileEntity instanceof Profile) {
-            throw new \InvalidArgumentException(\sprintf('Invalid profile: \'%s\'!', $this->profile));
-        }
-
         if (!\is_string($this->format)) {
-            throw new \InvalidArgumentException('Format could not be determined');
+            throw new \InvalidArgumentException('Should not happen. Format could not be determined');
         }
 
-        $this->start($output, $this->profileEntity, $this->filePath, $this->format);
+        $this->start($output, $this->profile, $this->filePath, $this->format);
 
         return 0;
     }
@@ -101,7 +98,7 @@ class ImportCommand extends ShopwareCommand
             'inputFile' => $file,
             'format' => $format,
             'username' => 'Commandline',
-            'batchSize' => $profileModel->getType() === DataDbAdapter::PRODUCT_IMAGE_ADAPTER ? 1 : 50,
+            'batchSize' => $profileModel->getType() === DataDbAdapter::PRODUCT_IMAGE_ADAPTER ? 1 : (int) $this->config->getByNamespace('SwagImportExport', 'batch-size-import', 50),
         ]);
 
         $output->writeln('<info>' . \sprintf('Using profile: %s.', $profileModel->getName()) . '</info>');
@@ -119,27 +116,27 @@ class ImportCommand extends ShopwareCommand
 
     private function prepareImportInputValidation(InputInterface $input): void
     {
-        $this->profile = $input->getOption('profile');
+        $profileName = $input->getOption('profile');
         $this->format = $input->getOption('format');
         $this->filePath = $input->getArgument('filepath');
 
         // if no profile is specified try to find it from the filename
-        if ($this->profile === null) {
+        if ($profileName === null) {
             $profile = $this->profileFactory->loadProfileByFileName($this->filePath);
 
             if (!$profile instanceof Profile) {
-                throw new \InvalidArgumentException(sprintf('Profile could not be determinated by file path %s.', $this->filePath));
+                throw new \InvalidArgumentException(sprintf('Profile could not be determinated by file path "%s".', $this->filePath));
             }
 
-            $this->profileEntity = $profile;
+            $this->profile = $profile;
         } else {
-            $profile = $this->profileRepository->findOneBy(['name' => $this->profile]);
+            $profileEntity = $this->profileRepository->findOneBy(['name' => $profileName]);
 
-            if (!$profile instanceof ProfileEntity) {
-                throw new \InvalidArgumentException(sprintf('Profile was not found by the name %s', $this->profile));
+            if (!$profileEntity instanceof ProfileEntity) {
+                throw new \InvalidArgumentException(sprintf('Profile not found by name "%s".', $profileName));
             }
 
-            $this->profileEntity = new Profile($profile);
+            $this->profile = new Profile($profileEntity);
         }
 
         // if no format is specified try to find it from the filename
@@ -151,13 +148,13 @@ class ImportCommand extends ShopwareCommand
         $this->format = \strtolower($this->format);
 
         // validate type
-        if (!\in_array($this->format, ['csv', 'xml'])) {
-            throw new \InvalidArgumentException(\sprintf('Invalid format: \'%s\'! Valid formats are: CSV and XML.', $this->format));
+        if (!\in_array($this->format, ['csv', 'xml'], true)) {
+            throw new \InvalidArgumentException(\sprintf('Invalid file format: "%s"! Valid file formats are: CSV and XML.', $this->format));
         }
 
         // validate path
         if (!\file_exists($this->filePath)) {
-            throw new \InvalidArgumentException(\sprintf('File \'%s\' not found!', $this->filePath));
+            throw new \InvalidArgumentException(\sprintf('File "%s" not found!', $this->filePath));
         }
     }
 }

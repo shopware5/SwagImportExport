@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Components\Service;
 
+use SwagImportExport\Components\DbAdapters\DataDbAdapter;
 use SwagImportExport\Components\Factories\ProfileFactory;
 use SwagImportExport\Components\Profile\Profile;
 use SwagImportExport\Components\Session\SessionService;
@@ -30,17 +31,21 @@ class AutoImportService implements AutoImportServiceInterface
 
     private ImportServiceInterface $importService;
 
+    private \Shopware_Components_Config $config;
+
     public function __construct(
         UploadPathProvider $uploadPathProvider,
         ProfileFactory $profileFactory,
         SessionService $sessionService,
-        ImportServiceInterface $importService
+        ImportServiceInterface $importService,
+        \Shopware_Components_Config $config
     ) {
         $this->uploadPathProvider = $uploadPathProvider;
         $this->profileFactory = $profileFactory;
         $this->sessionService = $sessionService;
         $this->directory = $this->uploadPathProvider->getPath(UploadPathProvider::CRON_DIR);
         $this->importService = $importService;
+        $this->config = $config;
     }
 
     public function runAutoImport(): void
@@ -167,6 +172,7 @@ class AutoImportService implements AutoImportServiceInterface
                 'inputFile' => $inputFile,
                 'format' => $format,
                 'username' => 'Cron',
+                'batchSize' => $profileModel->getType() === DataDbAdapter::PRODUCT_IMAGE_ADAPTER ? 1 : (int) $this->config->getByNamespace('SwagImportExport', 'batch-size-import', 50),
             ]
         );
 

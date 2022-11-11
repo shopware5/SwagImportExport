@@ -127,7 +127,7 @@ class Shopware_Controllers_Backend_SwagImportExportImport extends \Shopware_Cont
             'inputFile' => $inputFile,
             'format' => $this->uploadPathProvider->getFileExtension($inputFile),
             'username' => $auth->getIdentity()->name ?: 'Cli',
-            'batchSize' => $profile->getType() === DataDbAdapter::PRODUCT_IMAGE_ADAPTER ? 1 : (int) $config->getByNamespace('SwagImportExport', 'batch-size-import', 1000),
+            'batchSize' => $profile->getType() === DataDbAdapter::PRODUCT_IMAGE_ADAPTER ? 1 : (int) $config->getByNamespace('SwagImportExport', 'batch-size-import', 50),
         ]);
 
         return $importRequest;
