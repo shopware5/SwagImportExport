@@ -12,7 +12,6 @@ namespace SwagImportExport\Components\DbAdapters;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
-use Enlight_Components_Db_Adapter_Pdo_Mysql;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchInterface;
@@ -52,7 +51,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
 
     private ModelManager $modelManager;
 
-    private Enlight_Components_Db_Adapter_Pdo_Mysql $db;
+    private \Enlight_Components_Db_Adapter_Pdo_Mysql $db;
 
     private array $unprocessedData;
 
@@ -100,7 +99,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
     private ImageWriter $imageWriter;
 
     public function __construct(
-        Enlight_Components_Db_Adapter_Pdo_Mysql $db,
+        \Enlight_Components_Db_Adapter_Pdo_Mysql $db,
         ModelManager $modelManager,
         MediaServiceInterface $mediaService,
         \Shopware_Components_Config $config,

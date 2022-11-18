@@ -9,18 +9,14 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Tests\Helper;
 
-use ReflectionClass;
-use ReflectionMethod;
-use ReflectionProperty;
-
 trait ReflectionHelperTrait
 {
     /**
      * @param class-string $className
      */
-    public function getReflectionMethod(string $className, string $methodName): ReflectionMethod
+    public function getReflectionMethod(string $className, string $methodName): \ReflectionMethod
     {
-        $method = (new ReflectionClass($className))->getMethod($methodName);
+        $method = (new \ReflectionClass($className))->getMethod($methodName);
         $method->setAccessible(true);
 
         return $method;
@@ -29,9 +25,9 @@ trait ReflectionHelperTrait
     /**
      * @param class-string $className
      */
-    public function getReflectionProperty(string $className, string $property): ReflectionProperty
+    public function getReflectionProperty(string $className, string $property): \ReflectionProperty
     {
-        $property = (new ReflectionClass($className))->getProperty($property);
+        $property = (new \ReflectionClass($className))->getProperty($property);
         $property->setAccessible(true);
 
         return $property;

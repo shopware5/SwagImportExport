@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace SwagImportExport\Tests\Functional\Commands;
 
 use Doctrine\DBAL\Connection;
-use ImportExportTestKernel;
 use PHPUnit\Framework\TestCase;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use SwagImportExport\Tests\Helper\CommandTestCaseTrait;
@@ -45,7 +44,7 @@ class ImportCommandTest extends TestCase
 
         $actualLineAmount = $this->getRowCountForTable(ProfileDataProvider::CUSTOMER_TABLE);
         $profile = 'default_customers';
-        $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'CustomerImport.xml';
+        $filePath = \ImportExportTestKernel::IMPORT_FILES_DIR . 'CustomerImport.xml';
         $expectedImportedCustomersAmount = 4;
 
         $consoleOutput = $this->runCommand(sprintf('%s %s %s', self::CLI_IMPORT_COMMAND, $profile, $filePath));
@@ -67,7 +66,7 @@ class ImportCommandTest extends TestCase
     {
         $actualLineAmount = $this->getRowCountForTable(ProfileDataProvider::CUSTOMER_TABLE);
         $profile = 'default_customers';
-        $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'CustomerImport.csv';
+        $filePath = \ImportExportTestKernel::IMPORT_FILES_DIR . 'CustomerImport.csv';
         $expectedImportedCustomersAmount = 4;
 
         $consoleOutput = $this->runCommand(sprintf('%s %s %s', self::CLI_IMPORT_COMMAND, $profile, $filePath));
@@ -84,7 +83,7 @@ class ImportCommandTest extends TestCase
     {
         $actualLineAmount = $this->getRowCountForTable(ProfileDataProvider::CATEGORY_TABLE);
         $profile = 'default_categories';
-        $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'CategoriesImport.xml';
+        $filePath = \ImportExportTestKernel::IMPORT_FILES_DIR . 'CategoriesImport.xml';
         $expectedImportedCategories = 16;
 
         $consoleOutput = $this->runCommand(sprintf('%s %s %s', self::CLI_IMPORT_COMMAND, $profile, $filePath));
@@ -101,7 +100,7 @@ class ImportCommandTest extends TestCase
     {
         $actualLineAmount = $this->getRowCountForTable(ProfileDataProvider::CATEGORY_TABLE);
         $profile = 'default_categories';
-        $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'CategoriesImport.csv';
+        $filePath = \ImportExportTestKernel::IMPORT_FILES_DIR . 'CategoriesImport.csv';
         $expectedImportedCategories = 16;
 
         $consoleOutput = $this->runCommand(sprintf('%s %s %s', self::CLI_IMPORT_COMMAND, $profile, $filePath));
@@ -118,7 +117,7 @@ class ImportCommandTest extends TestCase
     {
         $actualLineAmount = $this->getRowCountForTable(ProfileDataProvider::NEWSLETTER_TABLE);
         $profile = 'default_newsletter_recipient';
-        $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'NewsletterRecipientImport.xml';
+        $filePath = \ImportExportTestKernel::IMPORT_FILES_DIR . 'NewsletterRecipientImport.xml';
         $expectedImportedNewsletterRecipients = 6;
 
         $consoleOutput = $this->runCommand(sprintf('%s %s %s', self::CLI_IMPORT_COMMAND, $profile, $filePath));
@@ -135,7 +134,7 @@ class ImportCommandTest extends TestCase
     {
         $actualLineAmount = $this->getRowCountForTable(ProfileDataProvider::NEWSLETTER_TABLE);
         $profile = 'default_newsletter_recipient';
-        $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'NewsletterRecipientImport.csv';
+        $filePath = \ImportExportTestKernel::IMPORT_FILES_DIR . 'NewsletterRecipientImport.csv';
         $expectedImportedNewsletterRecipients = 6;
 
         $consoleOutput = $this->runCommand(sprintf('%s %s %s', self::CLI_IMPORT_COMMAND, $profile, $filePath));
@@ -152,7 +151,7 @@ class ImportCommandTest extends TestCase
     {
         $actualLineAmount = $this->getRowCountForTable(ProfileDataProvider::PRODUCT_TABLE);
         $profile = 'default_articles';
-        $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'ArticleImport.xml';
+        $filePath = \ImportExportTestKernel::IMPORT_FILES_DIR . 'ArticleImport.xml';
         $expectedImportedProducts = 2;
 
         $consoleOutput = $this->runCommand(sprintf('%s %s %s', self::CLI_IMPORT_COMMAND, $profile, $filePath));
@@ -169,7 +168,7 @@ class ImportCommandTest extends TestCase
     {
         $actualLineAmount = $this->getRowCountForTable(ProfileDataProvider::PRODUCT_TABLE);
         $profile = 'default_articles';
-        $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'ArticleImport.csv';
+        $filePath = \ImportExportTestKernel::IMPORT_FILES_DIR . 'ArticleImport.csv';
         $expectedImportedProducts = 2;
 
         $consoleOutput = $this->runCommand(sprintf('%s %s %s', self::CLI_IMPORT_COMMAND, $profile, $filePath));
@@ -186,7 +185,7 @@ class ImportCommandTest extends TestCase
     {
         $actualLineAmount = $this->getRowCountForTable(ProfileDataProvider::VARIANT_TABLE);
         $profile = 'default_article_variants_minimal';
-        $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'VariantsImport.xml';
+        $filePath = \ImportExportTestKernel::IMPORT_FILES_DIR . 'VariantsImport.xml';
         $expectedImportedVariants = 2;
 
         $consoleOutput = $this->runCommand(sprintf('%s %s %s', self::CLI_IMPORT_COMMAND, $profile, $filePath));
@@ -203,7 +202,7 @@ class ImportCommandTest extends TestCase
     {
         $actualLineAmount = $this->getRowCountForTable(ProfileDataProvider::VARIANT_TABLE);
         $profile = 'default_article_variants_minimal';
-        $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'VariantsImport.csv';
+        $filePath = \ImportExportTestKernel::IMPORT_FILES_DIR . 'VariantsImport.csv';
         $expectedImportedVariants = 2;
 
         $consoleOutput = $this->runCommand(sprintf('%s %s %s', self::CLI_IMPORT_COMMAND, $profile, $filePath));
@@ -219,7 +218,7 @@ class ImportCommandTest extends TestCase
     public function testProductInStockXmlImport(): void
     {
         $profile = 'default_article_in_stock';
-        $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'ArticleInStockImport.xml';
+        $filePath = \ImportExportTestKernel::IMPORT_FILES_DIR . 'ArticleInStockImport.xml';
 
         $consoleOutput = $this->runCommand(sprintf('%s %s %s', self::CLI_IMPORT_COMMAND, $profile, $filePath));
 
@@ -230,7 +229,7 @@ class ImportCommandTest extends TestCase
     public function testProductInStockCsvImport(): void
     {
         $profile = 'default_article_in_stock';
-        $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'ArticleInStockImport.csv';
+        $filePath = \ImportExportTestKernel::IMPORT_FILES_DIR . 'ArticleInStockImport.csv';
 
         $consoleOutput = $this->runCommand(sprintf('%s %s %s', self::CLI_IMPORT_COMMAND, $profile, $filePath));
 
@@ -241,7 +240,7 @@ class ImportCommandTest extends TestCase
     public function testProductPriceXmlImport(): void
     {
         $profile = 'default_article_prices';
-        $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'ArticlePricesImport.xml';
+        $filePath = \ImportExportTestKernel::IMPORT_FILES_DIR . 'ArticlePricesImport.xml';
 
         $consoleOutput = $this->runCommand(sprintf('%s %s %s', self::CLI_IMPORT_COMMAND, $profile, $filePath));
 
@@ -252,7 +251,7 @@ class ImportCommandTest extends TestCase
     public function testProductPriceCsvImport(): void
     {
         $profile = 'default_article_prices';
-        $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'ArticlePricesImport.csv';
+        $filePath = \ImportExportTestKernel::IMPORT_FILES_DIR . 'ArticlePricesImport.csv';
 
         $consoleOutput = $this->runCommand(sprintf('%s %s %s', self::CLI_IMPORT_COMMAND, $profile, $filePath));
 
@@ -263,7 +262,7 @@ class ImportCommandTest extends TestCase
     public function testProductTranslationXmlImport(): void
     {
         $profile = 'default_article_translations';
-        $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'ArticleTranslationImport.xml';
+        $filePath = \ImportExportTestKernel::IMPORT_FILES_DIR . 'ArticleTranslationImport.xml';
 
         $consoleOutput = $this->runCommand(sprintf('%s %s %s', self::CLI_IMPORT_COMMAND, $profile, $filePath));
 
@@ -274,7 +273,7 @@ class ImportCommandTest extends TestCase
     public function testProductTranslationCsvImport(): void
     {
         $profile = 'default_article_translations';
-        $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'ArticleTranslationImport.csv';
+        $filePath = \ImportExportTestKernel::IMPORT_FILES_DIR . 'ArticleTranslationImport.csv';
 
         $consoleOutput = $this->runCommand(sprintf('%s %s %s', self::CLI_IMPORT_COMMAND, $profile, $filePath));
 
@@ -285,7 +284,7 @@ class ImportCommandTest extends TestCase
     public function testOrderXmlImport(): void
     {
         $profile = 'default_orders_minimal';
-        $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'OrderImport.xml';
+        $filePath = \ImportExportTestKernel::IMPORT_FILES_DIR . 'OrderImport.xml';
         $actualLineAmount = $this->getRowCountForTable(ProfileDataProvider::ORDER_TABLE);
         $expectedImportedOrders = 0;
 
@@ -302,7 +301,7 @@ class ImportCommandTest extends TestCase
     public function testOrderCsvImport(): void
     {
         $profile = 'default_orders_minimal';
-        $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'OrderImport.csv';
+        $filePath = \ImportExportTestKernel::IMPORT_FILES_DIR . 'OrderImport.csv';
         $actualLineAmount = $this->getRowCountForTable(ProfileDataProvider::ORDER_TABLE);
         $expectedImportedOrders = 0;
 
@@ -319,7 +318,7 @@ class ImportCommandTest extends TestCase
     public function testMainOrderXmlImport(): void
     {
         $profile = 'default_order_main_data';
-        $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'MainOrderImport.xml';
+        $filePath = \ImportExportTestKernel::IMPORT_FILES_DIR . 'MainOrderImport.xml';
 
         $this->expectException(\Exception::class);
         $this->runCommand(self::CLI_IMPORT_COMMAND . " {$profile} {$filePath}");
@@ -328,7 +327,7 @@ class ImportCommandTest extends TestCase
     public function testMainOrderCsvImport(): void
     {
         $profile = 'default_order_main_data';
-        $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'MainOrderImport.csv';
+        $filePath = \ImportExportTestKernel::IMPORT_FILES_DIR . 'MainOrderImport.csv';
 
         $this->expectException(\Exception::class);
         $this->runCommand(self::CLI_IMPORT_COMMAND . " {$profile} {$filePath}");
@@ -337,7 +336,7 @@ class ImportCommandTest extends TestCase
     public function testTranslationXmlImport(): void
     {
         $profile = 'default_system_translations';
-        $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'TranslationImport.xml';
+        $filePath = \ImportExportTestKernel::IMPORT_FILES_DIR . 'TranslationImport.xml';
 
         $consoleOutput = $this->runCommand(sprintf('%s %s %s', self::CLI_IMPORT_COMMAND, $profile, $filePath));
 
@@ -348,7 +347,7 @@ class ImportCommandTest extends TestCase
     public function testTranslationCsvImport(): void
     {
         $profile = 'default_system_translations';
-        $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'TranslationImport.csv';
+        $filePath = \ImportExportTestKernel::IMPORT_FILES_DIR . 'TranslationImport.csv';
 
         $consoleOutput = $this->runCommand(sprintf('%s %s %s', self::CLI_IMPORT_COMMAND, $profile, $filePath));
 
@@ -365,7 +364,7 @@ class ImportCommandTest extends TestCase
 
     public function testExportCommandProfileNameDetectionByFileName(): void
     {
-        $filePath = ImportExportTestKernel::IMPORT_FILES_DIR . 'test.default_customers.xml';
+        $filePath = \ImportExportTestKernel::IMPORT_FILES_DIR . 'test.default_customers.xml';
         $consoleOutput = $this->runCommand('sw:importexport:import ' . $filePath);
         static::assertSame('Using profile: default_customers.', $consoleOutput[0]);
     }

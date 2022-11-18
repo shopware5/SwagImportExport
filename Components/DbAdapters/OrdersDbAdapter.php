@@ -504,13 +504,11 @@ class OrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
     private function getAttributes(string $tableName, string $joinAlias, string $prefix, array $ignoredFields): array
     {
         $columns = $this->modelManager->getConnection()->getSchemaManager()->listTableColumns($tableName);
-        unset($columns['id']);
+        unset($columns['id'], $columns['orderid']);
 
         foreach ($ignoredFields as $field) {
             unset($columns[$field]);
         }
-
-        unset($columns['id'], $columns['orderid']);
 
         $attributes = \array_map(function ($column) {
             return $column->getName();
