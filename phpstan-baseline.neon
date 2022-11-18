@@ -116,16 +116,6 @@ parameters:
 			path: Components/DbAdapters/Products/CategoryWriter.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\Products\\\\ConfiguratorWriter\\:\\:createSet\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DbAdapters/Products/ConfiguratorWriter.php
-
-		-
-			message: "#^Property SwagImportExport\\\\Components\\\\DbAdapters\\\\Products\\\\ConfiguratorWriter\\:\\:\\$sets type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/DbAdapters/Products/ConfiguratorWriter.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\Products\\\\ImageWriter\\:\\:prepareImageData\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/DbAdapters/Products/ImageWriter.php

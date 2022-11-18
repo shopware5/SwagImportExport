@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Components\DbAdapters;
 
-use Enlight_Components_Db_Adapter_Pdo_Mysql;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\StateTranslatorService;
@@ -29,14 +28,14 @@ class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
 
     private ModelManager $modelManager;
 
-    private Enlight_Components_Db_Adapter_Pdo_Mysql $db;
+    private \Enlight_Components_Db_Adapter_Pdo_Mysql $db;
 
     private UnderscoreToCamelCaseServiceInterface $underscoreToCamelCaseService;
 
     private StateTranslatorServiceInterface $stateTranslator;
 
     public function __construct(
-        Enlight_Components_Db_Adapter_Pdo_Mysql $db,
+        \Enlight_Components_Db_Adapter_Pdo_Mysql $db,
         ModelManager $entityManager,
         UnderscoreToCamelCaseServiceInterface $underscoreToCamelCaseService,
         StateTranslatorServiceInterface $stateTranslator

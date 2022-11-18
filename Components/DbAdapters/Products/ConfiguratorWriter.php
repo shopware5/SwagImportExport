@@ -29,7 +29,10 @@ class ConfiguratorWriter
 
     private \Enlight_Components_Db_Adapter_Pdo_Mysql $db;
 
-    private array $sets;
+    /**
+     * @var array<int|string, mixed>
+     */
+    private array $sets = [];
 
     public function __construct(
         DbalHelper $dbalHelper,
@@ -49,7 +52,7 @@ class ConfiguratorWriter
      */
     public function writeOrUpdateConfiguratorSet(ProductWriterResult $productWriterResult, array $configuratorData): void
     {
-        if (!isset($this->sets)) {
+        if (empty($this->sets)) {
             $this->sets = $this->getSets();
         }
 
@@ -233,6 +236,9 @@ class ConfiguratorWriter
         return $result ? (int) $result : null;
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
     private function createSet(array $data): int
     {
         // Delete id to avoid unique constraint violations
@@ -313,7 +319,7 @@ class ConfiguratorWriter
 
     private function checkExistence(string $table, int $id): bool
     {
-        $sql = "SELECT `id` FROM $table WHERE id = ?";
+        $sql = sprintf('SELECT `id` FROM %s WHERE id = ?', $table);
         $result = $this->connection->fetchOne($sql, [$id]);
 
         return (bool) $result;

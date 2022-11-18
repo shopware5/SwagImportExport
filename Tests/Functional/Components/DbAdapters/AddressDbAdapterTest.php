@@ -265,7 +265,7 @@ class AddressDbAdapterTest extends TestCase
 
         $connection = $this->getContainer()->get('dbal_connection');
         $addressId = $connection->executeQuery("SELECT id FROM s_user_addresses WHERE firstname='My firstname'")->fetchOne();
-        $createdAttribute = $connection->executeQuery("SELECT * FROM s_user_addresses_attributes WHERE address_id={$addressId}")->fetchAllAssociative();
+        $createdAttribute = $connection->executeQuery('SELECT * FROM s_user_addresses_attributes WHERE address_id=:addressId', ['addressId' => $addressId])->fetchAllAssociative();
 
         static::assertEquals('text1', $createdAttribute[0]['text1']);
         static::assertEquals('text2', $createdAttribute[0]['text2']);

@@ -308,7 +308,7 @@ class ProductsDbAdapterTest extends TestCase
 
         $dbalConnection = $this->getContainer()->get('dbal_connection');
         $productId = $dbalConnection->executeQuery("SELECT articleID FROM s_articles_details WHERE orderNumber='SW10006'")->fetchOne();
-        $result = $dbalConnection->executeQuery("SELECT * FROM s_core_translations WHERE objecttype='article' AND objectkey={$productId}")->fetchAllAssociative();
+        $result = $dbalConnection->executeQuery("SELECT * FROM s_core_translations WHERE objecttype='article' AND objectkey=:productId", ['productId' => $productId])->fetchAllAssociative();
         $importedTranslation = \unserialize($result[0]['objectdata']);
 
         // trait rollback not working - so we roll back manually
