@@ -51,7 +51,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends \Shopware_Controller
             return;
         }
 
-        $clientOriginalName = $file->getClientOriginalName();
+        $fileName = $file->getClientOriginalName();
 
         $extension = $file->getClientOriginalExtension();
 
@@ -61,13 +61,19 @@ class Shopware_Controllers_Backend_SwagImportExport extends \Shopware_Controller
             return;
         }
 
-        $file->move($this->uploadPathProvider->getPath(), $clientOriginalName);
+        // if file name already exists, add timestamp and random string
+        // to file name to prevent file override
+        if ($this->isFileNameExisting($fileName)) {
+            $fileName = $this->createTimestampedRandomizedFileName($fileName);
+        }
+
+        $file->move($this->uploadPathProvider->getPath(), $fileName);
 
         $this->view->assign([
             'success' => true,
             'data' => [
-                'path' => $this->uploadPathProvider->getRealPath($clientOriginalName),
-                'fileName' => $clientOriginalName,
+                'path' => $this->uploadPathProvider->getRealPath($fileName),
+                'fileName' => $fileName,
             ],
         ]);
     }
@@ -183,5 +189,37 @@ class Shopware_Controllers_Backend_SwagImportExport extends \Shopware_Controller
             default:
                 return false;
         }
+    }
+
+    private function isFileNameExisting(string $filename): bool
+    {
+        return file_exists(
+            $this->uploadPathProvider->getRealPath($filename)
+        );
+    }
+
+    private function createTimestampedRandomizedFileName(string $oldFileName): string
+    {
+        $fileName = pathinfo($oldFileName, PATHINFO_FILENAME);
+        $fileExtension = pathinfo($oldFileName, PATHINFO_EXTENSION);
+
+        $hash = \substr(\md5(\uniqid()), 0, 8);
+
+        $dateTime = new \DateTime('now');
+
+        $newFileName = sprintf(
+            '%s.%s-%s.%s',
+            $fileName,
+            $dateTime->format('Y.m.d.h.i.s'),
+            $hash,
+            $fileExtension
+        );
+
+        // make sure that the new filename is unused
+        if ($this->isFileNameExisting($newFileName)) {
+            return $this->createTimestampedRandomizedFileName($oldFileName);
+        }
+
+        return $newFileName;
     }
 }
