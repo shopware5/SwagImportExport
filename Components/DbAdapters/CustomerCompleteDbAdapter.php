@@ -11,6 +11,7 @@ namespace SwagImportExport\Components\DbAdapters;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\Query;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Models\Customer\Customer;
 use Shopware\Models\Order\Order;
@@ -66,10 +67,11 @@ class CustomerCompleteDbAdapter extends CustomerDbAdapter
             }
         }
 
+        /** @var Query<array<string, mixed>> $query */
         $query = $this->getBuilder($columns, $ids)->getQuery();
         $query->setHydrationMode(AbstractQuery::HYDRATE_ARRAY);
 
-        $customers = $this->manager->createPaginator($query)->getIterator()->getArrayCopy();
+        $customers = iterator_to_array($this->manager->createPaginator($query));
 
         $customerIds = \array_column($customers, 'id');
         $addresses = $this->getAddresses($customerIds);
