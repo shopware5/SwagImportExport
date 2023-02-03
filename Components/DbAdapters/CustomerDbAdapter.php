@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace SwagImportExport\Components\DbAdapters;
 
 use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\Query;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\Password\Manager;
@@ -111,10 +112,11 @@ class CustomerDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
             }
         }
 
+        /** @var Query<array<string, mixed>> $query */
         $query = $this->getBuilder($columns, $ids)->getQuery();
         $query->setHydrationMode(AbstractQuery::HYDRATE_ARRAY);
 
-        $customers = $this->manager->createPaginator($query)->getIterator()->getArrayCopy();
+        $customers = iterator_to_array($this->manager->createPaginator($query));
 
         $result['default'] = DbAdapterHelper::decodeHtmlEntities($customers);
 

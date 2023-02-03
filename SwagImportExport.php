@@ -56,6 +56,8 @@ class SwagImportExport extends Plugin
 
         (new DefaultProfileUpdater($this->container->get('dbal_connection')))->update();
 
+        $context->scheduleClearCache(UpdateContext::CACHE_LIST_ALL);
+
         $this->createDirectories();
     }
 
@@ -64,6 +66,7 @@ class SwagImportExport extends Plugin
      */
     public function uninstall(UninstallContext $context): void
     {
+        $context->scheduleClearCache(UninstallContext::CACHE_LIST_ALL);
     }
 
     /**
@@ -71,6 +74,7 @@ class SwagImportExport extends Plugin
      */
     public function activate(ActivateContext $context): void
     {
+        $context->scheduleClearCache(ActivateContext::CACHE_LIST_ALL);
     }
 
     /**
@@ -78,6 +82,7 @@ class SwagImportExport extends Plugin
      */
     public function deactivate(DeactivateContext $context): void
     {
+        $context->scheduleClearCache(DeactivateContext::CACHE_LIST_ALL);
     }
 
     private function createDirectories(): void

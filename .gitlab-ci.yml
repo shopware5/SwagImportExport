@@ -31,6 +31,8 @@ default:
         - (cd shopware/custom/plugins/${PLUGIN_NAME} && composer install)
         - cd shopware
         - cp .env.dist .env
+        - composer update laminas/laminas-code
+        - composer config --no-plugins allow-plugins.phpstan/extension-installer true
         - make init
         - cp -r custom/plugins/${PLUGIN_NAME}/Tests/config_gitlab.php config.php
         - php bin/console sw:plugin:refresh
@@ -99,9 +101,9 @@ SW 5.7 PHP 7.4:
     only:
         - master
 
-SW 5.7 PHP 8.1:
+SW 5.7 PHP 8.2:
     extends: .SW 5.7 default
-    image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:8.1
+    image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:8.2
 
 SW 5.7.4:
     variables:

@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace SwagImportExport\Controllers\Backend;
 
 use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\Query;
 use Shopware\Components\CSRFWhitelistAware;
 use SwagImportExport\Components\UploadPathProvider;
 use SwagImportExport\Models\Logger;
@@ -42,8 +43,12 @@ class Shopware_Controllers_Backend_SwagImportExport extends \Shopware_Controller
 
     public function uploadFileAction(): void
     {
-        /** @var UploadedFile $file */
         $file = $this->Request()->files->get('fileId');
+        if (!$file instanceof UploadedFile) {
+            $this->View()->assign(['success' => false, 'message' => 'Uploaded file is not valid']);
+
+            return;
+        }
 
         if (!$file->isValid()) {
             $this->View()->assign(['success' => false, 'message' => $file->getErrorMessage()]);
@@ -143,6 +148,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends \Shopware_Controller
         $modelManager = $this->getModelManager();
         /** @var LoggerRepository $repo */
         $repo = $modelManager->getRepository(Logger::class);
+        /** @var Query<array<string, mixed>> $query */
         $query = $repo->getLogListQuery(
             $this->Request()->getParam('filter', []),
             $this->Request()->getParam('sort', []),
@@ -157,11 +163,8 @@ class Shopware_Controllers_Backend_SwagImportExport extends \Shopware_Controller
         // returns the total count of the query
         $total = $paginator->count();
 
-        // returns the customer data
-        $data = $paginator->getIterator()->getArrayCopy();
-
         $this->View()->assign([
-            'success' => true, 'data' => $data, 'total' => $total,
+            'success' => true, 'data' => iterator_to_array($paginator), 'total' => $total,
         ]);
     }
 

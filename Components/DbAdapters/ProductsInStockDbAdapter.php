@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace SwagImportExport\Components\DbAdapters;
 
 use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\Query;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Models\Article\Detail;
@@ -80,10 +81,11 @@ class ProductsInStockDbAdapter implements DataDbAdapter, \Enlight_Hook
         // prices
         array_push($columns, 'customerGroup.taxInput as taxInput', 'articleTax.tax as tax');
 
+        /** @var Query<array<string, mixed>> $query */
         $query = $this->getBuilder($columns, $ids)->getQuery();
         $query->setHydrationMode(AbstractQuery::HYDRATE_ARRAY);
 
-        $result['default'] = $this->modelManager->createPaginator($query)->getIterator()->getArrayCopy();
+        $result['default'] = iterator_to_array($this->modelManager->createPaginator($query));
 
         foreach ($result['default'] as &$record) {
             if ($record['taxInput']) {
@@ -182,14 +184,12 @@ class ProductsInStockDbAdapter implements DataDbAdapter, \Enlight_Hook
             $builder->setMaxResults($limit);
         }
 
+        /** @var Query<array<string, mixed>> $query */
         $query = $builder->getQuery();
         $query->setHydrationMode(AbstractQuery::HYDRATE_ARRAY);
-        $records = $this->modelManager->createPaginator($query)->getIterator()->getArrayCopy();
         $result = [];
-        if ($records) {
-            foreach ($records as $value) {
-                $result[] = $value['id'];
-            }
+        foreach ($this->modelManager->createPaginator($query) as $value) {
+            $result[] = $value['id'];
         }
 
         return $result;

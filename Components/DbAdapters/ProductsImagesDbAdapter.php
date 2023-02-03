@@ -24,6 +24,8 @@ use Shopware\Models\Article\Configurator\Group;
 use Shopware\Models\Article\Configurator\Option;
 use Shopware\Models\Article\Detail;
 use Shopware\Models\Article\Image;
+use Shopware\Models\Article\Image\Mapping;
+use Shopware\Models\Article\Image\Rule;
 use Shopware\Models\Attribute\ArticleImage as ProductImageAttribute;
 use Shopware\Models\Media\Album;
 use Shopware\Models\Media\Media;
@@ -502,17 +504,20 @@ class ProductsImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
     {
         $query = $this->manager->getRepository(Article::class)->getArticleImageDataQuery($imageId);
         $image = $query->getOneOrNullResult(AbstractQuery::HYDRATE_OBJECT);
+        if (!$image instanceof Image) {
+            throw new ModelNotFoundException(Image::class, $imageId);
+        }
         $imageData = $query->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
 
         foreach ($relationGroups as $relationGroup) {
             $optionCollection = [];
-            $mapping = new Image\Mapping();
+            $mapping = new Mapping();
 
             foreach ($relationGroup as $relation) {
                 $optionModel = $relation['option'];
                 $optionCollection[] = $optionModel;
 
-                $rule = new Image\Rule();
+                $rule = new Rule();
                 $rule->setMapping($mapping);
                 $rule->setOption($optionModel);
 

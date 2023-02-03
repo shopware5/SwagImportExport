@@ -53,6 +53,7 @@ return (new Config())
         'ordered_class_elements' => true,
         'ordered_imports' => true,
         'phpdoc_order' => true,
+        'phpdoc_separation' => ['groups' => [['ORM\*', 'Assert\*']]],
         'phpdoc_summary' => false,
         'phpdoc_var_annotation_correct_order' => true,
         'php_unit_test_case_static_method_calls' => true,
