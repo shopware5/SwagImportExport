@@ -921,11 +921,6 @@ parameters:
 			path: Tests/Functional/Controllers/Backend/OrderExportTest.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ProductExportTest\\:\\:readCsvIndexedByOrdernumber\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Tests/Functional/Controllers/Backend/ProductExportTest.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ProductsInstockExportTest\\:\\:readCsvIndexedByOrdernumber\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Tests/Functional/Controllers/Backend/ProductsInstockExportTest.php

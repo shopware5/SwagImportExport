@@ -76,12 +76,6 @@ class ImportService implements ImportServiceInterface
     {
         yield from $this->doImport($importRequest, $session);
         $this->modelManager->clear();
-        $profileType = $importRequest->profileEntity->getType();
-        if (\in_array($profileType, self::SUPPORTED_UNPROCESSED_DATA_PROFILE_TYPES, true)) {
-            foreach ($this->importUnprocessedData($importRequest) as $ignored) {
-                // nth
-            }
-        }
     }
 
     private function afterImport(array $unprocessedData, string $profileName, string $outputFile, string $prevState): void
@@ -118,6 +112,7 @@ class ImportService implements ImportServiceInterface
             );
 
             yield from $this->doImport($subRequest, $innerSession);
+            unlink($tmpFile);
         }
     }
 
@@ -154,6 +149,13 @@ class ImportService implements ImportServiceInterface
                     'false',
                     $session
                 );
+
+                $profileType = $request->profileEntity->getType();
+                if (\in_array($profileType, self::SUPPORTED_UNPROCESSED_DATA_PROFILE_TYPES, true)) {
+                    foreach ($this->importUnprocessedData($request) as [$profileName, $position]) {
+                        // nth
+                    }
+                }
 
                 yield [$request->profileEntity->getName(), $resultData['position']];
             } catch (\Exception $e) {

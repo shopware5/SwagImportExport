@@ -284,9 +284,9 @@ class ProductDataManager extends DataManager implements \Enlight_Hook
     {
         $suppliers = $this->getSuppliers();
         $name = $record['supplierName'];
-        $supplierId = $suppliers[$name];
+        $supplierId = $suppliers[$name] ?? null;
 
-        // creates supplier if does not exist
+        // creates supplier if it does not exist
         if (!$supplierId) {
             $data = ['name' => $name];
             $builder = $this->dbalHelper->getQueryBuilderForEntity(
