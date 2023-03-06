@@ -197,13 +197,13 @@ class ImageWriter
         $imageData = [];
         foreach ($images as $key => $image) {
             $imageData[$key]['name'] = $image['path'];
-            $imageData[$key]['main'] = $image['main'] ?: 2;
+            $imageData[$key]['main'] = $image['main'] ?? 2;
             $imageData[$key]['description'] = !empty($image['description']) ? $image['description'] : $medias[$key]['description'];
             $imageData[$key]['extension'] = $medias[$key]['extension'];
-            $imageData[$key]['variantId'] = $image[$key]['variantId'];
+            $imageData[$key]['variantId'] = $medias[$key]['variantId'];
             $imageData[$key]['id'] = $medias[$key]['id'];
 
-            if ($imageData[$key]['main'] == 1) {
+            if ((int) $imageData[$key]['main'] === 1) {
                 $mediaId = $medias[$key]['id'];
             }
         }

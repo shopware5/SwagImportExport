@@ -14,6 +14,8 @@ use SwagImportExport\Components\Profile\Profile;
 
 class ImportRequest
 {
+    public ?int $sessionId = null;
+
     public string $format;
 
     public Profile $profileEntity;

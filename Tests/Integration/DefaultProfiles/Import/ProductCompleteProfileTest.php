@@ -52,6 +52,12 @@ class ProductCompleteProfileTest extends TestCase
         static::assertEquals(0, $importedVariants[1]['purchasePrice']);
         static::assertEquals(999, $importedVariants[1]['instock']);
         static::assertEquals('with different instock', $importedVariants[1]['additionaltext']);
+
+        $importedProductImages = $this->executeQuery("SELECT * FROM s_articles_img WHERE articleID={$importedProduct[0]['id']}");
+        static::assertCount(6, $importedProductImages, 'Import did not import expected 6 images');
+        foreach ($importedProductImages as $importedProductImage) {
+            static::assertStringContainsString('sw-icon_blue128', $importedProductImage['img']);
+        }
     }
 
     public function testImportShouldCreateVariantWithDifferentPricesForCustomerGroups(): void

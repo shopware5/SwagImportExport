@@ -92,10 +92,11 @@ class Shopware_Controllers_Backend_SwagImportExportExport extends \Shopware_Cont
 
         $session = $this->sessionService->loadSession($exportRequest->sessionId);
 
-        $lastPosition = 0;
+        $lastPosition = $session->getPosition();
         try {
             foreach ($this->exportService->export($exportRequest, $session) as $position) {
                 $lastPosition = $position;
+                break;
             }
         } catch (\Throwable $e) {
             $this->View()->assign(['success' => false, 'msg' => $e->getMessage()]);
@@ -103,11 +104,16 @@ class Shopware_Controllers_Backend_SwagImportExportExport extends \Shopware_Cont
             return;
         }
 
-        $this->View()->assign(['success' => true, 'data' => [
-            'position' => $lastPosition,
-            'fileName' => $fileName,
-            'profileId' => $this->Request()->getParam('profileId'),
-        ]]);
+        $this->View()->assign([
+            'success' => true,
+            'data' => [
+                'position' => $lastPosition,
+                'fileName' => $fileName,
+                'profileId' => $profile->getId(),
+                'sessionId' => $session->getEntity()->getId(),
+                'format' => $format,
+            ],
+        ]);
     }
 
     protected function initAcl(): void
@@ -119,30 +125,31 @@ class Shopware_Controllers_Backend_SwagImportExportExport extends \Shopware_Cont
     private function getExportRequest(Profile $profile, string $format): ExportRequest
     {
         $auth = $this->get('auth');
+        $request = $this->Request();
 
         $exportRequest = new ExportRequest();
         $exportRequest->setData([
-            'sessionId' => $this->Request()->getParam('sessionId') ? (int) $this->Request()->getParam('sessionId') : null,
+            'sessionId' => $request->getParam('sessionId') ? (int) $request->getParam('sessionId') : null,
             'profileEntity' => $profile,
             'format' => $format,
             'filter' => [],
-            'limit' => $this->Request()->getParam('limit') ? (int) $this->Request()->getParam('limit') : null,
-            'offset' => $this->Request()->getParam('offset') ? (int) $this->Request()->getParam('offset') : null,
-            'username' => $auth->getIdentity()->name ?: 'Cli',
-            'category' => $this->Request()->getParam('categories') ? [$this->Request()->getParam('categories')] : null,
+            'limit' => $request->getParam('limit') ? (int) $request->getParam('limit') : null,
+            'offset' => $request->getParam('offset') ? (int) $request->getParam('offset') : null,
+            'username' => $auth->getIdentity()->name ?: 'Backend user',
+            'category' => $request->getParam('categories') ? [$request->getParam('categories')] : null,
             'batchSize' => $this->config->getByNamespace('SwagImportExport', 'batch-size-export', 1),
-            'productStream' => $this->Request()->getParam('productStreamId') ? [$this->Request()->getParam('productStreamId')] : null,
-            'exportVariants' => $this->Request()->getParam('variants') ? (bool) $this->Request()->getParam('variants') : null,
-            'stockFilter' => $this->Request()->getParam('stockFilter') ?: null,
-            'customFilterDirection' => $this->Request()->getParam('customFilterDirection') ?: null,
-            'customFilterValue' => $this->Request()->getParam('customFilterValue') ?: null,
-            'ordernumberFrom' => $this->Request()->getParam('ordernumberFrom') ?: null,
-            'dateFrom' => $this->Request()->getParam('dateFrom') ?: null,
-            'dateTo' => $this->Request()->getParam('dateTo') ?: null,
-            'orderstate' => $this->Request()->getParam('orderstate'),
-            'paymentstate' => $this->Request()->getParam('paymentstate'),
-            'customerStreamId' => $this->Request()->getParam('customerStreamId') ?: null,
-            'customerId' => $this->Request()->getParam('customerId') ?: null,
+            'productStream' => $request->getParam('productStreamId') ? [$request->getParam('productStreamId')] : null,
+            'exportVariants' => $request->getParam('variants') ? (bool) $request->getParam('variants') : null,
+            'stockFilter' => $request->getParam('stockFilter') ?: null,
+            'customFilterDirection' => $request->getParam('customFilterDirection') ?: null,
+            'customFilterValue' => $request->getParam('customFilterValue') ?: null,
+            'ordernumberFrom' => $request->getParam('ordernumberFrom') ?: null,
+            'dateFrom' => $request->getParam('dateFrom') ?: null,
+            'dateTo' => $request->getParam('dateTo') ?: null,
+            'orderstate' => $request->getParam('orderstate'),
+            'paymentstate' => $request->getParam('paymentstate'),
+            'customerStreamId' => $request->getParam('customerStreamId') ?: null,
+            'customerId' => $request->getParam('customerId') ?: null,
         ]);
 
         return $exportRequest;

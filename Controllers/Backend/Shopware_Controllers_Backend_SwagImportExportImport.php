@@ -81,23 +81,23 @@ class Shopware_Controllers_Backend_SwagImportExportImport extends \Shopware_Cont
     {
         $importRequest = $this->getImportRequest($request);
 
-        $session = $this->sessionService->createSession();
+        $session = $this->sessionService->loadSession($importRequest->sessionId);
 
         try {
-            $lastPosition = 0;
+            $lastPosition = $session->getPosition();
             foreach ($this->importService->import($importRequest, $session) as [$profileName, $position]) {
-                if ($profileName === $importRequest->profileEntity->getName()) {
-                    $lastPosition = $position;
-                }
+                $lastPosition = $position;
+                break;
             }
-            $resultData = [
-                'importFile' => $importRequest->inputFile,
-                'position' => $lastPosition,
-            ];
 
             $this->View()->assign([
                 'success' => true,
-                'data' => $resultData,
+                'data' => [
+                    'importFile' => $request->get('importFile'),
+                    'position' => $lastPosition,
+                    'profileId' => $importRequest->profileEntity->getId(),
+                    'sessionId' => $session->getEntity()->getId(),
+                ],
             ]);
         } catch (\Exception $e) {
             $this->View()->assign([
@@ -123,10 +123,11 @@ class Shopware_Controllers_Backend_SwagImportExportImport extends \Shopware_Cont
 
         $importRequest = new ImportRequest();
         $importRequest->setData([
+            'sessionId' => $request->get('sessionId') ? (int) $request->get('sessionId') : null,
             'profileEntity' => $profile,
             'inputFile' => $inputFile,
             'format' => $this->uploadPathProvider->getFileExtension($inputFile),
-            'username' => $auth->getIdentity()->name ?: 'Cli',
+            'username' => $auth->getIdentity()->name ?: 'Backend user',
             'batchSize' => $profile->getType() === DataDbAdapter::PRODUCT_IMAGE_ADAPTER ? 1 : (int) $config->getByNamespace('SwagImportExport', 'batch-size-import', 50),
         ]);
 

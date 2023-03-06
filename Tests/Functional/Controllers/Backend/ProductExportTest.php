@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Tests\Functional\Controllers\Backend;
 
-use Doctrine\DBAL\Connection;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\DataProvider\ProfileDataProvider;
@@ -133,7 +132,7 @@ class ProductExportTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
-        $mappedProductList = $this->readCsvIndexedByOrdernumber($file);
+        $mappedProductList = $this->readCsvIndexedByOrderNumber($file);
         static::assertCount($limit, $mappedProductList);
     }
 
@@ -179,7 +178,7 @@ class ProductExportTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
-        $mappedProductList = $this->readCsvIndexedByOrdernumber($file);
+        $mappedProductList = $this->readCsvIndexedByOrderNumber($file);
         static::assertCount(15, $mappedProductList);
     }
 
@@ -211,8 +210,7 @@ class ProductExportTest extends \Enlight_Components_Test_Controller_TestCase
     {
         $categoryId = self::CATEGORY_ID_VINTAGE;
 
-        $connection = $this->getConnection();
-        $connection->executeStatement('Update s_core_config_elements set value = "i:1;" where name = "batch-size-export"');
+        $this->setConfig('batch-size-export', 1);
 
         $params = $this->getExportRequestParams();
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::PRODUCT_PROFILE_TYPE);
@@ -220,8 +218,12 @@ class ProductExportTest extends \Enlight_Components_Test_Controller_TestCase
         $params['categories'] = $categoryId;
         $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExportExport/export');
-        $assigned = $this->View()->getAssign('data');
+        for ($position = 1; $position <= 10; ++$position) {
+            $this->dispatch('backend/SwagImportExportExport/export');
+            $assigned = $this->View()->getAssign('data');
+            static::assertSame($position, $assigned['position']);
+            $this->Request()->setParams($assigned);
+        }
 
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
@@ -253,7 +255,7 @@ class ProductExportTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
-        $mappedProductList = $this->readCsvIndexedByOrdernumber($file);
+        $mappedProductList = $this->readCsvIndexedByOrderNumber($file);
         static::assertCount(10, $mappedProductList);
     }
 
@@ -301,7 +303,7 @@ class ProductExportTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
-        $mappedProductList = $this->readCsvIndexedByOrdernumber($file);
+        $mappedProductList = $this->readCsvIndexedByOrderNumber($file);
         static::assertCount(12, $mappedProductList);
     }
 
@@ -347,7 +349,7 @@ class ProductExportTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
-        $mappedProductList = $this->readCsvIndexedByOrdernumber($file);
+        $mappedProductList = $this->readCsvIndexedByOrderNumber($file);
         static::assertEquals('Münsterländer Lagerkorn 32%', $mappedProductList['SW10002.3']['name']);
         static::assertEquals('0,5 Liter', $mappedProductList['SW10002.3']['additionalText']);
 
@@ -400,7 +402,7 @@ class ProductExportTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertFileExists($file, "File not found {$fileName}");
         $this->backendControllerTestHelper->addFile($file);
 
-        $mappedProductList = $this->readCsvIndexedByOrdernumber($file);
+        $mappedProductList = $this->readCsvIndexedByOrderNumber($file);
         static::assertCount($limit, $mappedProductList);
     }
 
@@ -514,13 +516,11 @@ class ProductExportTest extends \Enlight_Components_Test_Controller_TestCase
         static::assertEquals($expected, $nodeValue);
     }
 
-    private function readCsvIndexedByOrdernumber(string $file): array
+    /**
+     * @return array<array<string, mixed>>
+     */
+    private function readCsvIndexedByOrderNumber(string $file): array
     {
         return $this->csvToArrayIndexedByFieldValue($file, 'ordernumber');
-    }
-
-    private function getConnection(): Connection
-    {
-        return $this->getContainer()->get('dbal_connection');
     }
 }
