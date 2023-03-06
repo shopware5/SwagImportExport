@@ -764,8 +764,8 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
             'prices.price as price',
             'prices.pseudoPrice as pseudoPrice',
             'prices.customerGroupKey as priceGroup',
-            'prices.from',
-            'prices.to',
+            'prices.from as priceFrom',
+            'prices.to as priceTo',
         ];
 
         if (SwagVersionHelper::isShopware578()) {
@@ -885,7 +885,9 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
 
         if ($attributes) {
             foreach ($attributes as $attribute) {
-                $columns[] = $attribute['columnName'];
+                $prefix = 'translatable_attribute';
+                $attr = $this->underscoreToCamelCaseService->underscoreToCamelCase($attribute['columnName']);
+                $columns[] = \sprintf('%s.%s as attribute%s', $prefix, $attr, \ucwords($attr));
             }
         }
 

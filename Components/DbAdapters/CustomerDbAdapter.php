@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
@@ -11,6 +12,7 @@ namespace SwagImportExport\Components\DbAdapters;
 
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Query;
+use Exception;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\Password\Manager;

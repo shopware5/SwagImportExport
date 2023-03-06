@@ -47,7 +47,7 @@
             <argument type="service" id="SwagImportExport\Components\DbalHelper"/>
             <argument type="service" id="guzzle_http_client_factory"/>
             <argument type="service" id="config"/>
-            <argument type="service" id="front"/>
+            <argument type="service" id="request_stack"/>
             <argument>%kernel.root_dir%</argument>
 
             <tag name="import_export.db_adapter"/>

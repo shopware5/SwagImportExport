@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
@@ -12,6 +13,7 @@ namespace SwagImportExport\Components\DbAdapters;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
+use Exception;
 use GuzzleHttp\ClientInterface;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Components\ContainerAwareEventManager;
@@ -37,6 +39,7 @@ use SwagImportExport\Components\Utils\SnippetsHelper;
 use SwagImportExport\Components\Validators\ProductImageValidator;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class ProductsImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
 {
@@ -55,8 +58,6 @@ class ProductsImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
     private ModelManager $manager;
 
     private MediaServiceInterface $mediaService;
-
-    private ?\Enlight_Controller_Request_Request $request;
 
     private \Enlight_Event_EventManager $eventManager;
 
@@ -84,6 +85,8 @@ class ProductsImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
 
     private ClientInterface $httpClient;
 
+    private RequestStack $requestStack;
+
     public function __construct(
         ModelManager $manager,
         \Enlight_Components_Db_Adapter_Pdo_Mysql $db,
@@ -95,7 +98,7 @@ class ProductsImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
         DbalHelper $dbalHelper,
         GuzzleFactory $guzzleFactory,
         \Shopware_Components_Config $config,
-        \Enlight_Controller_Front $front,
+        RequestStack $requestStack,
         string $path
     ) {
         $this->manager = $manager;
@@ -112,7 +115,7 @@ class ProductsImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
         $this->importExportErrorMode = (bool) $config->get('SwagImportExportErrorMode');
         $this->docPath = $path . \DIRECTORY_SEPARATOR . 'media_temp';
         $this->validator = new ProductImageValidator();
-        $this->request = $front->Request();
+        $this->requestStack = $requestStack;
     }
 
     public function supports(string $adapter): bool
@@ -202,11 +205,13 @@ class ProductsImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
      */
     public function getDefaultColumns(): array
     {
-        if (!$this->request instanceof \Enlight_Controller_Request_Request) {
+        $request = $this->requestStack->getCurrentRequest();
+
+        if (!$request instanceof \Enlight_Controller_Request_Request) {
             throw new \RuntimeException(sprintf('Request needs to be set in order to use %s', __METHOD__));
         }
 
-        $path = $this->request->getScheme() . '://' . $this->request->getHttpHost() . $this->request->getBasePath() . '/media/image/';
+        $path = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath() . '/media/image/';
 
         $columns = [
             'mv.number as ordernumber',

@@ -225,14 +225,14 @@ class ProductsPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
     {
         $columns = [
             'detail.number as orderNumber',
-            'price.id',
-            'price.articleId',
-            'price.articleDetailsId',
-            'price.from',
-            'price.to',
+            'price.id as priceId',
+            'price.articleId as priceProductId',
+            'price.articleDetailsId as productDetailsId',
+            'price.from as priceFrom',
+            'price.to as priceTo',
             'price.price',
-            'price.pseudoPrice',
-            'price.percent',
+            'price.pseudoPrice as pseudoPrice',
+            'price.percent as pricePercent',
             'price.customerGroupKey as priceGroup',
             'article.name as name',
             'detail.additionalText as additionalText',
@@ -241,7 +241,7 @@ class ProductsPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
         ];
 
         if (SwagVersionHelper::isShopware578()) {
-            $columns[] = 'price.regulationPrice';
+            $columns[] = 'price.regulationPrice as regulationPrice';
         }
 
         return $columns;

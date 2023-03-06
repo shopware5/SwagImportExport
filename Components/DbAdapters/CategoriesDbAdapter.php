@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
@@ -131,7 +132,7 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandle
             throw new \Exception($message);
         }
 
-        $categories = $this->getBuilder($columns['default'], $ids)->getQuery()->getArrayResult();
+        $categories = $this->getBuilder($columns, $ids)->getQuery()->getArrayResult();
 
         $result = [];
         foreach ($categories as $category) {
@@ -231,7 +232,7 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandle
      */
     public function getDefaultColumns(): array
     {
-        $columns['default'] = [
+        $columns = [
             'c.id as categoryId',
             'c.parentId as parentId',
             'c.name as name',
@@ -252,7 +253,7 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandle
         $attributesSelect = $this->getAttributes();
 
         if (!empty($attributesSelect)) {
-            $columns['default'] = \array_merge($columns['default'], $attributesSelect);
+            $columns = \array_merge($columns, $attributesSelect);
         }
 
         return $columns;
@@ -280,10 +281,10 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandle
     }
 
     /**
-     * @param array<string>|string $columns
-     * @param array<int>           $ids
+     * @param array<string, array<string>>|array<string> $columns
+     * @param array<int>                                 $ids
      */
-    private function getBuilder($columns, array $ids): QueryBuilder
+    private function getBuilder(array $columns, array $ids): QueryBuilder
     {
         $builder = $this->modelManager->createQueryBuilder();
         $builder->select($columns)

@@ -41,6 +41,16 @@ class DataProvider implements \Enlight_Hook
     }
 
     /**
+     * @internal
+     *
+     * @return iterable<DataDbAdapter>
+     */
+    public function getAdapters(): iterable
+    {
+        return $this->adapters;
+    }
+
+    /**
      * Returns the necessary adapter
      */
     public function createDbAdapter(string $adapterType): DataDbAdapter

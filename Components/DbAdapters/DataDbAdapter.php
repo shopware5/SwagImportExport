@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
@@ -31,8 +32,8 @@ interface DataDbAdapter
     /**
      * Reads all records with the given ids and selects the passed columns.
      *
-     * @param array<int>                              $ids
-     * @param array<int|string, array<string>|string> $columns
+     * @param array<int>                                $ids
+     * @param array<string>|array<string,array<string>> $columns
      *
      * @return array<string, mixed>
      */
@@ -52,7 +53,7 @@ interface DataDbAdapter
      *
      * @see DataDbAdapter::getColumns()
      *
-     * @return array<int|string, array<string>|string>
+     * @return array<string>|array<string,array<string>>
      */
     public function getDefaultColumns(): array;
 
