@@ -13,8 +13,10 @@ use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Query;
 use Shopware\Components\CSRFWhitelistAware;
 use SwagImportExport\Components\UploadPathProvider;
+use SwagImportExport\Components\Utils\FileNameGenerator;
 use SwagImportExport\Models\Logger;
 use SwagImportExport\Models\LoggerRepository;
+use SwagImportExport\Models\Profile;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
@@ -56,21 +58,14 @@ class Shopware_Controllers_Backend_SwagImportExport extends \Shopware_Controller
             return;
         }
 
-        $fileName = $file->getClientOriginalName();
-
         $extension = $file->getClientOriginalExtension();
-
         if (!$this->isFormatValid($extension)) {
             $this->View()->assign(['success' => false, 'error' => 'invalidFileFormat', 'message' => 'No valid file format. Please use xml or csv.']);
 
             return;
         }
 
-        // if file name already exists, add timestamp and random string
-        // to file name to prevent file override
-        if ($this->isFileNameExisting($fileName)) {
-            $fileName = $this->createTimestampedRandomizedFileName($fileName);
-        }
+        $fileName = $this->createTimestampedRandomizedFileName($file->getClientOriginalName());
 
         $file->move($this->uploadPathProvider->getPath(), $fileName);
 
@@ -194,35 +189,15 @@ class Shopware_Controllers_Backend_SwagImportExport extends \Shopware_Controller
         }
     }
 
-    private function isFileNameExisting(string $filename): bool
-    {
-        return file_exists(
-            $this->uploadPathProvider->getRealPath($filename)
-        );
-    }
-
     private function createTimestampedRandomizedFileName(string $oldFileName): string
     {
-        $fileName = pathinfo($oldFileName, PATHINFO_FILENAME);
-        $fileExtension = pathinfo($oldFileName, PATHINFO_EXTENSION);
+        $fileName = pathinfo($oldFileName, \PATHINFO_FILENAME);
+        $fileExtension = pathinfo($oldFileName, \PATHINFO_EXTENSION);
 
-        $hash = \substr(\md5(\uniqid()), 0, 8);
+        // Little "hack", so the FileNameGenerator could be re-used
+        $profile = new Profile();
+        $profile->setType($fileName);
 
-        $dateTime = new \DateTime('now');
-
-        $newFileName = sprintf(
-            '%s.%s-%s.%s',
-            $fileName,
-            $dateTime->format('Y.m.d.h.i.s'),
-            $hash,
-            $fileExtension
-        );
-
-        // make sure that the new filename is unused
-        if ($this->isFileNameExisting($newFileName)) {
-            return $this->createTimestampedRandomizedFileName($oldFileName);
-        }
-
-        return $newFileName;
+        return FileNameGenerator::generateFileName('import', $fileExtension, $profile);
     }
 }

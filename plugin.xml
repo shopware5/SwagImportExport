@@ -15,6 +15,15 @@
     <description lang="de">Das Importieren und Exportieren von Artikeln, Kunden oder Kategorien gehört zum Alltag vieler Shopbetreiber: Schnell lassen sich so Lagerbestände aktualisieren, Preise anpassen oder Erstimporte vornehmen.</description>
     <description lang="en">Importing and exporting product and customer data, categories as well as product images is a standard task of any shop owner. Keeping that in mind, Shopware wants to make it as easy as possible for you to quickly edit inventory, prices or even perform a customized import.</description>
 
+    <changelog version="REPLACE_GLOBALLY_WITH_NEXT_VERSION(3.1.3)">
+        <changes lang="de">
+            PT-13035 - Zum Import hoch geladene Dateien werden nun nicht mehr überschrieben, wenn sie den gleichen Namen haben;
+        </changes>
+        <changes lang="en">
+            PT-13035 - Files uploaded for import are now no longer overwritten if they have the same name;
+        </changes>
+    </changelog>
+
     <changelog version="3.1.2">
         <changes lang="de">
             PT-13003 - Cache wird jetzt beim Aktivieren, Updaten und Deinstallieren des Plugins bereinigt;
