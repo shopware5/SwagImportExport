@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
@@ -106,6 +107,11 @@ class DataWorkflow
             // Therefore, we can close the file with a footer and mark the session as done.
             $footer = $transformerChain->composeFooter();
             $fileWriter->writeFooter($exportRequest->filePath, $footer);
+
+            if (empty($session->getRecordIds())) {
+                // No records were exported, therefore the filesize must be set properly
+                $session->getEntity()->setFileSize((int) filesize($exportRequest->filePath));
+            }
             $session->close();
         }
 

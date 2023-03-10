@@ -635,6 +635,23 @@ EOD
         );
     }
 
+    public function testEmptyExportHasFileSizeInDatabaseCommand(): void
+    {
+        $profileName = 'default_orders';
+
+        $fileName = 'empty.xml';
+        $this->addCreatedExportFile($fileName);
+
+        $this->runCommand(sprintf('sw:importexport:export -p %s --dateFrom "10-05-2015" --dateTo "15-05-2015" %s', $profileName, $fileName));
+        $filePath = $this->getFilePath($fileName);
+        $fileSize = (int) filesize($filePath);
+
+        $connection = $this->getContainer()->get(Connection::class);
+        $dbFileSize = (int) $connection->fetchOne('SELECT file_size FROM s_import_export_session ORDER BY id DESC');
+
+        static::assertSame($fileSize, $dbFileSize);
+    }
+
     private function getLineAmount(string $fileName): int
     {
         $fp = \file($this->getFilePath($fileName));
