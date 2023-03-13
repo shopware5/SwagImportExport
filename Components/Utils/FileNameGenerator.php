@@ -15,14 +15,13 @@ class FileNameGenerator
 {
     public static function generateFileName(string $operation, string $format, Profile $profile): string
     {
-        $fileFormat = $format;
-
-        $adapterType = $profile->getType();
-
-        $hash = \substr(\md5(\uniqid()), 0, 8);
-
-        $dateTime = new \DateTime('now');
-
-        return sprintf('%s.%s.%s-%s.%s', $operation, $adapterType, $dateTime->format('Y.m.d.h.i.s'), $hash, $fileFormat);
+        return sprintf(
+            '%s.%s.%s-%s.%s',
+            $operation,
+            $profile->getType(),
+            (new \DateTime('now'))->format('Y.m.d.h.i.s'),
+            \substr(\md5(\uniqid()), 0, 8),
+            $format
+        );
     }
 }

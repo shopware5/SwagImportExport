@@ -21,8 +21,13 @@ class SwagImportExportTest extends TestCase
     /**
      * @dataProvider getFileInformation
      */
-    public function testValidateFile(string $originalName, bool $isValid, string $extension, bool $wasSuccessFull, string $errorMessage = null): void
-    {
+    public function testValidateFile(
+        string $originalName,
+        bool $isValid,
+        string $extension,
+        bool $wasSuccessFull,
+        string $errorMessage = null
+    ): void {
         $testView = new TestViewMock();
         $uploadPathMock = $this->getMockBuilder(UploadPathProvider::class)->disableOriginalConstructor()->getMock();
         $controller = new Shopware_Controllers_Backend_SwagImportExport($uploadPathMock);
@@ -45,13 +50,16 @@ class SwagImportExportTest extends TestCase
         $controller->setRequest($request);
 
         $controller->uploadFileAction();
-        static::assertEquals($wasSuccessFull, $testView->getAssign('success'));
+        static::assertSame($wasSuccessFull, $testView->getAssign('success'));
+
+        if ($wasSuccessFull) {
+            $fileName = $testView->getAssign('data')['fileName'];
+            static::assertStringStartsWith('import.file-is-valid.' . (new \DateTime('now'))->format('Y.m.d.h.i'), $fileName);
+            static::assertStringEndsWith('.csv', $fileName);
+        }
     }
 
-    /**
-     * @return \Generator
-     */
-    public function getFileInformation()
+    public function getFileInformation(): \Generator
     {
         yield 'With valid file' => [
                 'file-is-valid.csv',

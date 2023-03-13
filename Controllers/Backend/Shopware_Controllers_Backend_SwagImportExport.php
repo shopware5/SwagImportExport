@@ -13,8 +13,10 @@ use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Query;
 use Shopware\Components\CSRFWhitelistAware;
 use SwagImportExport\Components\UploadPathProvider;
+use SwagImportExport\Components\Utils\FileNameGenerator;
 use SwagImportExport\Models\Logger;
 use SwagImportExport\Models\LoggerRepository;
+use SwagImportExport\Models\Profile;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
@@ -56,23 +58,22 @@ class Shopware_Controllers_Backend_SwagImportExport extends \Shopware_Controller
             return;
         }
 
-        $clientOriginalName = $file->getClientOriginalName();
-
         $extension = $file->getClientOriginalExtension();
-
         if (!$this->isFormatValid($extension)) {
             $this->View()->assign(['success' => false, 'error' => 'invalidFileFormat', 'message' => 'No valid file format. Please use xml or csv.']);
 
             return;
         }
 
-        $file->move($this->uploadPathProvider->getPath(), $clientOriginalName);
+        $fileName = $this->createTimestampedRandomizedFileName($file->getClientOriginalName());
+
+        $file->move($this->uploadPathProvider->getPath(), $fileName);
 
         $this->view->assign([
             'success' => true,
             'data' => [
-                'path' => $this->uploadPathProvider->getRealPath($clientOriginalName),
-                'fileName' => $clientOriginalName,
+                'path' => $this->uploadPathProvider->getRealPath($fileName),
+                'fileName' => $fileName,
             ],
         ]);
     }
@@ -186,5 +187,17 @@ class Shopware_Controllers_Backend_SwagImportExport extends \Shopware_Controller
             default:
                 return false;
         }
+    }
+
+    private function createTimestampedRandomizedFileName(string $oldFileName): string
+    {
+        $fileName = pathinfo($oldFileName, \PATHINFO_FILENAME);
+        $fileExtension = pathinfo($oldFileName, \PATHINFO_EXTENSION);
+
+        // Little "hack", so the FileNameGenerator could be re-used
+        $profile = new Profile();
+        $profile->setType($fileName);
+
+        return FileNameGenerator::generateFileName('import', $fileExtension, $profile);
     }
 }
