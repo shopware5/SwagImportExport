@@ -276,11 +276,6 @@ parameters:
 			path: Components/Service/AutoImportService.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\Service\\\\ImportService\\:\\:afterImport\\(\\) has parameter \\$unprocessedData with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: Components/Service/ImportService.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\Service\\\\Struct\\\\ProfileDataStruct\\:\\:asArray\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/Service/Struct/ProfileDataStruct.php

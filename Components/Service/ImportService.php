@@ -15,7 +15,6 @@ use SwagImportExport\Components\Factories\ProfileFactory;
 use SwagImportExport\Components\Logger\LoggerInterface;
 use SwagImportExport\Components\Providers\FileIOProvider;
 use SwagImportExport\Components\Session\Session;
-use SwagImportExport\Components\Session\SessionService;
 use SwagImportExport\Components\Structs\ImportRequest;
 use SwagImportExport\Components\UploadPathProvider;
 use SwagImportExport\Components\Utils\SnippetsHelper;
@@ -39,16 +38,13 @@ class ImportService implements ImportServiceInterface
 
     private ModelManager $modelManager;
 
-    private SessionService $sessionService;
-
     public function __construct(
         FileIOProvider $fileIOFactory,
         UploadPathProvider $uploadPathProvider,
         LoggerInterface $logger,
         DataWorkflow $dataWorkflow,
         ProfileFactory $profileFactory,
-        ModelManager $modelManager,
-        SessionService $sessionService
+        ModelManager $modelManager
     ) {
         $this->uploadPathProvider = $uploadPathProvider;
         $this->logger = $logger;
@@ -56,7 +52,6 @@ class ImportService implements ImportServiceInterface
         $this->dataWorkflow = $dataWorkflow;
         $this->profileFactory = $profileFactory;
         $this->modelManager = $modelManager;
-        $this->sessionService = $sessionService;
     }
 
     public function prepareImport(ImportRequest $importRequest): int
@@ -78,19 +73,13 @@ class ImportService implements ImportServiceInterface
         $this->modelManager->clear();
     }
 
-    private function afterImport(array $unprocessedData, string $profileName, string $outputFile, string $prevState): void
-    {
-        $this->dataWorkflow->saveUnprocessedData($unprocessedData, $profileName, $outputFile, $prevState);
-    }
-
-    private function importUnprocessedData(ImportRequest $request): \Generator
+    public function prepareImportOfUnprocessedData(ImportRequest $request): ?array
     {
         // loops the unprocessed data
         $pathInfoBaseName = \pathinfo($request->inputFile, \PATHINFO_BASENAME);
         foreach (self::SUPPORTED_UNPROCESSED_DATA_PROFILE_TYPES as $profileType) {
-            $tmpFile = $this->uploadPathProvider->getRealPath(
-                $pathInfoBaseName . '-' . $profileType . '-swag.csv'
-            );
+            $tmpFileName = $pathInfoBaseName . '-' . $profileType . self::UNPROCESSED_DATA_FILE_ENDING;
+            $tmpFile = $this->uploadPathProvider->getRealPath($tmpFileName);
 
             if (!\file_exists($tmpFile)) {
                 continue;
@@ -98,28 +87,23 @@ class ImportService implements ImportServiceInterface
 
             $profile = $this->profileFactory->loadHiddenProfile($profileType);
 
-            $innerSession = $this->sessionService->createSession();
+            $fileReader = $this->fileIOFactory->getFileReader('csv');
+            $totalCount = $fileReader->getTotalCount($tmpFile);
 
-            $subRequest = new ImportRequest();
-            $subRequest->setData(
-                [
-                    'profileEntity' => $profile,
-                    'inputFile' => $tmpFile,
-                    'format' => 'csv',
-                    'username' => $request->username,
-                    'batchSize' => $profile->getEntity()->getType() === DataDbAdapter::PRODUCT_IMAGE_ADAPTER ? 1 : $request->batchSize,
-                ]
-            );
-
-            yield from $this->doImport($subRequest, $innerSession);
-            unlink($tmpFile);
+            return [
+                'importFile' => $tmpFileName,
+                'profileId' => $profile->getId(),
+                'count' => $totalCount,
+                'position' => 0,
+                'load' => true,
+            ];
         }
+
+        return null;
     }
 
     private function doImport(ImportRequest $request, Session $session): \Generator
     {
-        $sessionState = $session->getState();
-
         do {
             try {
                 $resultData = $this->dataWorkflow->import($request, $session);
@@ -127,10 +111,10 @@ class ImportService implements ImportServiceInterface
                 if (!empty($resultData['unprocessedData'])) {
                     foreach ($resultData['unprocessedData'] as $profileName => $value) {
                         $outputFile = $this->uploadPathProvider->getRealPath(
-                            $this->uploadPathProvider->getFileNameFromPath($request->inputFile) . '-' . $profileName . '-swag.csv'
+                            $this->uploadPathProvider->getFileNameFromPath($request->inputFile) . '-' . $profileName . self::UNPROCESSED_DATA_FILE_ENDING
                         );
 
-                        $this->afterImport($resultData['unprocessedData'], $profileName, $outputFile, $sessionState);
+                        $this->dataWorkflow->saveUnprocessedData($resultData['unprocessedData'], $profileName, $outputFile, $session->getState());
                     }
                 }
 
@@ -149,13 +133,6 @@ class ImportService implements ImportServiceInterface
                     'false',
                     $session
                 );
-
-                $profileType = $request->profileEntity->getType();
-                if (\in_array($profileType, self::SUPPORTED_UNPROCESSED_DATA_PROFILE_TYPES, true)) {
-                    foreach ($this->importUnprocessedData($request) as [$profileName, $position]) {
-                        // nth
-                    }
-                }
 
                 yield [$request->profileEntity->getName(), $resultData['position']];
             } catch (\Exception $e) {

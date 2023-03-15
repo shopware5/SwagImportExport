@@ -16,6 +16,7 @@ use SwagImportExport\Components\Profile\Profile;
 use SwagImportExport\Components\Service\ImportServiceInterface;
 use SwagImportExport\Components\Session\SessionService;
 use SwagImportExport\Components\Structs\ImportRequest;
+use SwagImportExport\Components\UploadPathProvider;
 use SwagImportExport\Models\Profile as ProfileEntity;
 use SwagImportExport\Models\ProfileRepository;
 use Symfony\Component\Console\Input\InputArgument;
@@ -41,18 +42,22 @@ class ImportCommand extends ShopwareCommand
 
     private \Shopware_Components_Config $config;
 
+    private UploadPathProvider $uploadPathProvider;
+
     public function __construct(
         ProfileFactory $profileFactory,
         ProfileRepository $profileRepository,
         SessionService $sessionService,
         ImportServiceInterface $importService,
-        \Shopware_Components_Config $config
+        \Shopware_Components_Config $config,
+        UploadPathProvider $uploadPathProvider
     ) {
         $this->profileFactory = $profileFactory;
         $this->profileRepository = $profileRepository;
         $this->sessionService = $sessionService;
         $this->importService = $importService;
         $this->config = $config;
+        $this->uploadPathProvider = $uploadPathProvider;
 
         parent::__construct();
     }
@@ -112,6 +117,22 @@ class ImportCommand extends ShopwareCommand
         foreach ($this->importService->import($importRequest, $session) as [$profileName, $position]) {
             $output->writeln('<info>' . \sprintf('Processed %s: %d.', $profileName, $position) . '</info>');
         }
+
+        if (str_ends_with($importRequest->inputFile, ImportServiceInterface::UNPROCESSED_DATA_FILE_ENDING)) {
+            unlink($importRequest->inputFile);
+        }
+
+        $importRequest->inputFile = $this->filePath;
+        $unprocessedData = $this->importService->prepareImportOfUnprocessedData($importRequest);
+        if (!\is_array($unprocessedData)) {
+            return;
+        }
+
+        $output->writeln('<info>Start to import unprocessed data</info>');
+
+        $subProfileModel = $this->profileFactory->loadProfile($unprocessedData['profileId']);
+        $subFile = $this->uploadPathProvider->getRealPath($unprocessedData['importFile']);
+        $this->start($output, $subProfileModel, $subFile, 'csv');
     }
 
     private function prepareImportInputValidation(InputInterface $input): void

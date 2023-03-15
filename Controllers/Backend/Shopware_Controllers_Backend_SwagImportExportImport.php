@@ -12,6 +12,7 @@ namespace SwagImportExport\Controllers\Backend;
 use SwagImportExport\Components\DbAdapters\DataDbAdapter;
 use SwagImportExport\Components\Factories\ProfileFactory;
 use SwagImportExport\Components\Service\ImportServiceInterface;
+use SwagImportExport\Components\Session\Session;
 use SwagImportExport\Components\Session\SessionService;
 use SwagImportExport\Components\Structs\ImportRequest;
 use SwagImportExport\Components\UploadPathProvider;
@@ -47,23 +48,19 @@ class Shopware_Controllers_Backend_SwagImportExportImport extends \Shopware_Cont
     public function prepareImportAction(Request $request): void
     {
         if (!$request->get('profileId')) {
-            throw new \UnexpectedValueException('ProfileId must be set');
+            $this->View()->assign(['success' => false, 'msg' => 'Request parameter "profileId" must be set']);
+
+            return;
         }
 
         if (!$request->get('importFile')) {
-            throw new \UnexpectedValueException('importFile must be set');
-        }
-
-        $importRequest = $this->getImportRequest($request);
-
-        if (empty($importRequest->inputFile)) {
-            $this->View()->assign(['success' => false, 'msg' => 'No valid file']);
+            $this->View()->assign(['success' => false, 'msg' => 'Request parameter "importFile" must be set']);
 
             return;
         }
 
         try {
-            $totalCount = $this->importService->prepareImport($importRequest);
+            $totalCount = $this->importService->prepareImport($this->getImportRequest($request));
         } catch (\Exception $e) {
             $this->View()->assign(['success' => false, 'msg' => $e->getMessage()]);
 
@@ -88,6 +85,21 @@ class Shopware_Controllers_Backend_SwagImportExportImport extends \Shopware_Cont
             foreach ($this->importService->import($importRequest, $session) as [$profileName, $position]) {
                 $lastPosition = $position;
                 break;
+            }
+
+            if ($session->getState() === Session::SESSION_CLOSE) {
+                if (str_ends_with($importRequest->inputFile, ImportServiceInterface::UNPROCESSED_DATA_FILE_ENDING)) {
+                    unlink($importRequest->inputFile);
+                }
+                $unprocessedData = $this->importService->prepareImportOfUnprocessedData($importRequest);
+                if (\is_array($unprocessedData)) {
+                    $this->View()->assign([
+                        'success' => true,
+                        'data' => $unprocessedData,
+                    ]);
+
+                    return;
+                }
             }
 
             $this->View()->assign([
