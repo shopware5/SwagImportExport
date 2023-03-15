@@ -1282,13 +1282,13 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
         $this->unprocessedData = [];
         $this->tempData = [];
 
-        foreach ($records['article'] as $index => $article) {
+        foreach ($records['article'] as $index => $product) {
             try {
                 $this->modelManager->getConnection()->beginTransaction();
 
-                $productWriterResult = $productWriter->write($article, $defaultValues);
+                $productWriterResult = $productWriter->write($product, $defaultValues);
 
-                $processedFlag = isset($article['processed']) && (int) $article['processed'] === 1;
+                $processedFlag = isset($product['processed']) && (int) $product['processed'] === 1;
 
                 /*
                  * Only processed data will be imported
@@ -1328,7 +1328,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
 
                     $propertyWriter->writeUpdateCreatePropertyGroupsFilterAndValues(
                         $productWriterResult->getProductId(),
-                        $article['orderNumber'],
+                        $product['orderNumber'],
                         $this->filterPropertyValues($records, $index, $productWriterResult)
                     );
 
@@ -1349,12 +1349,12 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
                  * Processed and unprocessed data will be imported
                  */
                 if ($processedFlag) {
-                    $article['mainNumber'] = $article['orderNumber'];
+                    $product['mainNumber'] = $product['orderNumber'];
                 }
 
                 $relationWriter->write(
                     $productWriterResult->getProductId(),
-                    $article['mainNumber'],
+                    $product['mainNumber'],
                     \array_filter(
                         $records['accessory'] ?? [],
                         function (array $accessory) use ($index, $productWriterResult) {
@@ -1368,7 +1368,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
 
                 $relationWriter->write(
                     $productWriterResult->getProductId(),
-                    $article['mainNumber'],
+                    $product['mainNumber'],
                     \array_filter(
                         $records['similar'] ?? [],
                         function (array $similar) use ($index, $productWriterResult) {
@@ -1382,7 +1382,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
 
                 $imageWriter->write(
                     $productWriterResult->getProductId(),
-                    $article['mainNumber'],
+                    $product['mainNumber'],
                     \array_filter(
                         $records['image'] ?? [],
                         function (array $image) use ($index) {
