@@ -191,8 +191,8 @@ class Shopware_Controllers_Backend_SwagImportExport extends \Shopware_Controller
 
     private function createTimestampedRandomizedFileName(string $oldFileName): string
     {
-        $fileName = pathinfo($oldFileName, \PATHINFO_FILENAME);
-        $fileExtension = pathinfo($oldFileName, \PATHINFO_EXTENSION);
+        $fileName = $this->uploadPathProvider->getFileNameWithoutExtensionFromPath($oldFileName);
+        $fileExtension = $this->uploadPathProvider->getFileExtension($oldFileName);
 
         // Little "hack", so the FileNameGenerator could be re-used
         $profile = new Profile();

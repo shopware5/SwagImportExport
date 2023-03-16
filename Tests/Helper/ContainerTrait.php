@@ -16,6 +16,6 @@ trait ContainerTrait
 {
     public function getContainer(): Container
     {
-        return Shopware()->Container();
+        return \ImportExportTestKernel::$kernel->getContainer();
     }
 }

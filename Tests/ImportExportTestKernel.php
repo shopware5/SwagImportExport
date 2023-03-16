@@ -16,7 +16,7 @@ class ImportExportTestKernel extends Kernel
 {
     public const IMPORT_FILES_DIR = __DIR__ . '/Helper/ImportFiles/';
 
-    private static ImportExportTestKernel $kernel;
+    public static ImportExportTestKernel $kernel;
 
     public static function start(): void
     {

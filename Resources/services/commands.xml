@@ -26,6 +26,7 @@
             <argument type="service" id="SwagImportExport\Components\Service\ExportService"/>
             <argument type="service" id="config"/>
             <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="SwagImportExport\Components\UploadPathProvider"/>
 
             <tag name="console.command" command="sw:importexport:export"/>
         </service>

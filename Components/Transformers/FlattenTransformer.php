@@ -1115,11 +1115,8 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      *
      * @param array<string|int, mixed> $node
      * @param array<string, string>    $mapper
-     * @param string                   $path
-     *
-     * @return string
      */
-    private function findConfigurationGroupValue(array $node, array $mapper, string $path = null): ?string
+    private function findConfigurationGroupValue(array $node, array $mapper, ?string $path = null): ?string
     {
         foreach ($node as $key => $value) {
             $currentPath = $this->getMergedPath($path, (string) $key);
