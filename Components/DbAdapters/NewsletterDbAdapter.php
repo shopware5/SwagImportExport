@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
@@ -10,6 +11,7 @@ declare(strict_types=1);
 namespace SwagImportExport\Components\DbAdapters;
 
 use Doctrine\ORM\Query\Expr\Join;
+use Exception;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Models\Customer\Customer;
@@ -56,7 +58,7 @@ class NewsletterDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandle
         $this->validator = new NewsletterValidator();
         $this->dataManager = $dataManager;
         $this->db = $db;
-        $this->errorMode = $config->get('SwagImportExportErrorMode');
+        $this->errorMode = $config->get('SwagImportExportErrorMode', false);
         $this->eventManager = $eventManager;
     }
 

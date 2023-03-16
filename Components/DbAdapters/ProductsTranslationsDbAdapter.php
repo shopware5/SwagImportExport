@@ -80,7 +80,7 @@ class ProductsTranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
 
         if ($attributes) {
             foreach ($attributes as $attribute) {
-                $translation[] = 't.' . $attribute['columnName'];
+                $translation[] = 't.' . $attribute['columnName'] . ' as ' . $attribute['columnName'];
             }
         }
 

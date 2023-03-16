@@ -148,12 +148,12 @@ class TranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
     public function getDefaultColumns(): array
     {
         return [
-            'objectKey',
-            'objectType',
-            'baseName',
-            'name',
-            'description',
-            'languageId',
+            'objectKey as objectKey',
+            'objectType as objectType',
+            'baseName as baseName',
+            'name as name',
+            'description as description',
+            'languageId as languageId',
         ];
     }
 
