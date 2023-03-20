@@ -36,5 +36,5 @@ interface ImportServiceInterface
      *
      * @return array{importFile: string, profileId: int, count: int, position: 0, load: true}|null
      */
-    public function prepareImportOfUnprocessedData(ImportRequest $request): ?array;
+    public function getInfoToImportUnprocessedData(ImportRequest $request): ?array;
 }

@@ -21,6 +21,7 @@ use SwagImportExport\Components\Profile\Profile;
 use SwagImportExport\Components\Service\ExportServiceInterface;
 use SwagImportExport\Components\Session\SessionService;
 use SwagImportExport\Components\Structs\ExportRequest;
+use SwagImportExport\Components\UploadPathProvider;
 use SwagImportExport\Components\Utils\SnippetsHelper;
 use SwagImportExport\Models\Profile as ProfileModel;
 use SwagImportExport\Models\ProfileRepository;
@@ -73,6 +74,8 @@ class ExportCommand extends ShopwareCommand
 
     private Connection $connection;
 
+    private UploadPathProvider $uploadPathProvider;
+
     public function __construct(
         ProfileRepository $profileRepository,
         ProfileFactory $profileFactory,
@@ -82,7 +85,8 @@ class ExportCommand extends ShopwareCommand
         LoggerInterface $logger,
         ExportServiceInterface $exportService,
         \Shopware_Components_Config $config,
-        Connection $connection
+        Connection $connection,
+        UploadPathProvider $uploadPathProvider
     ) {
         $this->profileRepository = $profileRepository;
         $this->entityManager = $entityManager;
@@ -93,6 +97,7 @@ class ExportCommand extends ShopwareCommand
         $this->exportService = $exportService;
         $this->config = $config;
         $this->connection = $connection;
+        $this->uploadPathProvider = $uploadPathProvider;
 
         parent::__construct();
     }
@@ -288,7 +293,7 @@ class ExportCommand extends ShopwareCommand
         $this->format = $input->getOption('format');
         // if no format is specified try to find it from the filename
         if (empty($this->format)) {
-            $this->format = \pathinfo($this->filePath, \PATHINFO_EXTENSION);
+            $this->format = $this->uploadPathProvider->getFileExtension($this->filePath);
         }
 
         // format should be case-insensitive

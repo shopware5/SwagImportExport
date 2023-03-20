@@ -29,8 +29,7 @@ class SwagImportExportTest extends TestCase
         string $errorMessage = null
     ): void {
         $testView = new TestViewMock();
-        $uploadPathMock = $this->getMockBuilder(UploadPathProvider::class)->disableOriginalConstructor()->getMock();
-        $controller = new Shopware_Controllers_Backend_SwagImportExport($uploadPathMock);
+        $controller = new Shopware_Controllers_Backend_SwagImportExport(new UploadPathProvider(__DIR__));
         $controller->setView($testView);
         $uploadFile = $this->getMockBuilder(UploadedFile::class)->disableOriginalConstructor()->getMock();
         $uploadFile->method('isValid')->willReturn($isValid);

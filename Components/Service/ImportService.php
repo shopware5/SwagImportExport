@@ -73,10 +73,10 @@ class ImportService implements ImportServiceInterface
         $this->modelManager->clear();
     }
 
-    public function prepareImportOfUnprocessedData(ImportRequest $request): ?array
+    public function getInfoToImportUnprocessedData(ImportRequest $request): ?array
     {
         // loops the unprocessed data
-        $pathInfoBaseName = \pathinfo($request->inputFile, \PATHINFO_BASENAME);
+        $pathInfoBaseName = $this->uploadPathProvider->getFileNameFromPath($request->inputFile);
         foreach (self::SUPPORTED_UNPROCESSED_DATA_PROFILE_TYPES as $profileType) {
             $tmpFileName = $pathInfoBaseName . '-' . $profileType . self::UNPROCESSED_DATA_FILE_ENDING;
             $tmpFile = $this->uploadPathProvider->getRealPath($tmpFileName);

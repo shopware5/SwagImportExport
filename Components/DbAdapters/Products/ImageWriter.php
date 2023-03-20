@@ -15,6 +15,7 @@ use Enlight_Components_Db_Adapter_Pdo_Mysql as PDOConnection;
 use SwagImportExport\Components\DbAdapters\DataDbAdapter;
 use SwagImportExport\Components\DbAdapters\ProductsDbAdapter;
 use SwagImportExport\Components\Exception\AdapterException;
+use SwagImportExport\Components\UploadPathProvider;
 use SwagImportExport\Components\Utils\SnippetsHelper;
 
 class ImageWriter
@@ -25,12 +26,16 @@ class ImageWriter
 
     private Connection $connection;
 
+    private UploadPathProvider $uploadPathProvider;
+
     public function __construct(
         PDOConnection $db,
-        Connection $connection
+        Connection $connection,
+        UploadPathProvider $uploadPathProvider
     ) {
         $this->db = $db;
         $this->connection = $connection;
+        $this->uploadPathProvider = $uploadPathProvider;
     }
 
     public function setProductDBAdapter(ProductsDbAdapter $productsDbAdapter): void
@@ -64,7 +69,7 @@ class ImageWriter
             } elseif (!empty($image['path'])) {
                 $media = $this->getMediaByName($image['path']);
             } elseif (!empty($image['imageUrl'])) {
-                $name = \pathinfo($image['imageUrl'], \PATHINFO_FILENAME);
+                $name = $this->uploadPathProvider->getFileNameWithoutExtensionFromPath($image['imageUrl']);
                 $media = $this->getMediaByName($name);
                 $image['path'] = $name;
                 // if data comes from article adapter prepare data for hidden profile

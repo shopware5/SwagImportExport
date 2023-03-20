@@ -37,6 +37,11 @@ class UploadPathProvider
         return \pathinfo($path, \PATHINFO_BASENAME);
     }
 
+    public function getFileNameWithoutExtensionFromPath(string $path): string
+    {
+        return \pathinfo($path, \PATHINFO_FILENAME);
+    }
+
     public function getFileExtension(string $path): string
     {
         return \pathinfo($path, \PATHINFO_EXTENSION);

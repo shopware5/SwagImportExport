@@ -87,8 +87,8 @@ class AutoImportService implements AutoImportServiceInterface
     private function importFiles(array $files, string $lockerFileLocation): void
     {
         foreach ($files as $file) {
-            $fileExtension = \strtolower(\pathinfo($file, \PATHINFO_EXTENSION));
-            $fileName = \strtolower(\pathinfo($file, \PATHINFO_FILENAME));
+            $fileExtension = \strtolower($this->uploadPathProvider->getFileExtension($file));
+            $fileName = \strtolower($this->uploadPathProvider->getFileNameWithoutExtensionFromPath($file));
 
             if (\in_array($fileExtension, ['xml', 'csv'])) {
                 try {

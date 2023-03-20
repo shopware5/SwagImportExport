@@ -84,7 +84,8 @@ class ProductImportTest extends TestCase
 
     public function testImportProductImportFileWithBatchSizeOne(): void
     {
-        $this->setImportBatchSize();
+        $batchSizeBackUp = (int) $this->getContainer()->get(\Shopware_Components_Config::class)->getByNamespace('SwagImportExport', 'batch-size-import', 50);
+        $this->setImportBatchSize(1);
 
         $importController = $this->getImportController();
         $view = new TestViewMock();
@@ -99,9 +100,11 @@ class ProductImportTest extends TestCase
         ]));
 
         static::assertSame(1, $view->getAssign('data')['position']);
+
+        $this->setImportBatchSize($batchSizeBackUp);
     }
 
-    public function testImportProductImportFileWithImage(): void
+    public function testImportProductImportFileWithAdditionalProductAndImage(): void
     {
         $importController = $this->getImportController();
         $view = new TestViewMock();
@@ -117,6 +120,19 @@ class ProductImportTest extends TestCase
         $importController->importAction(new Request([
             'profileId' => self::DEFAULT_PRODUCT_COMPLETE_PROFILE_ID,
             'importFile' => 'ProductWIthImageImport.csv',
+        ]));
+
+        static::assertTrue($view->getAssign('success'));
+        $data = $view->getAssign('data');
+        static::assertIsArray($data);
+        static::assertSame('ProductWIthImageImport.csv-articles-swag.csv', $data['importFile']);
+        static::assertSame(0, $data['position']);
+        static::assertTrue($data['load']);
+
+        // start additional product import
+        $importController->importAction(new Request([
+            'profileId' => $data['profileId'],
+            'importFile' => $data['importFile'],
         ]));
 
         static::assertTrue($view->getAssign('success'));
@@ -155,9 +171,9 @@ class ProductImportTest extends TestCase
         return $this->getContainer()->get(UploadPathProvider::class);
     }
 
-    private function setImportBatchSize(): void
+    private function setImportBatchSize(int $batchSize): void
     {
-        $this->getContainer()->get('config_writer')->save('batch-size-import', 1, 'SwagImportExport');
+        $this->getContainer()->get('config_writer')->save('batch-size-import', $batchSize, 'SwagImportExport');
         $this->getContainer()->get(\Zend_Cache_Core::class)->clean();
         $this->getContainer()->get(\Shopware_Components_Config::class)->setShop(Shopware()->Shop());
     }

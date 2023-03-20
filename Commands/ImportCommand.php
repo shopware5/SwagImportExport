@@ -123,12 +123,12 @@ class ImportCommand extends ShopwareCommand
         }
 
         $importRequest->inputFile = $this->filePath;
-        $unprocessedData = $this->importService->prepareImportOfUnprocessedData($importRequest);
+        $unprocessedData = $this->importService->getInfoToImportUnprocessedData($importRequest);
         if (!\is_array($unprocessedData)) {
             return;
         }
 
-        $output->writeln('<info>Start to import unprocessed data</info>');
+        $output->writeln('<info>Start to import additional product data</info>');
 
         $subProfileModel = $this->profileFactory->loadProfile($unprocessedData['profileId']);
         $subFile = $this->uploadPathProvider->getRealPath($unprocessedData['importFile']);
@@ -162,7 +162,7 @@ class ImportCommand extends ShopwareCommand
 
         // if no format is specified try to find it from the filename
         if (empty($this->format)) {
-            $this->format = \pathinfo($this->filePath, \PATHINFO_EXTENSION);
+            $this->format = $this->uploadPathProvider->getFileExtension($this->filePath);
         }
 
         // format should be case-insensitive

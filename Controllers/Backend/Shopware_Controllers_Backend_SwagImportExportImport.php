@@ -89,9 +89,11 @@ class Shopware_Controllers_Backend_SwagImportExportImport extends \Shopware_Cont
 
             if ($session->getState() === Session::SESSION_CLOSE) {
                 if (str_ends_with($importRequest->inputFile, ImportServiceInterface::UNPROCESSED_DATA_FILE_ENDING)) {
-                    unlink($importRequest->inputFile);
+                    $subImportInputFile = $importRequest->inputFile;
+                    unlink($subImportInputFile);
+                    $this->restoreOriginalFileName($subImportInputFile, $importRequest);
                 }
-                $unprocessedData = $this->importService->prepareImportOfUnprocessedData($importRequest);
+                $unprocessedData = $this->importService->getInfoToImportUnprocessedData($importRequest);
                 if (\is_array($unprocessedData)) {
                     $this->View()->assign([
                         'success' => true,
@@ -144,5 +146,15 @@ class Shopware_Controllers_Backend_SwagImportExportImport extends \Shopware_Cont
         ]);
 
         return $importRequest;
+    }
+
+    private function restoreOriginalFileName(string $subImportInputFile, ImportRequest $importRequest): void
+    {
+        $subImportInputFileEnding = '-' . $importRequest->profileEntity->getType() . ImportServiceInterface::UNPROCESSED_DATA_FILE_ENDING;
+        $importRequest->inputFile = substr(
+            $subImportInputFile,
+            0,
+            \strlen($subImportInputFile) - \strlen($subImportInputFileEnding)
+        );
     }
 }

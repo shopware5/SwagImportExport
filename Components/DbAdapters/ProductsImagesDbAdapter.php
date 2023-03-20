@@ -35,6 +35,7 @@ use SwagImportExport\Components\DataManagers\ProductImageDataManager;
 use SwagImportExport\Components\DbalHelper;
 use SwagImportExport\Components\Exception\AdapterException;
 use SwagImportExport\Components\Service\UnderscoreToCamelCaseServiceInterface;
+use SwagImportExport\Components\UploadPathProvider;
 use SwagImportExport\Components\Utils\SnippetsHelper;
 use SwagImportExport\Components\Validators\ProductImageValidator;
 use Symfony\Component\HttpFoundation\File\File;
@@ -87,6 +88,8 @@ class ProductsImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
 
     private RequestStack $requestStack;
 
+    private UploadPathProvider $uploadPathProvider;
+
     public function __construct(
         ModelManager $manager,
         \Enlight_Components_Db_Adapter_Pdo_Mysql $db,
@@ -99,7 +102,8 @@ class ProductsImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
         GuzzleFactory $guzzleFactory,
         \Shopware_Components_Config $config,
         RequestStack $requestStack,
-        string $path
+        string $path,
+        UploadPathProvider $uploadPathProvider
     ) {
         $this->manager = $manager;
         $this->db = $db;
@@ -116,6 +120,7 @@ class ProductsImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
         $this->docPath = $path . \DIRECTORY_SEPARATOR . 'media_temp';
         $this->validator = new ProductImageValidator();
         $this->requestStack = $requestStack;
+        $this->uploadPathProvider = $uploadPathProvider;
     }
 
     public function supports(string $adapter): bool
@@ -297,7 +302,7 @@ class ProductsImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
 
                 $product = $productDetailModel->getArticle();
 
-                $name = \pathinfo($record['image'], \PATHINFO_FILENAME);
+                $name = $this->uploadPathProvider->getFileNameWithoutExtensionFromPath($record['image']);
 
                 $media = false;
                 if ($this->imageImportMode === 1) {
@@ -318,7 +323,7 @@ class ProductsImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
                     $media->setAlbum($album);
 
                     $media->setFile($file);
-                    $media->setName(\pathinfo($record['image'], \PATHINFO_FILENAME));
+                    $media->setName($this->uploadPathProvider->getFileNameWithoutExtensionFromPath($record['image']));
                     $media->setDescription('');
                     $media->setCreated(new \DateTime());
                     $media->setUserId(0);
@@ -538,7 +543,7 @@ class ProductsImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
     }
 
     /**
-     * @param Option[]             $options
+     * @param array<Option>        $options
      * @param array<string, mixed> $imageData
      */
     private function createImagesForOptions(array $options, array $imageData, Image $parent): void
