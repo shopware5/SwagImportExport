@@ -17,11 +17,13 @@
 
     <changelog version="REPLACE_GLOBALLY_WITH_NEXT_VERSION(4.0.0)">
         <changes lang="de">
+            PT-13026 - Leere Exporte via CLI werden wieder korrekt im Protokoll angezeigt;
             PT-13006 - Bei der Konvertierungseinstellung in Profilen werden nun wieder alle Felder korrekt angezeigt;
             PT-13035 - Zum Import hoch geladene Dateien werden nun nicht mehr überschrieben, wenn sie den gleichen Namen haben;
             PT-13067 - Produktbilder werden wieder nachgelagert nach dem Import der anderen Produktdaten importiert;
         </changes>
         <changes lang="en">
+            PT-13026 - Empty exports via CLI are displayed correctly in the log again;
             PT-13006 - In the conversion setting in profiles, all fields are now displayed correctly again;
             PT-13035 - Files uploaded for import are now no longer overwritten if they have the same name;
             PT-13067 - Product images are imported again downstream after the other product data is imported;
