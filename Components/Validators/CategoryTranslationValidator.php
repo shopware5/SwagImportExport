@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
@@ -12,10 +13,24 @@ namespace SwagImportExport\Components\Validators;
 class CategoryTranslationValidator extends Validator
 {
     /**
-     * @var array<string, string>
+     * @var array<string, array<string>>
+     */
+    protected array $snippetData = [
+        'categoryId' => [
+            'adapters/category_translation/category_not_found',
+            'Category id is required',
+        ],
+        'languageId' => [
+            'adapters/translations/language_not_found',
+            'Language id is required.',
+        ],
+    ];
+
+    /**
+     * @var array<string>
      */
     protected array $requiredFields = [
-        'categoryId' => 'adapters/category_required',
-        'languageId' => 'adapters/translations/language_not_found',
+        'categoryId',
+        'languageId',
     ];
 }
