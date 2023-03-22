@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
@@ -442,6 +443,17 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends \Shopware_Con
                 'success' => false, 'msg' => 'No columns found.',
             ]);
         }
+        $columns = array_diff(
+            $columns,
+            [
+                'customer',
+                'attribute',
+                'unhashedPassword',
+                'price.price',
+            ],
+        );
+
+        $columns = array_values($columns);
 
         // merge all sections
         if ($section === 'default' && \count($dbAdapter->getSections()) > 1) {
