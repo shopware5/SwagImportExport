@@ -38,7 +38,7 @@ class CategoryValidator extends Validator
         ],
         'categoryId' => [
             'adapters/categories/id_required',
-            'Category id is required. If you don\'t import an id, child- and father categories could not get referenced to each other.',
+            'Category id is required. If you don\'t import an id, child- and parent categories could not get referenced to each other.',
             'id',
         ],
     ];
