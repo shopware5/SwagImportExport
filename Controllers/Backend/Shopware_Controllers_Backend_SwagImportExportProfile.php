@@ -443,6 +443,9 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends \Shopware_Con
                 'success' => false, 'msg' => 'No columns found.',
             ]);
         }
+
+        // Because of historical reasons in certain cases getDefaultColumns is used for internal usage.
+        // This removes those strings from the columns so that they will not be sent to the frontend
         $columns = array_diff(
             $columns,
             [
