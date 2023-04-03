@@ -360,14 +360,21 @@ class AddressDbAdapter implements DataDbAdapter, \Enlight_Hook
     private function createAddressWithId(array $addressRecord): Address
     {
         $connection = $this->modelManager->getConnection();
-        $connection->executeQuery(
+        $preparedStatement = $connection->prepare(
             'INSERT INTO s_user_addresses
               (id, user_id, country_id, zipcode, firstname, lastname)
               VALUES
-              (:id, :userID, :countryID, :zipcode, :firstname, :lastname)
-          ',
-            $addressRecord
+              (:id, :userID, :countryID, :zipcode, :firstname, :lastname)'
         );
+
+        $preparedStatement->executeQuery([
+            'id' => $addressRecord['id'],
+            'userID' => $addressRecord['userID'],
+            'countryID' => $addressRecord['countryID'],
+            'zipcode' => $addressRecord['zipcode'],
+            'firstname' => $addressRecord['firstname'],
+            'lastname' => $addressRecord['lastname'],
+        ]);
 
         $addressId = $connection->lastInsertId();
 

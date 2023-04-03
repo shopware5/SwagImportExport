@@ -17,6 +17,7 @@
 
     <changelog version="REPLACE_GLOBALLY_WITH_NEXT_VERSION(4.0.0)">
         <changes lang="de">
+            PT-12984 - Beim Löschen eines Datensatzes aus dem Protokoll werden nun auch die zugehörigen Daten aus anderen Tabellen in der Datenbank gelöscht;
             PT-13042 - Der Import von default_articles_complete mit bereits existierenden Bildern funktioniert wieder fehlerfrei;
             PT-13045 - Der Import von default_category_translations funktioniert wieder fehlerfrei;
             PT-13026 - Leere Exporte via CLI werden wieder korrekt im Protokoll angezeigt;
@@ -25,6 +26,7 @@
             PT-13067 - Produktbilder werden wieder nachgelagert nach dem Import der anderen Produktdaten importiert;
         </changes>
         <changes lang="en">
+            PT-12984 - Deleting a record from the log removes also the associated data from other tables in the database;
             PT-13042 - The import of default_articles_complete with already existing images works again without errors;
             PT-13045 - The import of default_category_translations works again without any errors;
             PT-13026 - Empty exports via CLI are displayed correctly in the log again;

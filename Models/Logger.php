@@ -30,7 +30,7 @@ class Logger extends ModelEntity
 
     /**
      * @ORM\ManyToOne(targetEntity="SwagImportExport\Models\Session", inversedBy="logs")
-     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private ?Session $session;
 
