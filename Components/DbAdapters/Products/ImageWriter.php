@@ -44,7 +44,7 @@ class ImageWriter
     }
 
     /**
-     * @param array<string, mixed> $images
+     * @param array<int, array<string, mixed>> $images
      *
      * @throws AdapterException
      */
@@ -209,7 +209,7 @@ class ImageWriter
             $imageData[$key]['id'] = $medias[$key]['id'];
 
             if ((int) $imageData[$key]['main'] === 1) {
-                $mediaId = $medias[$key]['id'];
+                $mediaId = (int) $medias[$key]['id'];
             }
         }
 
