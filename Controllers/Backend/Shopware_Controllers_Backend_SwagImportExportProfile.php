@@ -444,18 +444,6 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends \Shopware_Con
             ]);
         }
 
-        // Because of historical reasons in certain cases getDefaultColumns is used for internal usage.
-        // This removes those strings from the columns so that they will not be sent to the frontend
-        $columns = array_diff(
-            $columns,
-            [
-                'customer',
-                'attribute',
-                'unhashedPassword',
-                'price.price',
-            ],
-        );
-
         $columns = array_values($columns);
 
         // merge all sections
@@ -495,6 +483,12 @@ class Shopware_Controllers_Backend_SwagImportExportProfile extends \Shopware_Con
                 $column['type'] = DataManager::getFieldType($column['name'], $defaultFields);
             }
         }
+
+        // Because of legacy reasons getDefaultColumns get misused quite a lot and in various ways.
+        // This catches all of these mistakes and filters those values out that are only used for internal calculation
+        $columns = array_filter($columns, function ($value) {
+            return \is_array($value) && \array_key_exists('id', $value) && \array_key_exists('name', $value);
+        });
 
         $this->View()->assign([
             'success' => true, 'data' => $columns, 'total' => \count($columns),

@@ -114,7 +114,7 @@ class XmlFileReader implements FileReader
 
         if ($node->hasAttributes()) {
             $record['_attributes'] = [];
-            foreach ($node->attributes ?? [] as $attr) {
+            foreach ($node->attributes as $attr) {
                 $record['_attributes'][$attr->name] = $attr->value;
             }
             if (!$hasChildren) {
