@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 /**
  * (c) shopware AG <info@shopware.com>
@@ -9,9 +10,11 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Tests\Functional\Components\Service\Mock;
 
+use SwagImportExport\Components\FileIO\FileReader;
 use SwagImportExport\Components\FileIO\FileWriter;
+use SwagImportExport\Tests\Functional\Components\_fixtures\DataSetProductPrices;
 
-class FileIoMock implements FileWriter
+class FileIoMock implements FileWriter, FileReader
 {
     public function __construct()
     {
@@ -32,6 +35,27 @@ class FileIoMock implements FileWriter
     public function writeRecords(string $fileName, $treeData): void
     {
         \file_put_contents($fileName, $treeData, \FILE_APPEND);
+    }
+
+    public function getTotalCount(string $fileName): int
+    {
+        return 0;
+    }
+
+    /**
+     * @param array<string> $tree
+     */
+    public function setTree(array $tree): void
+    {
+        // DO NOTHING
+    }
+
+    /**
+     * @return array<string, array<int, array<string, string>>>
+     */
+    public function readRecords(string $fileName, int $position, int $step): array
+    {
+        return DataSetProductPrices::getDataSet();
     }
 
     public function supports(string $format): bool
