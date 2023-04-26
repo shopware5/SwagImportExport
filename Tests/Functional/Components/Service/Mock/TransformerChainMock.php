@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace SwagImportExport\Tests\Functional\Components\Service\Mock;
 
 use SwagImportExport\Components\Transformers\DataTransformerChain;
+use SwagImportExport\Tests\Functional\Components\_fixtures\DataSetProductPrices;
 
 class TransformerChainMock extends DataTransformerChain
 {
@@ -34,5 +35,15 @@ class TransformerChainMock extends DataTransformerChain
     public function transformForward($data): array
     {
         return [\PHP_EOL . 'just | another | return | value'];
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     *
+     * @return array<string, array<int, array<string, string>>>
+     */
+    public function transformBackward(array $data): array
+    {
+        return DataSetProductPrices::getFixedDataSet();
     }
 }
