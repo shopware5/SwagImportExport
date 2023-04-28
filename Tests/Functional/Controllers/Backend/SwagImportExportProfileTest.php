@@ -10,13 +10,15 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Tests\Functional\Controllers\Backend;
 
-use PHPUnit\Framework\TestCase;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Driver\Exception;
+use Doctrine\DBAL\ForwardCompatibility\Result;
 use SwagImportExport\Controllers\Backend\Shopware_Controllers_Backend_SwagImportExportProfile;
 use SwagImportExport\Models\Profile;
 use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\TestViewMock;
 
-class SwagImportExportProfileTest extends TestCase
+class SwagImportExportProfileTest extends \Enlight_Components_Test_Controller_TestCase
 {
     use ContainerTrait;
 
@@ -36,6 +38,45 @@ class SwagImportExportProfileTest extends TestCase
             static::assertIsArray($column);
             static::assertArrayHasKey('id', $column);
             static::assertArrayHasKey('name', $column);
+        }
+    }
+
+    /**
+     * @throws Exception
+     * @throws \Doctrine\DBAL\Exception
+     */
+    public function testGetColumnsIsListArrayWithConsecutiveKeys(): void
+    {
+        $connection = $this->getContainer()->get(Connection::class);
+        $builder = $connection->createQueryBuilder();
+        $builder->select('id')
+            ->from('s_import_export_profile')
+            ->orderBy('id', 'asc');
+        $result = $builder->execute();
+        static::assertInstanceOf(Result::class, $result);
+
+        $profileIds = $result->fetchAllNumeric();
+
+        $importExportProfile = $this->getContainer()->get(Shopware_Controllers_Backend_SwagImportExportProfile::class);
+        $testView = new TestViewMock();
+        $importExportProfile->setView($testView);
+
+        $testRequest = new \Enlight_Controller_Request_RequestTestCase();
+
+        foreach ($profileIds as $profileId) {
+            $params['profileId'] = $profileId;
+            $params['page'] = 0;
+            $params['start'] = 0;
+            $params['limit'] = 50;
+            $testRequest->setParams($params);
+            $importExportProfile->setRequest($testRequest);
+            $importExportProfile->getColumnsAction();
+
+            $i = 0;
+            foreach (array_keys($testView->getAssign('data')) as $key) {
+                static::assertSame($i, $key);
+                ++$i;
+            }
         }
     }
 }
