@@ -5,7 +5,7 @@
     <label lang="de">Shopware Import/Export</label>
     <label lang="en">Shopware Import/Export</label>
 
-    <version>3.1.2</version>
+    <version>4.0.0</version>
     <copyright>(c) by shopware AG</copyright>
     <license>MIT</license>
     <link>https://store.shopware.com</link>
@@ -15,7 +15,7 @@
     <description lang="de">Das Importieren und Exportieren von Artikeln, Kunden oder Kategorien gehört zum Alltag vieler Shopbetreiber: Schnell lassen sich so Lagerbestände aktualisieren, Preise anpassen oder Erstimporte vornehmen.</description>
     <description lang="en">Importing and exporting product and customer data, categories as well as product images is a standard task of any shop owner. Keeping that in mind, Shopware wants to make it as easy as possible for you to quickly edit inventory, prices or even perform a customized import.</description>
 
-    <changelog version="REPLACE_GLOBALLY_WITH_NEXT_VERSION(4.0.0)">
+    <changelog version="4.0.0">
         <changes lang="de">
             PT-12984 - Beim Löschen eines Datensatzes aus dem Protokoll werden nun auch die zugehörigen Daten aus anderen Tabellen in der Datenbank gelöscht;
             PT-13042 - Der Import von default_articles_complete mit bereits existierenden Bildern funktioniert wieder fehlerfrei;
