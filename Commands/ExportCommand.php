@@ -47,6 +47,8 @@ class ExportCommand extends ShopwareCommand
 
     private string $filePath;
 
+    private ?int $orderstate = null;
+
     private ?string $dateFrom = null;
 
     private ?string $dateTo = null;
@@ -117,6 +119,7 @@ class ExportCommand extends ShopwareCommand
             ->addOption('exportVariants', 'x', InputOption::VALUE_NONE, 'Should the variants be exported?')
             ->addOption('offset', 'o', InputOption::VALUE_OPTIONAL, 'What is the offset?')
             ->addOption('limit', 'l', InputOption::VALUE_OPTIONAL, 'What is the limit?')
+            ->addOption('orderstate', 'orderstate', InputOption::VALUE_OPTIONAL, 'Orderstate ID')
             ->addOption('dateFrom', 'from', InputOption::VALUE_OPTIONAL, 'Date from')
             ->addOption('dateTo', 'to', InputOption::VALUE_OPTIONAL, 'Date to')
             ->addOption('category', 'c', InputOption::VALUE_OPTIONAL, 'Provide a category ID')
@@ -146,6 +149,7 @@ class ExportCommand extends ShopwareCommand
                 'exportVariants' => $this->exportVariants,
                 'limit' => $this->limit,
                 'offset' => $this->offset,
+                'orderstate' => $this->orderstate,
                 'dateFrom' => $this->dateFrom,
                 'dateTo' => $this->dateTo,
                 'filter' => [],
@@ -167,6 +171,10 @@ class ExportCommand extends ShopwareCommand
         }
         if ($this->customerStreamId) {
             $output->writeln('<info>' . \sprintf('Using Customer Stream as filter: %d.', $this->customerStreamId) . '</info>');
+        }
+
+        if ($this->orderstate) {
+            $output->writeln('<info>' . \sprintf('OrderState: %s.', $this->orderstate) . '</info>');
         }
 
         if ($this->dateFrom) {
@@ -230,6 +238,17 @@ class ExportCommand extends ShopwareCommand
                 $this->productStreamId = (int) $productStream;
             } else {
                 $this->productStreamId = $this->getProductStreamIdByName($productStream);
+            }
+        }
+
+        $orderstate = $input->getOption('orderstate');
+        if ($orderstate !== null) {
+            if (is_numeric($orderstate)) {
+                $this->orderstate = (int) $orderstate;
+            } elseif ($orderstate == 'cancelled') {
+                $this->orderstate = -1;
+            } else {
+                throw new \InvalidArgumentException('Option "orderstate" must be a valid ID');
             }
         }
 
