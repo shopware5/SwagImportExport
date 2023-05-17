@@ -245,8 +245,6 @@ class ExportCommand extends ShopwareCommand
         if ($orderstate !== null) {
             if (is_numeric($orderstate)) {
                 $this->orderstate = (int) $orderstate;
-            } elseif ($orderstate == 'cancelled') {
-                $this->orderstate = -1;
             } else {
                 throw new \InvalidArgumentException('Option "orderstate" must be a valid ID');
             }

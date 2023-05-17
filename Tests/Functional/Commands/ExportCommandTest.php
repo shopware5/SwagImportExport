@@ -369,6 +369,46 @@ EOD
         );
     }
 
+    public function testOrderExportCommandOrderstate(): void
+    {
+        $totalCount = 8;
+        $profileName = 'default_orders';
+
+        $fileName = 'mainorder.csv';
+        $this->addCreatedExportFile($fileName);
+
+        $consoleOutput = $this->runCommand(sprintf('sw:importexport:export -p %s --orderstate 0 %s', $profileName, $fileName));
+
+        $lineAmount = $this->getLineAmount($fileName);
+
+        static::assertSame('Using format: csv.', $consoleOutput[1]);
+        static::assertSame('Total count: ' . $totalCount . '.', $consoleOutput[3]);
+        static::assertSame(
+            $totalCount + 1,
+            $lineAmount
+        );
+    }
+
+    public function testOrderExportCommandOrderstateWithNegativeParam(): void
+    {
+        $totalCount = 9;
+        $profileName = 'default_orders';
+
+        $fileName = 'mainorder.csv';
+        $this->addCreatedExportFile($fileName);
+
+        $consoleOutput = $this->runCommand(sprintf('sw:importexport:export -p %s --orderstate=-1 %s', $profileName, $fileName));
+
+        $lineAmount = $this->getLineAmount($fileName);
+
+        static::assertSame('Using format: csv.', $consoleOutput[1]);
+        static::assertSame('Total count: ' . $totalCount . '.', $consoleOutput[4]);
+        static::assertSame(
+            $totalCount + 1,
+            $lineAmount,
+        );
+    }
+
     public function testTranslationsCsvExportCommand(): void
     {
         $expectedLineAmount = 16;
