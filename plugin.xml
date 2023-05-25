@@ -18,9 +18,11 @@
     <changelog version="REPLACE_GLOBAL_WITH_NEXT_VERSION(4.1.0)">
         <changes lang="de">
             PT-13089 - Beim Export via CLI, kann nun nach Bestellstatus eingeschränkt werden;
+            PT-13087 - Die Staffelpreis-spezifischen Werte für "von" und "bis" werden wieder korrekt exportiert;
         </changes>
         <changes lang="en">
             PT-13089 - While exporting via CLI, it is now possible to limit by order status;
+            PT-13087 - The graduated price specific values for "from" and "to" are exported correctly again;
         </changes>
     </changelog>
 

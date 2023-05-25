@@ -10,10 +10,13 @@ declare(strict_types=1);
 namespace SwagImportExport\Tests\Functional\Controllers\Backend;
 
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
+use SwagImportExport\Components\Utils\SwagVersionHelper;
+use SwagImportExport\Controllers\Backend\Shopware_Controllers_Backend_SwagImportExportExport;
 use SwagImportExport\Tests\Helper\ContainerTrait;
 use SwagImportExport\Tests\Helper\DataProvider\ProfileDataProvider;
 use SwagImportExport\Tests\Helper\ExportControllerTrait;
 use SwagImportExport\Tests\Helper\FixturesImportTrait;
+use SwagImportExport\Tests\Helper\TestViewMock;
 
 class ProductPricesExportTest extends \Enlight_Components_Test_Controller_TestCase
 {
@@ -39,10 +42,17 @@ class ProductPricesExportTest extends \Enlight_Components_Test_Controller_TestCa
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::PRODUCTS_PRICES_PROFILE_TYPE);
         $params['format'] = self::FORMAT_XML;
         $params['variants'] = 1;
-        $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExportExport/export');
-        $assigned = $this->View()->getAssign('data');
+        $controller = $this->createController();
+        $view = new TestViewMock();
+        $controller->setView($view);
+        $request = new \Enlight_Controller_Request_RequestTestCase();
+        $request->setParams($params);
+        $controller->setRequest($request);
+
+        $controller->exportAction();
+
+        $assigned = $view->getAssign('data');
 
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
@@ -61,10 +71,17 @@ class ProductPricesExportTest extends \Enlight_Components_Test_Controller_TestCa
         $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::PRODUCTS_PRICES_PROFILE_TYPE);
         $params['format'] = self::FORMAT_CSV;
         $params['variants'] = 1;
-        $this->Request()->setParams($params);
 
-        $this->dispatch('backend/SwagImportExportExport/export');
-        $assigned = $this->View()->getAssign('data');
+        $controller = $this->createController();
+        $view = new TestViewMock();
+        $controller->setView($view);
+        $request = new \Enlight_Controller_Request_RequestTestCase();
+        $request->setParams($params);
+        $controller->setRequest($request);
+
+        $controller->exportAction();
+
+        $assigned = $view->getAssign('data');
 
         $fileName = $assigned['fileName'];
         $file = $this->uploadPathProvider->getRealPath($fileName);
@@ -78,6 +95,42 @@ class ProductPricesExportTest extends \Enlight_Components_Test_Controller_TestCa
         static::assertEquals('1,5 Liter', $mappedPriceList['SW10002.1']['_additionaltext']);
     }
 
+    public function testProductsPricesCsvExportHasNotEmptyValues(): void
+    {
+        $params = $this->getExportRequestParams();
+        $nonEmptyColumns = include __DIR__ . '/_fixtures/product.prices.non.empty.columns.php';
+        if (SwagVersionHelper::isShopware578()) {
+            $nonEmptyColumns[] = 'regulationPrice';
+        }
+
+        $params['profileId'] = $this->backendControllerTestHelper->getProfileIdByType(ProfileDataProvider::PRODUCTS_PRICES_PROFILE_TYPE);
+        $params['format'] = self::FORMAT_CSV;
+        $params['variants'] = 1;
+        $params['limit'] = 1;
+
+        $controller = $this->createController();
+        $view = new TestViewMock();
+        $controller->setView($view);
+        $request = new \Enlight_Controller_Request_RequestTestCase();
+        $request->setParams($params);
+        $controller->setRequest($request);
+
+        $controller->exportAction();
+
+        $data = $view->getAssign('data');
+
+        $fileName = $data['fileName'];
+        $file = $this->uploadPathProvider->getRealPath($fileName);
+
+        static::assertFileExists($file, 'File not found ' . $fileName);
+        $this->backendControllerTestHelper->addFile($file);
+        $mappedProductPriceList = $this->csvToArrayIndexedByFieldValue($file, 'ordernumber');
+
+        foreach ($nonEmptyColumns as $column) {
+            static::assertStringMatchesFormat('%s', $mappedProductPriceList['SW10003'][$column], 'empty value returned for ' . $column);
+        }
+    }
+
     private function assertPriceAttributeInXml(string $filePath, string $orderNumber, string $attribute, string $expected): void
     {
         $productDomNodeList = $this->queryXpath($filePath, "//Price[ordernumber='{$orderNumber}']/{$attribute}");
@@ -85,5 +138,13 @@ class ProductPricesExportTest extends \Enlight_Components_Test_Controller_TestCa
         static::assertInstanceOf(\DOMNode::class, $node);
         $nodeValue = $node->nodeValue;
         static::assertEquals($expected, $nodeValue);
+    }
+
+    private function createController(): Shopware_Controllers_Backend_SwagImportExportExport
+    {
+        $controller = $this->getContainer()->get(Shopware_Controllers_Backend_SwagImportExportExport::class);
+        $controller->setContainer($this->getContainer());
+
+        return $controller;
     }
 }

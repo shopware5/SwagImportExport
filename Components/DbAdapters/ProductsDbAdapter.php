@@ -764,8 +764,8 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
             'prices.price as price',
             'prices.pseudoPrice as pseudoPrice',
             'prices.customerGroupKey as priceGroup',
-            'prices.from as priceFrom',
-            'prices.to as priceTo',
+            'prices.from as from',
+            'prices.to as to',
         ];
 
         if (SwagVersionHelper::isShopware578()) {
