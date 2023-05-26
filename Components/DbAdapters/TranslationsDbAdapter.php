@@ -406,6 +406,8 @@ class TranslationsDbAdapter implements DataDbAdapter, \Enlight_Hook
 
     /**
      * @throws AdapterException
+     *
+     * @return ModelRepository<ConfiguratorGroup>|ModelRepository<ConfiguratorOption>|ModelRepository<PropertyGroup>|ModelRepository<PropertyOption>|ModelRepository<PropertyValue>
      */
     private function getRepository(string $type): ModelRepository
     {

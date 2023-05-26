@@ -211,11 +211,6 @@ parameters:
 			path: Components/DbAdapters/ProductsPricesDbAdapter.php
 
 		-
-			message: "#^Method SwagImportExport\\\\Components\\\\DbAdapters\\\\TranslationsDbAdapter\\:\\:getRepository\\(\\) return type with generic class Shopware\\\\Components\\\\Model\\\\ModelRepository does not specify its types\\: TEntityClass$#"
-			count: 1
-			path: Components/DbAdapters/TranslationsDbAdapter.php
-
-		-
 			message: "#^Method SwagImportExport\\\\Components\\\\FileIO\\\\CsvFileReader\\:\\:toUtf8\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: Components/FileIO/CsvFileReader.php
