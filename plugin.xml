@@ -15,6 +15,15 @@
     <description lang="de">Das Importieren und Exportieren von Artikeln, Kunden oder Kategorien gehört zum Alltag vieler Shopbetreiber: Schnell lassen sich so Lagerbestände aktualisieren, Preise anpassen oder Erstimporte vornehmen.</description>
     <description lang="en">Importing and exporting product and customer data, categories as well as product images is a standard task of any shop owner. Keeping that in mind, Shopware wants to make it as easy as possible for you to quickly edit inventory, prices or even perform a customized import.</description>
 
+    <changelog version="REPLACE_GLOBAL_WITH_NEXT_VERSION(4.1.0)">
+        <changes lang="de">
+            PT-13089 - Beim Export via CLI, kann nun nach Bestellstatus eingeschränkt werden;
+        </changes>
+        <changes lang="en">
+            PT-13089 - While exporting via CLI, it is now possible to limit by order status;
+        </changes>
+    </changelog>
+
     <changelog version="4.0.0">
         <changes lang="de">
             PT-12984 - Beim Löschen eines Datensatzes aus dem Protokoll werden nun auch die zugehörigen Daten aus anderen Tabellen in der Datenbank gelöscht;
