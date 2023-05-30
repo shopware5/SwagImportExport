@@ -529,7 +529,7 @@ class TreeTransformer implements DataTransformerAdapter, ComposerInterface
      *
      * @return array<array<mixed>|string>|string
      */
-    private function transformToTree(array $node, array $mapper = [], string $adapterType = null)
+    private function transformToTree(array $node, array $mapper = [], ?string $adapterType = null)
     {
         if (isset($node['adapter']) && $node['adapter'] !== $adapterType) {
             return $this->buildIterationNode($node);

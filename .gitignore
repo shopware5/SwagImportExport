@@ -5,3 +5,4 @@
 .idea
 vendor
 .php-cs-fixer.cache
+.psh.yml.override

@@ -111,7 +111,7 @@ class Session
      * Updates the session position with the current position (stored in a member variable).
      * Updates the file size of the output file
      */
-    public function progress(int $step, string $file = null): void
+    public function progress(int $step, ?string $file = null): void
     {
         $sessionEntity = $this->getEntity();
 

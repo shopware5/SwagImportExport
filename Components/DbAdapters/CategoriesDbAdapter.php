@@ -83,7 +83,7 @@ class CategoriesDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandle
     /**
      * {@inheritDoc}
      */
-    public function readRecordIds(int $start = null, int $limit = null, array $filter = null): array
+    public function readRecordIds(?int $start = null, ?int $limit = null, ?array $filter = null): array
     {
         $builder = $this->modelManager->createQueryBuilder();
 

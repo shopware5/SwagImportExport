@@ -26,7 +26,7 @@ class SwagImportExportTest extends TestCase
         bool $isValid,
         string $extension,
         bool $wasSuccessFull,
-        string $errorMessage = null
+        ?string $errorMessage = null
     ): void {
         $testView = new TestViewMock();
         $controller = new Shopware_Controllers_Backend_SwagImportExport(new UploadPathProvider(__DIR__));
