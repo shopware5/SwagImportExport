@@ -81,7 +81,7 @@ class Expression extends ModelEntity
         return $this->variable;
     }
 
-    public function setProfile(Profile $profile = null): Expression
+    public function setProfile(?Profile $profile = null): Expression
     {
         $this->profile = $profile;
 

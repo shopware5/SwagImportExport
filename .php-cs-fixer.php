@@ -60,6 +60,7 @@ return (new Config())
         'single_line_throw' => false,
         'yoda_style' => ['equal' => false, 'identical' => false, 'less_and_greater' => false],
         'declare_strict_types' => true,
+        'nullable_type_declaration_for_default_null_value' => true,
 
         NoSuperfluousConcatenationFixer::name() => true,
         NoUselessCommentFixer::name() => true,

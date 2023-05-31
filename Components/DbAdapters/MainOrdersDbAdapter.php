@@ -54,7 +54,7 @@ class MainOrdersDbAdapter implements DataDbAdapter, \Enlight_Hook
     /**
      * {@inheritDoc}
      */
-    public function readRecordIds(int $start = null, int $limit = null, array $filter = null): array
+    public function readRecordIds(?int $start = null, ?int $limit = null, ?array $filter = null): array
     {
         $builder = $this->modelManager->getConnection()->createQueryBuilder();
         $builder->select('id')

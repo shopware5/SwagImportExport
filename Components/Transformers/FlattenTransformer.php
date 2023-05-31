@@ -967,7 +967,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      * @param array<string, mixed> $node
      * @param array<string, mixed> $mapper
      */
-    private function getPriceGroupFromNode(array $node, array $mapper, string $path = null): ?string
+    private function getPriceGroupFromNode(array $node, array $mapper, ?string $path = null): ?string
     {
         foreach ($node as $key => $value) {
             $currentPath = $this->getMergedPath($path, $key);
@@ -988,7 +988,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      * @param array<string, mixed> $node
      * @param array<string, mixed> $mapper
      */
-    private function collectPriceData(array $node, array $mapper, string $path = null, bool $emptyResult = false): void
+    private function collectPriceData(array $node, array $mapper, ?string $path = null, bool $emptyResult = false): void
     {
         foreach ($node as $key => $value) {
             $currentPath = $this->getMergedPath($path, $key);
@@ -1167,7 +1167,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      * @param array<string, string>     $mapper
      * @param ?array<string|int, mixed> $originalNode
      */
-    private function collectConfiguratorData(array $node, array $mapper, string $path = null, array $originalNode = null): void
+    private function collectConfiguratorData(array $node, array $mapper, ?string $path = null, ?array $originalNode = null): void
     {
         foreach ($node as $key => $value) {
             $currentPath = $this->getMergedPath($path, (string) $key);
@@ -1204,7 +1204,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      * @param array<string, string>     $mapper
      * @param ?array<string|int, mixed> $originalNode
      */
-    private function collectPropertyData(array $node, array $mapper, string $path = null, array $originalNode = null): void
+    private function collectPropertyData(array $node, array $mapper, ?string $path = null, ?array $originalNode = null): void
     {
         foreach ($node as $key => $value) {
             $currentPath = $this->getMergedPath($path, (string) $key);
@@ -1236,7 +1236,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      * @param array<string|int, mixed> $node
      * @param array<string, string>    $mapper
      */
-    private function collectTranslationData(array $node, array $mapper, string $path = null): void
+    private function collectTranslationData(array $node, array $mapper, ?string $path = null): void
     {
         foreach ($node as $key => $value) {
             $currentPath = $this->getMergedPath($path, (string) $key);
@@ -1389,7 +1389,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      * @param array<string|int, mixed> $node
      * @param array<string, string>    $mapper
      */
-    private function getTaxRateFromNode(array $node, array $mapper, string $path = null): ?float
+    private function getTaxRateFromNode(array $node, array $mapper, ?string $path = null): ?float
     {
         foreach ($node as $key => $value) {
             $currentPath = $this->getMergedPath($path, (string) $key);
@@ -1413,7 +1413,7 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      * @param array<string|int, mixed> $node
      * @param array<string, string>    $mapper
      */
-    private function collectTaxRateData(array $node, array $mapper, string $path = null, bool $emptyResult = false): void
+    private function collectTaxRateData(array $node, array $mapper, ?string $path = null, bool $emptyResult = false): void
     {
         foreach ($node as $key => $value) {
             $currentPath = $this->getMergedPath($path, (string) $key);
