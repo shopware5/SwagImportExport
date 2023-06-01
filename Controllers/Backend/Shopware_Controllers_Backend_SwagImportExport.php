@@ -106,7 +106,7 @@ class Shopware_Controllers_Backend_SwagImportExport extends \Shopware_Controller
                     throw new \UnexpectedValueException('File extension is not valid');
             }
 
-            if (\file_exists($filePath)) {
+            if (!\file_exists($filePath)) {
                 $this->View()->assign(
                     [
                         'success' => false,
@@ -114,6 +114,8 @@ class Shopware_Controllers_Backend_SwagImportExport extends \Shopware_Controller
                         'message' => 'File not exist',
                     ]
                 );
+
+                return;
             }
 
             $this->Front()->Plugins()->ViewRenderer()->setNoRender();
@@ -130,7 +132,6 @@ class Shopware_Controllers_Backend_SwagImportExport extends \Shopware_Controller
             $response->sendHeaders();
 
             \readfile($filePath);
-            exit;
         } catch (\Exception $e) {
             $this->View()->assign(
                 [

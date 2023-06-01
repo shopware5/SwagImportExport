@@ -38,14 +38,6 @@ class CsvFileReader implements FileReader
      */
     public function readRecords(string $fileName, int $position, int $step): array
     {
-        /*
-         * Make sure to detect CR LF (Windows) line breaks.
-         * This setting is deprecated in PHP 8.1.
-         * Should be considered to be removed in next major version.
-         * Silenced for now, to not emit a notice.
-         */
-        @ini_set('auto_detect_line_endings', '1');
-
         $tempFileName = '';
         if (\file_exists($fileName)) {
             $tempFileName = $this->uploadPathProvider->getRealPath(\md5(\microtime() . '.csv'));
