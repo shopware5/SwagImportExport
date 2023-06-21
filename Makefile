@@ -36,7 +36,7 @@ endif
 
 CS_FIXER_RUN=
 fix-cs: ## Run the code style fixer
-	./../../../vendor-bin/cs-fixer/vendor/bin/php-cs-fixer fix -v $(CS_FIXER_RUN)
+	./../../../vendor/bin/php-cs-fixer fix -v $(CS_FIXER_RUN)
 
 fix-cs-dry: CS_FIXER_RUN= --dry-run
 fix-cs-dry: fix-cs  ## Run the code style fixer in dry mode
