@@ -44,7 +44,6 @@ class ProfileFactory implements \Enlight_Hook
 
         foreach (\explode('.', $filename) as $part) {
             $part = \strtolower($part);
-
             $profileEntity = $repository->findOneBy(['name' => $part]);
 
             if ($profileEntity !== null) {

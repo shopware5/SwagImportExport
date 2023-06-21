@@ -77,6 +77,7 @@ class ImportService implements ImportServiceInterface
     {
         // loops the unprocessed data
         $pathInfoBaseName = $this->uploadPathProvider->getFileNameFromPath($request->inputFile);
+
         foreach (self::SUPPORTED_UNPROCESSED_DATA_PROFILE_TYPES as $profileType) {
             $tmpFileName = $pathInfoBaseName . '-' . $profileType . self::UNPROCESSED_DATA_FILE_ENDING;
             $tmpFile = $this->uploadPathProvider->getRealPath($tmpFileName);

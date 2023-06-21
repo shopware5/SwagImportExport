@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Root>
+	<articles>
+		<article>
+            <ordernumber>SW10003</ordernumber>
+            <mainnumber>SW10003</mainnumber>
+            <image>
+                <imageUrl>https://raw.githubusercontent.com/shopware5/shopware/5.7/tests/Functional/Api/fixtures/test-bild.jpg</imageUrl>
+            </image>
+        </article>
+	</articles>
+</Root>
