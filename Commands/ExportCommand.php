@@ -35,7 +35,7 @@ class ExportCommand extends ShopwareCommand
 {
     private ?string $profile = null;
 
-    private Profile $profileEntity;#
+    private Profile $profileEntity;
 
     private bool $exportVariants = false;
 

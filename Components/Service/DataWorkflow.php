@@ -150,11 +150,12 @@ class DataWorkflow
             $position = $session->getPosition();
 
             $records = $fileReader->readRecords($request->inputFile, $position, $batchSize);
+
             $data = $transformerChain->transformBackward($records);
 
             $this->defaultValues = [];
-
             $defaultValues = $this->getDefaultFields($tree);
+
             // inserts/update data into the database
             $dataIo->write($data, $defaultValues);
 
@@ -223,6 +224,7 @@ class DataWorkflow
                 }
             }
         }
+
         return $this->defaultValues;
     }
 }

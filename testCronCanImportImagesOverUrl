@@ -1,4 +1,0 @@
-SHOPWARE_ENV=swagimportexporttest ./../../../vendor/phpunit/phpunit/phpunit --verbose --filter 
-PHPUnit 9.6.8 by Sebastian Bergmann and contributors.
-
-Required argument for option "--filter" is missing

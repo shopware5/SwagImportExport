@@ -182,7 +182,6 @@ class AutoImportService implements AutoImportServiceInterface
             echo $position . ' ' . $profileName . ' imported successfully' . \PHP_EOL;
         }
 
-
         $importRequest->inputFile = $inputFile;
         $unprocessedData = $this->importService->getInfoToImportUnprocessedData($importRequest);
         if (!\is_array($unprocessedData)) {
