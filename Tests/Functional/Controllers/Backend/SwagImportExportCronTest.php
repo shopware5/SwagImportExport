@@ -31,6 +31,9 @@ class SwagImportExportCronTest extends TestCase
 
     public function testCronCanImportImagesOverUrl(): void
     {
+        // Suppress output that would otherwise be shown in the Pipeline
+        $this->setOutputCallback(function () {});
+
         $conn = $this->getContainer()->get(Connection::class);
 
         $fileName = 'default_article_images_url.xml';
