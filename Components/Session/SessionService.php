@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace SwagImportExport\Components\Session;
 
+use Doctrine\Instantiator\Exception\UnexpectedValueException;
 use Shopware\Components\Model\ModelManager;
 use SwagImportExport\Components\Profile\Profile;
 use SwagImportExport\Components\Structs\ExportRequest;
@@ -29,7 +30,12 @@ class SessionService
         ModelManager $modelManager,
         UploadPathProvider $uploadPathProvider
     ) {
-        $this->sessionRepository = $modelManager->getRepository(SessionEntity::class);
+        $sessionRepository = $modelManager->getRepository(SessionEntity::class);
+        if (!$sessionRepository instanceof SessionRepository) {
+            throw new UnexpectedValueException(\sprintf('Expect SessionRepository got %s', \gettype($sessionRepository)));
+        }
+
+        $this->sessionRepository = $sessionRepository;
         $this->modelManager = $modelManager;
         $this->uploadPathProvider = $uploadPathProvider;
     }
@@ -48,8 +54,12 @@ class SessionService
         return $this->createSession();
     }
 
-    public function startImportSession(ImportRequest $importRequest, Profile $profile, Session $session, int $fileSize): void
-    {
+    public function startImportSession(
+        ImportRequest $importRequest,
+        Profile $profile,
+        Session $session,
+        int $fileSize
+    ): void {
         $session->start($profile, [
             'type' => 'import',
             'fileName' => $this->uploadPathProvider->getFileNameFromPath($importRequest->inputFile),
@@ -63,8 +73,12 @@ class SessionService
     /**
      * @param array<int> $ids
      */
-    public function startExportSession(ExportRequest $exportRequest, Profile $profile, Session $session, array $ids): void
-    {
+    public function startExportSession(
+        ExportRequest $exportRequest,
+        Profile $profile,
+        Session $session,
+        array $ids
+    ): void {
         $session->start($profile, [
             'type' => 'export',
             'fileName' => $this->uploadPathProvider->getFileNameFromPath($exportRequest->filePath),
