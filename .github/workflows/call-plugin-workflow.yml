@@ -34,3 +34,9 @@ jobs:
         uses: shopware5/docker-images-testing/.github/workflows/php-code-analysis.yml@main
         with:
             plugin-name: SwagImportExport
+    
+    call-javascript-workflow:
+            name: Analyse Javascript Code for SwagImportExport
+            uses: shopware5/docker-images-testing/.github/workflows/javascript-analysis.yml@main
+            with:
+                plugin-name: SwagImportExport
