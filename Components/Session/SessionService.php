@@ -25,11 +25,11 @@ class SessionService
 
     private UploadPathProvider $uploadPathProvider;
 
-    public function __construct(
-        ModelManager $modelManager,
-        UploadPathProvider $uploadPathProvider
-    ) {
-        $this->sessionRepository = $modelManager->getRepository(SessionEntity::class);
+    public function __construct(ModelManager $modelManager, UploadPathProvider $uploadPathProvider)
+    {
+        $sessionRepository = $modelManager->getRepository(SessionEntity::class);
+        \assert($sessionRepository instanceof SessionRepository);
+        $this->sessionRepository = $sessionRepository;
         $this->modelManager = $modelManager;
         $this->uploadPathProvider = $uploadPathProvider;
     }
