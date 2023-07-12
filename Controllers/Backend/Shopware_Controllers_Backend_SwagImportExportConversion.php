@@ -11,6 +11,7 @@ namespace SwagImportExport\Controllers\Backend;
 
 use Shopware\Components\Model\Exception\ModelNotFoundException;
 use SwagImportExport\Models\Expression;
+use SwagImportExport\Models\ExpressionRepository;
 use SwagImportExport\Models\Profile;
 
 /**
@@ -26,6 +27,7 @@ class Shopware_Controllers_Backend_SwagImportExportConversion extends \Shopware_
         $manager = $this->getModelManager();
 
         $expressionRepository = $manager->getRepository(Expression::class);
+        \assert($expressionRepository instanceof ExpressionRepository);
 
         $filter = \array_merge(['p.id' => $profileId], $filter);
 
