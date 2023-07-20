@@ -59,6 +59,7 @@ class DataIO
         if ($this->dbAdapter instanceof DefaultHandleable) {
             $this->dbAdapter->setDefaultValues($defaults);
         }
+
         $this->dbAdapter->write($data);
     }
 

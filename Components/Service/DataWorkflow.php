@@ -150,6 +150,7 @@ class DataWorkflow
             $position = $session->getPosition();
 
             $records = $fileReader->readRecords($request->inputFile, $position, $batchSize);
+
             $data = $transformerChain->transformBackward($records);
 
             $this->defaultValues = [];
