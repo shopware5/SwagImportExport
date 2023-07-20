@@ -257,10 +257,10 @@ class ProductsImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
             $records,
             ['subject' => $this]
         );
-
         foreach ($records['default'] as $record) {
             try {
                 $record = $this->validator->filterEmptyString($record);
+
                 $this->validator->checkRequiredFields($record);
 
                 $productDetailModel = $this->manager->getRepository(Detail::class)->findOneBy(['number' => $record['ordernumber']]);
@@ -269,7 +269,6 @@ class ProductsImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
                         ->get('adapters/articlesImages/article_not_found', 'Article with number %s does not exist');
                     throw new AdapterException(\sprintf($message, $record['ordernumber']));
                 }
-
                 $record = $this->dataManager->setDefaultFields($record, $productDetailModel->getArticle()->getId());
                 $this->validator->validate($record, ProductImageValidator::$mapper);
 
@@ -308,7 +307,6 @@ class ProductsImagesDbAdapter implements DataDbAdapter, \Enlight_Hook
                 if ($this->imageImportMode === 1) {
                     $media = $this->manager->getRepository(Media::class)->findOneBy(['name' => $name]);
                 }
-
                 // create new media
                 if ($this->imageImportMode === 2 || empty($media)) {
                     $path = $this->load($record['image'], $name);

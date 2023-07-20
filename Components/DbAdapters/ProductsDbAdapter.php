@@ -1397,6 +1397,7 @@ class ProductsDbAdapter implements DataDbAdapter, \Enlight_Hook, DefaultHandleab
             } catch (AdapterException $e) {
                 $this->modelManager->getConnection()->rollBack();
                 $message = $e->getMessage();
+
                 $this->saveMessage($message);
             }
         }

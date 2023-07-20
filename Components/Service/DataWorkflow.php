@@ -150,7 +150,6 @@ class DataWorkflow
             $position = $session->getPosition();
 
             $records = $fileReader->readRecords($request->inputFile, $position, $batchSize);
-
             $data = $transformerChain->transformBackward($records);
 
             $this->defaultValues = [];
@@ -158,10 +157,6 @@ class DataWorkflow
 
             // inserts/update data into the database
             $dataIo->write($data, $defaultValues);
-
-            // writes into database log table
-            $profileName = $request->profileEntity->getName();
-            $dataIo->writeLog($request->inputFile, $profileName);
 
             $session->progress($batchSize);
 
@@ -172,6 +167,10 @@ class DataWorkflow
         }
 
         if ($session->getState() === Session::SESSION_FINISHED) {
+            // writes into database log table
+            $profileName = $request->profileEntity->getName();
+            $dataIo->writeLog($request->inputFile, $profileName);
+
             $session->close();
         }
 
