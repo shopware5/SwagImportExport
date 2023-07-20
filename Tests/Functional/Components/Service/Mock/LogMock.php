@@ -17,7 +17,7 @@ use SwagImportExport\Components\Session\Session;
 class LogMock implements LoggerInterface
 {
     /**
-     * @var array<array<string>|string>.
+     * @var array<array<string>|string>
      */
     private array $logs;
 
