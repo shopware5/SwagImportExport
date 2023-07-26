@@ -159,10 +159,6 @@ class DataWorkflow
             // inserts/update data into the database
             $dataIo->write($data, $defaultValues);
 
-            // writes into database log table
-            $profileName = $request->profileEntity->getName();
-            $dataIo->writeLog($request->inputFile, $profileName);
-
             $session->progress($batchSize);
 
             if ($dataIo->supportsUnprocessedData()) {
@@ -172,6 +168,10 @@ class DataWorkflow
         }
 
         if ($session->getState() === Session::SESSION_FINISHED) {
+            // writes into database log table
+            $profileName = $request->profileEntity->getName();
+            $dataIo->writeLog($request->inputFile, $profileName);
+
             $session->close();
         }
 
