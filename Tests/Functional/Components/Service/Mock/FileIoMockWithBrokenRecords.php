@@ -18,7 +18,6 @@ class FileIoMockWithBrokenRecords implements FileWriter, FileReader
 {
     public function __construct()
     {
-        // DO NOTHINGTe
     }
 
     /**
@@ -47,7 +46,6 @@ class FileIoMockWithBrokenRecords implements FileWriter, FileReader
      */
     public function setTree(array $tree): void
     {
-        // DO NOTHING
     }
 
     /**
@@ -65,7 +63,6 @@ class FileIoMockWithBrokenRecords implements FileWriter, FileReader
 
     public function writeFooter(string $fileName, ?array $footerData): void
     {
-        // nth
     }
 
     public function hasTreeStructure(): bool
