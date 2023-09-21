@@ -156,16 +156,15 @@ class ConfiguratorWriter
         return $this->sets[$name] ? (int) $this->sets[$name] : null;
     }
 
-    /**
-     * @return int
-     */
     private function getGroupIdByGroupName(string $name): ?int
     {
         $sql = 'SELECT `id`
                 FROM s_article_configurator_groups
                 WHERE `name` = ?';
 
-        return (int) $this->connection->fetchOne($sql, [$name]) ?: null;
+        $id = $this->connection->fetchOne($sql, [$name]);
+
+        return $id ? (int) $id : null;
     }
 
     private function getOptionIdByOptionNameAndGroupId(string $optionName, int $groupId): ?int
@@ -174,7 +173,9 @@ class ConfiguratorWriter
                 FROM s_article_configurator_options
                 WHERE `name` = ? AND `group_id` = ?';
 
-        return (int) $this->db->fetchOne($sql, [$optionName, $groupId]) ?: null;
+        $id = $this->db->fetchOne($sql, [$optionName, $groupId]);
+
+        return $id ? (int) $id : null;
     }
 
     /**
@@ -231,9 +232,9 @@ class ConfiguratorWriter
 
     private function getConfiguratorSetIdByProductId(int $productId): ?int
     {
-        $result = $this->connection->fetchOne('SELECT configurator_set_id FROM s_articles WHERE id = ?', [$productId]);
+        $id = $this->connection->fetchOne('SELECT configurator_set_id FROM s_articles WHERE id = ?', [$productId]);
 
-        return $result ? (int) $result : null;
+        return $id ? (int) $id : null;
     }
 
     /**

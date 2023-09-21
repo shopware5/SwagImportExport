@@ -161,7 +161,7 @@ class RelationWriter
             [$orderNumber]
         );
 
-        return (int) $relationId ?: null;
+        return $relationId ? (int) $relationId : null;
     }
 
     /**

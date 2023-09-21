@@ -948,8 +948,6 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      * Returns price node by price group
      *
      * @param array<string|int, mixed> $node
-     *
-     * @return array
      */
     private function findNodeByPriceGroup(array $node, string $groupKey, array $mapper): ?array
     {
@@ -1370,8 +1368,6 @@ class FlattenTransformer implements DataTransformerAdapter, ComposerInterface
      *
      * @param array<string|int, mixed> $node
      * @param array<string, string>    $mapper
-     *
-     * @return array
      */
     private function findNodeByTaxRate(array $node, float $taxRate, array $mapper): ?array
     {
