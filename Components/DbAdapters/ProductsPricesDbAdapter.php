@@ -206,8 +206,8 @@ class ProductsPricesDbAdapter implements DataDbAdapter, \Enlight_Hook
                     $record['regulationPrice'] = \round($record['regulationPrice'] * (100 + $record['tax']) / 100, 2);
                 }
             } else {
-                $record['price'] = \round($record['price'], 2);
-                $record['pseudoPrice'] = \round($record['pseudoPrice'], 2);
+                $record['price'] = \round($record['price'] ?? 0, 2);
+                $record['pseudoPrice'] = \round($record['pseudoPrice'] ?? 0, 2);
                 if (SwagVersionHelper::isShopware578() && isset($record['regulationPrice'])) {
                     $record['regulationPrice'] = \round($record['regulationPrice'], 2);
                 }

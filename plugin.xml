@@ -15,6 +15,11 @@
     <description lang="de">Das Importieren und Exportieren von Artikeln, Kunden oder Kategorien gehört zum Alltag vieler Shopbetreiber: Schnell lassen sich so Lagerbestände aktualisieren, Preise anpassen oder Erstimporte vornehmen.</description>
     <description lang="en">Importing and exporting product and customer data, categories as well as product images is a standard task of any shop owner. Keeping that in mind, Shopware wants to make it as easy as possible for you to quickly edit inventory, prices or even perform a customized import.</description>
 
+    <changelog version="4.1.3">
+        <changes lang="de">PHP 8.2 Kompatibilität verbessert;</changes>
+        <changes lang="en">Improve PHP 8.2 compatibility;</changes>
+    </changelog>
+
     <changelog version="4.1.2">
         <changes lang="de">PT-12973 - Verbessert das Schreiben der Log-Datei bei Produktbilderimporten;</changes>
         <changes lang="en">PT-12973 - Improve writing of log file during product image imports;</changes>
