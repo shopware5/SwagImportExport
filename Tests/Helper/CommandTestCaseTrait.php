@@ -61,6 +61,6 @@ trait CommandTestCaseTrait
 
     private function getFilePath(string $fileName): string
     {
-        return sprintf('%s/%s', $this->getContainer()->getParameter('kernel.project_dir'), $fileName);
+        return sprintf('%s%s%s', $this->getContainer()->getParameter('kernel.project_dir'), \DIRECTORY_SEPARATOR, $fileName);
     }
 }
